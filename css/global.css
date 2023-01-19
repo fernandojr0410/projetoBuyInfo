@@ -1,0 +1,187 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgb(232, 232, 232);
+}
+
+.fundo-main {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 50px;
+}
+
+.titulo-cards-produtos>h3 {
+    font-size: 18px;
+    color: black;
+    font-weight: 700;
+    padding: 24px 10px;
+}
+
+/* --------- Card Produtos ----------*/
+
+.fundo-cards-produtos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px 0;
+    background-color: #fff;
+    width: 100%;
+    padding: 8px 16px;
+}
+
+.card-produto-wrapper {
+    display: flex;
+    text-align: center;
+    border: 2px solid #4444;
+    width: 230px;
+    transition: all 0.3s ease-out;
+}
+
+.card-produto-wrapper:hover {
+    transform: translateY(-5px);
+}
+
+.conteudo-card-produto {
+    display: flex;
+    text-decoration: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex: 1;
+    padding: 8px;
+}
+
+.conteudo-card-produto>h3 {
+    font-size: 16px;
+    color: black;
+    font-weight: 700;
+}
+
+.conteudo-card-produto>span {
+    font-size: 20px;
+    color: coral;
+    font-weight: 700;
+}
+
+.img-card-produto {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 230px;
+}
+
+.img-card-produto>img {
+    width: 170px;
+    height: auto;
+}
+
+.descricao-produto-card {
+    color: black;
+}
+
+/* ---------- Button ----------  */
+
+.button {
+    border-radius: 30px;
+    border: none;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #fff;
+    padding: 10px 25px;
+}
+
+.button:hover {
+    opacity: 0.8;
+}
+
+.button-primario {
+    background-color: coral;
+}
+
+.button-disabled {
+    background-color: gray;
+}
+
+/* ---------- Anuncie Agora ---------- */
+
+.card-anuncie-agora {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background-color: rgb(232, 232, 232);
+    padding: 100px 0;
+}
+
+
+.conteudo-anuncie-agora {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    background-color: aliceblue;
+    width: 70%;
+    height: 300px;
+}
+
+.conteudo-anuncie-agora>h1 {
+    padding: 16px 0;
+}
+
+.conteudo-anuncie-agora>span {
+    font-size: 20px;
+    font-weight: 700;
+    color: black;
+    padding: 30px 0;
+}
+
+/* ---------- Responsividade Header --------*/
+
+@media screen and (max-width: 1343px) {
+    .header-container-icones>span {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 560px) {
+    .header-container-button {
+        display: inline-block;
+    }
+}
+
+@media screen and (max-width: 1343px) {
+    .menus>span {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 845px) {
+    .menus>span {
+        max-width: 670px;
+        display: none;
+    }
+}
+
+@media screen and (max-width: 848px) {
+    .pesquisa-menus {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media screen and (max-width: 848px) {
+    .fundo-main {
+        display: flex;
+        padding: 650px 0;
+    }
+}

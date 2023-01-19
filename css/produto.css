@@ -1,0 +1,164 @@
+.fundo-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    gap: 32px;
+    background-color: #fff;
+    border-radius: 5px;
+    width: 85%;
+    padding: 20px 32px;
+    height: auto;
+}
+
+.conteudo {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.imagens {
+    display: flex;
+    flex: 1;
+    gap: 32px;
+}
+
+.imagem-principal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.imagem-principal>img {
+    width: 70%;
+    min-width: 300px;
+    height: auto;
+}
+
+.galeria-imagens {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.galeria-imagens>img {
+    width: 50px;
+    height: 50px;
+    border: 1px solid rgb(201, 198, 198);
+    border-radius: 4px;
+    padding: 4px;
+}
+
+.galeria-imagens>img:hover {
+    border-color: coral;
+    cursor: pointer;
+}
+
+.informacao {
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+    width: 400px;
+    gap: 24px;
+    border: 1px solid rgb(201, 198, 198);
+    border-radius: 4px;
+    padding: 16px;
+}
+
+.preco {
+    display: flex;
+    flex-direction: column;
+}
+
+.preco>span:nth-child(1) {
+    color: coral;
+    font-size: 30px;
+    font-weight: 500;
+}
+
+.preco>span:nth-child(2) {
+    color: black;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.informacao>a {
+    color: rgb(206, 206, 206);
+    text-decoration: underline;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.comprar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 280px;
+    height: 40px;
+    font-size: 20px;
+    background-color: rgb(65, 157, 76);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.comprar:hover {
+    opacity: 0.8;
+}
+
+.calcular-frete {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.calcular-frete>span {
+    color: black;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.cep {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cep>input {
+    height: 40px;
+    width: 175px;
+    border-radius: 5px;
+    border: 2px solid rgb(206, 206, 206);
+    padding: 0 10px;
+    font-size: 16px;
+    outline: none;
+}
+
+.button-cep {
+    background-color: #fff;
+    border: 2px solid coral;
+    color: coral;
+    width: 50px;
+    height: 43px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.descricao-produto {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.descricao-produto>h3 {
+    color: coral;
+}
+
+hr {
+    border-bottom: 1.5px solid rgb(206, 206, 206);
+    border-top: none;
+}
