@@ -180,17 +180,4 @@ body {
   }
 }
 
-@media screen and (max-width: 848px) {
-  .pesquisa-menus {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-}
 
-@media screen and (max-width: 848px) {
-  .fundo-main {
-    display: flex;
-    padding: 650px 0;
-  }
-}
