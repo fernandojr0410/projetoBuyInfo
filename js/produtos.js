@@ -1,9 +1,34 @@
 const token = "e82b7ce9aefe9ea912d47c59cf8875";
 
 const url = new URL(window.location.href);
+const estaNaHome = url.pathname.includes("home");
 const categoria = url.searchParams.get("categoria");
 const marca = url.searchParams.get("marca");
 const produto = url.searchParams.get("produto");
+
+const idMaisPesquisados = "99010004";
+const idUltimosAnuncios = "99010005";
+
+const queryProdutosHome = `
+      {
+        allProducts(filter: {productHighlight: {in: [${idMaisPesquisados}, ${idUltimosAnuncios}]}}) {
+          id, preco, nome, descricao, ativo, 
+          brand {
+            id, nome
+          },
+          category {
+            id, nome
+          },
+          productHighlight {
+            id, nome
+          },
+          imagens {
+            id, url
+          },
+          _createdAt
+        }
+      }
+  `;
 
 const queryProdutosCategoria = `
       {
@@ -74,7 +99,9 @@ function buscarProdutos(query) {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log(res);
+      if (estaNaHome) {
+        mostrarListaProdutosHome(res.data.allProducts);
+      }
       if (categoria) {
         mostrarTituloProdutos(res.data.category);
         mostrarListaProdutos(res.data.allProducts);
@@ -88,6 +115,7 @@ function buscarProdutos(query) {
     });
 }
 
+if (estaNaHome) buscarProdutos(queryProdutosHome);
 if (categoria) buscarProdutos(queryProdutosCategoria);
 if (produto) buscarProdutos(queryProduto);
 
@@ -101,6 +129,21 @@ function mostrarTituloProdutos(categoriaOuMarca) {
       />
       <h3>${categoriaOuMarca.nome}</h3>
     `;
+}
+
+function mostrarListaProdutosHome(produtos) {
+  const produtosMaisPesquisados = produtos.filter(item => item.productHighlight.id === idMaisPesquisados);
+  const produtosUltimosAnuncios = produtos.filter(item => item.productHighlight.id === idUltimosAnuncios);
+
+  produtosMaisPesquisados.forEach((produto) => {
+    const card = criarCardProduto(produto);
+    maisPesquisados.appendChild(card);
+  });
+
+  produtosUltimosAnuncios.forEach((produto) => {
+    const card = criarCardProduto(produto);
+    ultimosAnuncios.appendChild(card);
+  });
 }
 
 function mostrarListaProdutos(produtos) {
@@ -136,8 +179,8 @@ function mostrarProduto(produto) {
               <div class="preco">
                 <span>${formatarValorMoeda(produto.preco)}</span>
                 <span>ou em até 3x de ${formatarValorMoeda(
-                  produto.preco / 3
-                )} sem juros</span>
+    produto.preco / 3
+  )} sem juros</span>
               </div>
 
               <a href="#" id="forma-pagamento">ver mais opções de pagamento</a>
@@ -165,22 +208,20 @@ function mostrarProduto(produto) {
 
           <div class="descricao-produto">
             <h3>Descrição Produto</h3>
-            <span>
-              ${formatarDescricaoProduto(produto.descricao)}
-            </span> 
+            <span id="descricaoProduto"></span> 
           </div>
         `;
   containerProduto.appendChild(dadosProduto);
   criarGaleriaImagensProduto(produto);
+  criarDescricaoProduto(produto);
 }
 
 function criarCardProduto(produto) {
   const card = document.createElement("div");
   card.className = "card-produto-wrapper";
   card.innerHTML = `
-          <a href="produto.html?produto=${
-            produto.id
-          }" class="conteudo-card-produto">
+          <a href="produto.html?produto=${produto.id
+    }" class="conteudo-card-produto">
               <div class="img-card-produto">
                   <img src="${produto.imagens[0].url}" alt="${produto.nome}">
               </div>
@@ -213,11 +254,9 @@ function trocarImagemProduto(url) {
   imagemPrincipal.src = url;
 }
 
-function formatarDescricaoProduto(descricao) {
-  // const descricaoFormatada = descricao.replace(/\\n/g, "<br>");
-  console.log(JSON.stringify(descricao).includes("/a/"));
-
-  return descricao;
+function criarDescricaoProduto(produto) {
+  const descricaoProduto = document.getElementById("descricaoProduto");
+  descricaoProduto.innerText = `${produto.descricao}`
 }
 
 // FUNÇÕES DE USO GERAL
