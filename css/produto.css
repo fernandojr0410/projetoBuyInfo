@@ -51,7 +51,7 @@
 }
 
 .galeria-imagens>img:hover {
-    border-color: coral;
+    border-color: #04709f;
     cursor: pointer;
 }
 
@@ -72,7 +72,7 @@
 }
 
 .preco>span:nth-child(1) {
-    color: coral;
+    color: #04709f;
     font-size: 30px;
     font-weight: 500;
 }
@@ -138,8 +138,8 @@
 
 .button-cep {
     background-color: #fff;
-    border: 2px solid coral;
-    color: coral;
+    border: 2px solid #04709f;
+    color: #04709f;
     width: 50px;
     height: 43px;
     border-radius: 5px;
@@ -155,7 +155,7 @@
 }
 
 .descricao-produto>h3 {
-    color: coral;
+    color: #04709f;
 }
 
 hr {
