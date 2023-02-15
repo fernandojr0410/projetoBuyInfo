@@ -96,7 +96,7 @@ body {
   color: black;
 }
 
-#produtosCategoriaEMarca small {
+.conteudo-card-produto>small {
   font-size: 18px;
   font-weight: 500;
   border: 1px solid #04709f;
