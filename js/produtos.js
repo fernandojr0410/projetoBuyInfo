@@ -132,8 +132,12 @@ function mostrarTituloProdutos(categoriaOuMarca) {
 }
 
 function mostrarListaProdutosHome(produtos) {
-  const produtosMaisPesquisados = produtos.filter(item => item.productHighlight.id === idMaisPesquisados);
-  const produtosUltimosAnuncios = produtos.filter(item => item.productHighlight.id === idUltimosAnuncios);
+  const produtosMaisPesquisados = produtos.filter(
+    (item) => item.productHighlight.id === idMaisPesquisados
+  );
+  const produtosUltimosAnuncios = produtos.filter(
+    (item) => item.productHighlight.id === idUltimosAnuncios
+  );
 
   produtosMaisPesquisados.forEach((produto) => {
     const card = criarCardProduto(produto);
@@ -179,11 +183,11 @@ function mostrarProduto(produto) {
               <div class="preco">
                 <span>${formatarValorMoeda(produto.preco)}</span>
                 <span>ou em até 3x de ${formatarValorMoeda(
-    produto.preco / 3
-  )} sem juros</span>
+                  produto.preco / 3
+                )} sem juros</span>
               </div>
 
-              <a href="#" id="forma-pagamento">ver mais opções de pagamento</a>
+              <a href="./pagamento.html" id="forma-pagamento">ver mais opções de pagamento</a>
 
               <button class="comprar" id="comprar" type="button">
                 COMPRAR
@@ -220,8 +224,9 @@ function criarCardProduto(produto) {
   const card = document.createElement("div");
   card.className = "card-produto-wrapper";
   card.innerHTML = `
-          <a href="produto.html?produto=${produto.id
-    }" class="conteudo-card-produto">
+          <a href="produto.html?produto=${
+            produto.id
+          }" class="conteudo-card-produto">
               <div class="img-card-produto">
                   <img src="${produto.imagens[0].url}" alt="${produto.nome}">
               </div>
@@ -256,7 +261,7 @@ function trocarImagemProduto(url) {
 
 function criarDescricaoProduto(produto) {
   const descricaoProduto = document.getElementById("descricaoProduto");
-  descricaoProduto.innerText = `${produto.descricao}`
+  descricaoProduto.innerText = `${produto.descricao}`;
 }
 
 // FUNÇÕES DE USO GERAL
