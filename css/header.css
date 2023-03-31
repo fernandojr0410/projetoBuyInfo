@@ -34,7 +34,7 @@
 }
 
 .header-container-menus {
-    background-color: #04709f;
+    background-color: var(--azul-primario);
     height: 200px;
 }
 

@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/phosphor-icons"></script>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://unpkg.com/phosphor-icons"></script>
+    <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="./css/modal.css" />
+    <link rel="stylesheet" type="text/css" href="./css/pagamento.css" />
+    <link rel="stylesheet" type="text/css" href="./css/global.css" />
 
-
-  <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon" />
-  <link rel="stylesheet" type="text/css" href="./css/pagamento.css" />
-  <link rel="stylesheet" type="text/css" href="./css/global.css" />
-  <title>Forma de Pagamento</title>
-</head>
-
-<body>
-  <main>
-    <div class="fundo">
+    <title>Modal</title>
+  </head>
+  <body>
+    <div class="wrapper">
       <div class="fundo-pagamento">
         <div class="titulo-pagamento">
           <div class="titulo">
             <h3>Mais formas de pagamento</h3>
-            
+
             <div class="sair">
               <span>x</span>
             </div>
@@ -30,7 +28,7 @@
           <div class="forma-pagamento-container">
             <div class="forma-pagamento">
               <i class="ph-credit-card"></i>
-              <span>Cartão de Crédito</span>
+              <span><a href="#demo-modal">Cartão de Credito</a></span>
             </div>
 
             <div class="forma-pagamento">
@@ -51,26 +49,39 @@
               <span>Pix</span>
             </div>
           </div>
+
           <div class="linha">
             <hr />
           </div>
 
-          <div class="parcelamento-container">
-            <div class="parcelamento" id="pagamentoParcelado">
-              <div class="preco">
-                <span> 1x R$ 3.108,00</span>
-                <span>Sem Juros</span>
+         
+
+          <!-- Modal Aberto -->
+          <div id="demo-modal" class="modal">
+            <div class="modal__content">
+              <h1>Modal de Pagamento</h1>
+
+              <div class="parcelamento-container">
+                <div class="parcelamento" id="pagamentoParcelado">
+                  <div class="preco">
+                    <span> 1x R$ 3.108,00</span>
+                    <span>Sem Juros</span>
+                  </div>
+    
+                  <div class="preco-total">
+                    <span>R$ 3.108,00</span>
+                  </div>
               </div>
 
-              <div class="preco-total">
-                <span>R$ 3.108,00</span>
+              <div class="modal__footer">
+                <a href="#" class="modal__footer-btn-close"> Fechar </a>
               </div>
 
+              <a href="#" class="modal__close">&times;</a>
             </div>
           </div>
         </div>
       </div>
-  </main>
-</body>
-
+    </div>
+  </body>
 </html>

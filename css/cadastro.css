@@ -1,0 +1,149 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.fundo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #04709f;
+  width: 100%;
+  height: 85vh;
+  padding: 56px 0;
+}
+
+.fundo-cadastro {
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  width: 40%;
+  border-radius: 7px;
+}
+
+.header-cadastro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 0;
+}
+
+.header-cadastro > img {
+  width: 100%;
+}
+
+.header-cadastro > h3 {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.icone-cadastro {
+  display: flex;
+  gap: 26px;
+  cursor: pointer;
+  padding: 8px 0;
+}
+
+.icone-cadastro > img {
+  width: 57px;
+  height: 57px;
+}
+
+.icone-cadastro > img:nth-child(2) {
+  width: 57px;
+  height: 57px;
+}
+
+.alternativa {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 22px;
+  color: #a2a2a2;
+}
+
+.conteudo-container {
+  display: flex;
+  justify-content: center;
+  padding: 35px 0;
+  width: 100%;
+}
+
+.conteudo-cadastro {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 0 40px;
+}
+
+.conteudo-cadastro > label {
+  font-size: 18px;
+  padding: 0 8px;
+  padding-top: 16px;
+}
+
+.conteudo-cadastro > input {
+  font-size: 12px;
+  padding: 10px 12px;
+  width: 90%;
+  border-radius: 10px;
+  border: 1px solid #a2a2a2;
+  outline: none;
+}
+
+.cadastro {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding-top: 40px;
+}
+
+.cadastro > button {
+  background-color: #04709f;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.cadastro > button:hover {
+  opacity: 0.8;
+}
+
+.entrar {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.entrar > span {
+  padding: 10px 0;
+  text-decoration: none;
+}
+
+.entrar > span:nth-child(2) a {
+  color: #04709f;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.entrar > span:nth-child(2):hover {
+  opacity: 0.8;
+}
+
+/* resposividade */
+
+@media only screen and (max-width: 900px) {
+  .fundo-cadastro {
+    width: 90%;
+  }
+}

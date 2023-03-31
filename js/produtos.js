@@ -187,7 +187,7 @@ function mostrarProduto(produto) {
                 )} sem juros</span>
               </div>
 
-              <a href="./pagamento.html" id="forma-pagamento">ver mais opções de pagamento</a>
+              <a href="#demo-modal" id="forma-pagamento">ver mais opções de pagamento</a>
 
               <button class="comprar" id="comprar" type="button">
                 COMPRAR

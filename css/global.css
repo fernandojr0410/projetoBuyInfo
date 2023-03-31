@@ -5,6 +5,12 @@
   box-sizing: border-box;
 }
 
+:root {
+  --azul-primario: #04709f;
+  --azul-secundario: #5dade2;
+  --cinza-escuro: #666666;
+}
+
 body {
   background-color: rgb(232, 232, 232);
 }
@@ -23,12 +29,12 @@ body {
   padding: 24px 0;
 }
 
-.titulo-cards-produtos>img {
+.titulo-cards-produtos > img {
   width: 36px;
   height: auto;
 }
 
-.titulo-cards-produtos>h3 {
+.titulo-cards-produtos > h3 {
   font-size: 24px;
   color: #565656;
   font-weight: 700;
@@ -67,15 +73,15 @@ body {
   padding: 8px;
 }
 
-.conteudo-card-produto>h3 {
+.conteudo-card-produto > h3 {
   font-size: 16px;
   color: black;
   font-weight: 700;
 }
 
-.conteudo-card-produto>span {
+.conteudo-card-produto > span {
   font-size: 20px;
-  color: #04709f;
+  color: var(--azul-primario);
   font-weight: 700;
 }
 
@@ -87,7 +93,7 @@ body {
   height: 230px;
 }
 
-.img-card-produto>img {
+.img-card-produto > img {
   width: 170px;
   height: auto;
 }
@@ -96,13 +102,13 @@ body {
   color: black;
 }
 
-.conteudo-card-produto>small {
+.conteudo-card-produto > small {
   font-size: 18px;
   font-weight: 500;
-  border: 1px solid #04709f;
+  border: 1px solid var(--azul-primario);
   border-radius: 4px;
   padding: 2px 6px;
-  color: #04709f;
+  color: var(--azul-primario);
 }
 
 /* ---------- Button ----------  */
@@ -122,7 +128,7 @@ body {
 }
 
 .button-primario {
-  background-color: #04709f;
+  background-color: var(--azul-primario);
 }
 
 .button-disabled {
@@ -151,11 +157,11 @@ body {
   height: 300px;
 }
 
-.conteudo-anuncie-agora>h1 {
+.conteudo-anuncie-agora > h1 {
   padding: 16px 0;
 }
 
-.conteudo-anuncie-agora>span {
+.conteudo-anuncie-agora > span {
   font-size: 20px;
   font-weight: 700;
   color: black;
@@ -165,7 +171,7 @@ body {
 /* ---------- Responsividade Header --------*/
 
 @media screen and (max-width: 1343px) {
-  .header-container-icones>span {
+  .header-container-icones > span {
     display: none;
   }
 }
@@ -177,13 +183,13 @@ body {
 }
 
 @media screen and (max-width: 1343px) {
-  .menus>span {
+  .menus > span {
     display: none;
   }
 }
 
 @media screen and (max-width: 845px) {
-  .menus>span {
+  .menus > span {
     max-width: 670px;
     display: none;
   }
