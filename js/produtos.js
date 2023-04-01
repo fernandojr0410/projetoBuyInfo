@@ -187,7 +187,7 @@ function mostrarProduto(produto) {
                 )} sem juros</span>
               </div>
 
-              <a href="#demo-modal" id="forma-pagamento">ver mais opções de pagamento</a>
+              <span id="verMaisFormasDePagamento" onclick="mostrarModal('teste')">ver mais opções de pagamento</span>
 
               <button class="comprar" id="comprar" type="button">
                 COMPRAR
@@ -218,6 +218,7 @@ function mostrarProduto(produto) {
   containerProduto.appendChild(dadosProduto);
   criarGaleriaImagensProduto(produto);
   criarDescricaoProduto(produto);
+  //criarModalFormaPagamento()
 }
 
 function criarCardProduto(produto) {
@@ -272,3 +273,31 @@ function formatarValorMoeda(valor) {
 function alterarTituloDaPagina(title) {
   document.title = title;
 }
+
+function mostrarModal(tituloModal, conteudoModal) {
+  const bodyElement = document.getElementsByTagName("body")[0];
+  console.log(bodyElement);
+  const modal = document.createElement("div");
+  modal.className = "modal";
+  modal.innerHTML = `
+    <div class="wrapper">
+      <div class="fundo-pagamento">
+        <div class="titulo-pagamento">
+        <h3>${tituloModal}</h3>
+        <a href="#">X </a>
+        </div>
+      ${conteudoModal}
+      </div>
+    </div>
+  `;
+
+  bodyElement.appendChild(modal);
+}
+
+// Tirar o Scroll da Pagina - Forma de Pagamento - Modal
+
+// function tirarScroll() {
+//   document.documentElement.style.overflow = "hidden";
+//   document.body.scroll = "yes";
+// }
+// tirarScroll();

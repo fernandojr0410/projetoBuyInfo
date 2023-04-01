@@ -103,27 +103,27 @@
   .wrapper {
     display: flex;
     width: 60%;
-
   }
 }
 
 .modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  width: 100%;
   visibility: hidden;
   opacity: 0;
-  position: absolute;
-  width: 100%;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(77, 77, 77, 0.7);
   transition: all 0.4s;
+  background: rgba(77, 77, 77, 0.7);
 }
 
 .modal:target {
   visibility: visible;
   opacity: 1;
+  overflow: hidden;
 }
