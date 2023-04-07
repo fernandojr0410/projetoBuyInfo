@@ -1,129 +1,26 @@
-* {
-  padding: 0;
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.fundo-pagamento {
+.modal {
   display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 20px 50px;
-}
-
-.titulo-pagamento {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-}
-
-.titulo-pagamento > h3 {
-  font-size: 22px;
-  color: rgb(167, 167, 167);
-  font-weight: 600;
-}
-
-.titulo-pagamento > a {
-  font-size: 22px;
-  color: black;
-  text-decoration: none;
-}
-
-.forma-pagamento-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.forma-pagamento {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  padding-top: 50px;
-  padding-bottom: 20px;
-  cursor: pointer;
+  justify-content: center;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  transition: all 0.4s;
+  background: rgba(77, 77, 77, 0.3);
 }
 
-.forma-pagamento > i {
-  font-size: 40px;
-}
-
-.forma-pagamento > span {
-  font-size: 14px;
-  font-weight: 500;
-  text-align: center;
-}
-
-.forma-pagamento svg {
-  height: 38px;
-  width: 35px;
-}
-
-.forma-pagamento:hover {
-  color: var(--azul-primario);
-}
-
-.parcelamento-container {
-  padding-top: 20px;
-}
-
-.parcelamento {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  padding: 10px 10px;
-  gap: 10px;
-  font-size: 14px;
-  font-weight: 500;
-  color: black;
-  border: 1px solid black;
-  border-radius: 5px;
-}
-
-.preco-parcela {
-  display: flex;
-  flex-wrap: wrap;
-  max-width: 974px;
-  gap: 8px;
-}
-
-.preco-parcela > span:nth-child(2) {
-  color: var(--azul-primario);
-}
-
-/* modal */
-.wrapper {
+.modal-wrapper {
   display: flex;
   background-color: #fff;
   height: auto;
   width: 40%;
 }
 
-@media screen and (max-width: 806px) {
+/* @media screen and (max-width: 806px) {
   .wrapper {
     display: flex;
     width: 60%;
   }
-}
-
-.modal {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  width: 100%;
-  visibility: hidden;
-  opacity: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  transition: all 0.4s;
-  background: rgba(77, 77, 77, 0.7);
-}
-
-.modal:target {
-  visibility: visible;
-  opacity: 1;
-  overflow: hidden;
-}
+} */
