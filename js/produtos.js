@@ -298,26 +298,35 @@ function criarModalFormaPagamento(precoProduto) {
 
 <hr />
 
-<div class="parcelamento-container">
-  <div class="parcelamento" id="pagamentoParcelado">
-    <div class="preco-parcela" id="parcelasPagamento">
-      <span> 1x ${formatarValorMoeda(precoProduto)}</span>
-      <span>Sem Juros</span>
-    </div>
-
-    <div class="preco-total">
-      <span> ${formatarValorMoeda(precoProduto)}</span>
-    </div>
-  </div>
-</div>
+<div class="parcelamento-container" id="parcelasPagamento"></div>
   `;
 
   mostrarModal("Mais formas de pagamento", modalFormaPagamento);
+  criarParcelasPagamento(precoProduto);
 }
 
 function criarParcelasPagamento(precoProduto) {
   const parcelasPagamento = document.getElementById("parcelasPagamento");
-  for (let i = 0; i < MAXIMO_PARCELAS_PAGAMENTO; i++) {}
+  for (let i = 0; i < MAXIMO_PARCELAS_PAGAMENTO; i++) {
+    let parcelaAtual = i + 1;
+    const parcela = document.createElement("div");
+    parcela.className = "parcelamento";
+    parcela.innerHTML = `
+    <div class="parcelamento"> 
+    <div class="preco-parcela>
+    <span> ${parcelaAtual}x ${formatarValorMoeda(
+      precoProduto / parcelaAtual
+    )}</span>
+    <span>Sem Juros</span>
+    </div>
+    <div class="preco-total"> 
+    <span> ${formatarValorMoeda(precoProduto)}</span>
+    </div>
+    </div>
+    `;
+
+    parcelasPagamento.appendChild(parcela);
+  }
 }
 
 // FUNÇÕES DE USO GERAL
