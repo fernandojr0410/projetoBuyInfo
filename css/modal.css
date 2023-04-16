@@ -14,8 +14,44 @@
 .modal-wrapper {
   display: flex;
   background-color: #fff;
-  height: auto;
+  max-height: 80vh;
   width: 40%;
+  position: absolute;
+  animation: modal 0.5s;
+}
+
+.modal-conteudo {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px;
+}
+
+.modal-titulo {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.modal-titulo > h3 {
+  font-size: 20px;
+  color: rgb(167, 167, 167);
+  font-weight: 600;
+}
+
+.modal-titulo > i {
+  font-size: 24px;
+  color: black;
+  cursor: pointer;
+}
+
+@keyframes modal {
+  from {
+    top: -300px;
+  }
+  to {
+    top: 10%;
+  }
 }
 
 /* @media screen and (max-width: 806px) {
