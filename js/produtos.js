@@ -185,13 +185,12 @@ function mostrarProduto(produto) {
               <div class="preco">
                 <span>${formatarValorMoeda(produto.preco)}</span>
                 <span>ou em até 10x de ${formatarValorMoeda(
-                  produto.preco / MAXIMO_PARCELAS_PAGAMENTO
-                )} sem juros</span>
+    produto.preco / MAXIMO_PARCELAS_PAGAMENTO
+  )} sem juros</span>
               </div>
 
-              <span class="mais-forma-pagamento" id="verMaisFormasDePagamento" onclick="criarModalFormaPagamento(${
-                produto.preco
-              })">ver mais opções de pagamento</span>
+              <span class="mais-forma-pagamento" id="verMaisFormasDePagamento" onclick="criarModalFormaPagamento(${produto.preco
+    })">ver mais opções de pagamento</span>
 
               <button class="comprar" id="comprar" type="button">
                 COMPRAR
@@ -228,9 +227,8 @@ function criarCardProduto(produto) {
   const card = document.createElement("div");
   card.className = "card-produto-wrapper";
   card.innerHTML = `
-          <a href="produto.html?produto=${
-            produto.id
-          }" class="conteudo-card-produto">
+          <a href="produto.html?produto=${produto.id
+    }" class="conteudo-card-produto">
               <div class="img-card-produto">
                   <img src="${produto.imagens[0].url}" alt="${produto.nome}">
               </div>
@@ -359,7 +357,6 @@ function mostrarModal(tituloModal, conteudoModal) {
   document.getElementById("btnFecharModal").addEventListener("click", () => {
     fecharModal(bodyElement, modal);
   });
-  tirarScroll();
 }
 
 function fecharModal(body, modal) {
