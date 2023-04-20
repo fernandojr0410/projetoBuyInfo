@@ -357,14 +357,18 @@ function mostrarModal(tituloModal, conteudoModal) {
   document.getElementById("btnFecharModal").addEventListener("click", () => {
     fecharModal(bodyElement, modal);
   });
+  tirarScroll()
 }
 
 function fecharModal(body, modal) {
   body.removeChild(modal);
+  colocarScroll()
 }
 
-// tirarScroll();
 function tirarScroll() {
   document.documentElement.style.overflow = "hidden";
-  document.body.scroll = "yes";
+}
+
+function colocarScroll() {
+  document.documentElement.style.overflow = "auto";
 }
