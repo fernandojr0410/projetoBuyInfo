@@ -185,12 +185,13 @@ function mostrarProduto(produto) {
               <div class="preco">
                 <span>${formatarValorMoeda(produto.preco)}</span>
                 <span>ou em até 10x de ${formatarValorMoeda(
-    produto.preco / MAXIMO_PARCELAS_PAGAMENTO
-  )} sem juros</span>
+                  produto.preco / MAXIMO_PARCELAS_PAGAMENTO
+                )} sem juros</span>
               </div>
 
-              <span class="mais-forma-pagamento" id="verMaisFormasDePagamento" onclick="criarModalFormaPagamento(${produto.preco
-    })">ver mais opções de pagamento</span>
+              <span class="mais-forma-pagamento" id="verMaisFormasDePagamento" onclick="criarModalFormaPagamento(${
+                produto.preco
+              })">ver mais opções de pagamento</span>
 
               <button class="comprar" id="comprar" type="button">
                 COMPRAR
@@ -227,8 +228,9 @@ function criarCardProduto(produto) {
   const card = document.createElement("div");
   card.className = "card-produto-wrapper";
   card.innerHTML = `
-          <a href="produto.html?produto=${produto.id
-    }" class="conteudo-card-produto">
+          <a href="produto.html?produto=${
+            produto.id
+          }" class="conteudo-card-produto">
               <div class="img-card-produto">
                   <img src="${produto.imagens[0].url}" alt="${produto.nome}">
               </div>
@@ -269,16 +271,16 @@ function criarDescricaoProduto(produto) {
 function criarModalFormaPagamento(precoProduto) {
   const modalFormaPagamento = `
   <div class="forma-pagamento-container">
-  <div class="forma-pagamento">
+  <div class="forma-pagamento" onclick="criarParcelasCartaoPagamento(${precoProduto})">
     <i class="ph-credit-card"></i>
     <span>Cartão de Credito</span>
   </div>
-  <div class="forma-pagamento">
+  <div class="forma-pagamento" onclick="criarParcelaBoletoPagamento(${precoProduto})">
     <i class="ph-barcode"></i>
     <span>Boleto</span>
   </div>
 
-  <div class="forma-pagamento">
+  <div class="forma-pagamento" onclick="criarParcelaPixPagamento(${precoProduto})">
     <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
       <defs />
       <g fill="currentColor" fill-rule="evenodd">
@@ -300,11 +302,14 @@ function criarModalFormaPagamento(precoProduto) {
   `;
 
   mostrarModal("Mais formas de pagamento", modalFormaPagamento);
-  criarParcelasPagamento(precoProduto);
+  criarParcelasCartaoPagamento(precoProduto);
 }
 
-function criarParcelasPagamento(precoProduto) {
+function criarParcelasCartaoPagamento(precoProduto) {
   const parcelasPagamento = document.getElementById("parcelasPagamento");
+  parcelasPagamento.querySelectorAll(".parcelas").forEach((item) => {
+    item.remove();
+  });
   for (let i = 0; i < MAXIMO_PARCELAS_PAGAMENTO; i++) {
     let parcelaAtual = i + 1;
     const parcela = document.createElement("div");
@@ -325,6 +330,51 @@ function criarParcelasPagamento(precoProduto) {
   }
 }
 
+function criarParcelaBoletoPagamento(precoProduto) {
+  const parcelasPagamento = document.getElementById("parcelasPagamento");
+  parcelasPagamento.querySelectorAll(".parcelas").forEach((item) => {
+    item.remove();
+  });
+  const parcela = document.createElement("div");
+  parcela.className = "parcelas";
+  parcela.innerHTML = `
+      <div class="preco-parcela">
+        <span> 
+          1x ${formatarValorMoeda(precoProduto)} 
+        </span>
+        <span>no boleto bancário.</span>
+      </div>
+      <p>O boleto será gerado após a finalização de sua compra. 
+      Imprima e pague no banco ou pague pela internet utilizando o código de barras do boleto.</p>
+    `;
+  parcelasPagamento.appendChild(parcela);
+}
+
+function criarParcelaPixPagamento(precoProduto) {
+  const parcelasPagamento = document.getElementById("parcelasPagamento");
+  parcelasPagamento.querySelectorAll(".parcelas").forEach((item) => {
+    item.remove();
+  });
+  const parcela = document.createElement("div");
+  parcela.className = "parcelas";
+  parcela.innerHTML = `
+      <div class="preco-parcela">
+        <span> 
+          1x ${formatarValorMoeda(precoProduto)} 
+        </span>
+        <span>no Pix com 10% de desconto.</span>
+      </div>
+      <div class="preco-total"> 
+        <span>Total com desconto <b>${formatarValorMoeda(
+          calculaDescontoPercentual(precoProduto, 0.1)
+        )}</b></span>
+      </div>
+      <p>O pagamento é instantâneo e só pode ser à vista. Na etapa de finalização da compra, 
+      a gente explica direitinho como pagar com Pix.</p>
+    `;
+  parcelasPagamento.appendChild(parcela);
+}
+
 // FUNÇÕES DE USO GERAL
 function formatarValorMoeda(valor) {
   return valor.toLocaleString("pt-br", { style: "currency", currency: "BRL" });
@@ -334,9 +384,13 @@ function alterarTituloDaPagina(title) {
   document.title = title;
 }
 
+function calculaDescontoPercentual(valor, percentual) {
+  const desconto = valor * percentual;
+  return valor - desconto;
+}
+
 function mostrarModal(tituloModal, conteudoModal) {
   const bodyElement = document.getElementsByTagName("body")[0];
-  console.log(bodyElement);
   const modal = document.createElement("div");
   modal.className = "modal";
   modal.innerHTML = `
@@ -357,12 +411,12 @@ function mostrarModal(tituloModal, conteudoModal) {
   document.getElementById("btnFecharModal").addEventListener("click", () => {
     fecharModal(bodyElement, modal);
   });
-  tirarScroll()
+  tirarScroll();
 }
 
 function fecharModal(body, modal) {
   body.removeChild(modal);
-  colocarScroll()
+  colocarScroll();
 }
 
 function tirarScroll() {
