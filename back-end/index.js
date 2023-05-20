@@ -1,28 +1,42 @@
-import express from "express";
-import mysql from "mysql";
+const express = require("express");
+// const path = require("path");
+
+const conn = require("./db/mysql.js");
+const produtos = require("./produtos/produtos.js");
 
 const app = express();
-const conn = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "buy_info",
-});
-
 app.use(express.json());
 
 app.listen(5000, () => {
   console.log("Servidor Iniciado");
 });
 
-app.get("/produtos", (req, res) => {
-  conn.query("SELECT * FROM Produto", (error, result) => {
+app.use(express.static("public"));
+
+app.get("/produtos/findAll", (req, res) => {
+  produtos
+    .findAll()
+    .then((results) => {
+      res.send(results);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
+app.get("/produtos/findById", (req, res) => {
+  produtos
+    .findById(req.query.id)
+    .then((results) => {
+      res.send(results);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
+app.get("/categorias", (req, res) => {
+  conn().query("SELECT * FROM Categoria", (error, result) => {
     res.send(result);
-    console.log(error);
   });
-  // res.json({
-  //   id: 1,
-  //   nome: "Produto Teste",
-  //   marca: "Apple",
-  // });
 });
