@@ -54,11 +54,35 @@ app.get("/categorias/findById", (req, res) => {
     });
 });
 
+app.post("/categorias/insert", (req, res) => {
+  categorias
+    .insert(req.body)
+    .then(() => {
+      res.send("Categoria cadastrada com sucesso!");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
+    });
+});
+
 app.put("/categorias/update", (req, res) => {
   categorias
     .update(req.body)
     .then(() => {
-      res.send("Categoria atualizado com sucesso!");
+      res.send("Categoria atualizada com sucesso!");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
+    });
+});
+
+app.delete("/categorias/delete", (req, res) => {
+  categorias
+    .deleteById(req.body)
+    .then(() => {
+      res.send("Categoria deletada com sucesso!");
     })
     .catch((error) => {
       console.error(error);
