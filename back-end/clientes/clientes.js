@@ -17,7 +17,7 @@ function insert(dados) {
 }
 
 function update(dados) {
-  const { nome, CPF, endereco, telefone } = dados;
+  const { id, nome, CPF, endereco, telefone } = dados;
   const params = [];
   let sql = "UPDATE Cliente SET";
 

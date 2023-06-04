@@ -5,6 +5,7 @@ const conn = require("./db/mysql.js");
 const produtos = require("./produtos/produtos.js");
 const categorias = require("./categorias/categorias.js");
 const clientes = require("./clientes/clientes.js");
+const marcas = require("./marcas/marcas.js");
 
 const app = express();
 app.use(express.json());
@@ -142,6 +143,65 @@ app.put("/clientes/update", (req, res) => {
 
 app.delete("/clientes/delete", (req, res) => {
   clientes
+    .deleteById(req.body)
+    .then(() => {
+      res.send("Informação deletada com sucesso!");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
+    });
+});
+
+// Marca
+app.get("/marcas/findAll", (req, res) => {
+  marcas
+    .findAll()
+    .then((results) => {
+      res.send(results);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
+app.get("/marcas/findById", (req, res) => {
+  marcas
+    .findById(req.query.id)
+    .then((results) => {
+      res.send(results);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
+app.post("/marcas/insert", (req, res) => {
+  marcas
+    .insert(req.body)
+    .then(() => {
+      res.send("Você foi cadastrado com sucesso!");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
+    });
+});
+
+app.put("/marcas/update", (req, res) => {
+  marcas
+    .update(req.body)
+    .then(() => {
+      res.send("Dados atualizados com sucesso!");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
+    });
+});
+
+app.delete("/marcas/delete", (req, res) => {
+  marcas
     .deleteById(req.body)
     .then(() => {
       res.send("Informação deletada com sucesso!");
