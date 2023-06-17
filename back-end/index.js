@@ -9,15 +9,28 @@ const marcas = require("./marcas/marcas.js");
 
 const app = express();
 app.use(express.json());
-
 app.use(express.static("public"));
+
+const PORT = 5000;
+const HOST = "http://localhost";
 
 // Produtos
 app.get("/produtos/findAll", (req, res) => {
   produtos
     .findAll()
     .then((results) => {
-      res.send(results);
+      res.send(
+        results.map((produto) => {
+          return {
+            ...produto,
+            imagens:
+              produto.imagens &&
+              produto.imagens
+                .split(",")
+                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`),
+          };
+        })
+      );
     })
     .catch((error) => {
       console.error(error);
@@ -28,10 +41,57 @@ app.get("/produtos/findById", (req, res) => {
   produtos
     .findById(req.query.id)
     .then((results) => {
-      res.send(results);
+      res.send(
+        results.map((produto) => {
+          return {
+            ...produto,
+            imagens:
+              produto.imagens &&
+              produto.imagens
+                .split(",")
+                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`),
+          };
+        })
+      );
     })
     .catch((error) => {
       console.error(error);
+    });
+});
+
+app.post("/produtos/insert", (req, res) => {
+  produtos
+    .insert(req.body)
+    .then(() => {
+      res.send("Produto cadastrado com sucesso!");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
+    });
+});
+
+app.put("/produtos/update", (req, res) => {
+  produtos
+    .update(req.body)
+    .then(() => {
+      res.send("Produto atualizado com sucesso!");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
+    });
+});
+
+app.delete("/produtos/delete", (req, res) => {
+  produtos
+    .deleteById(req.body)
+    .then(() => {
+      res.send("Produto deletado com sucesso!");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
     });
 });
 
@@ -212,6 +272,6 @@ app.delete("/marcas/delete", (req, res) => {
     });
 });
 
-app.listen(5000, () => {
+app.listen(PORT, () => {
   console.log("Servidor Iniciado");
 });

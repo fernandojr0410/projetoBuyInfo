@@ -3,14 +3,143 @@ const util = require("util");
 const queryPromise = util.promisify(conn().query).bind(conn());
 
 function findAll() {
-  return queryPromise("SELECT * FROM Produto");
+  return queryPromise(`
+    SELECT p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome as categoria, m.nome as marca, d.nome as destaque, GROUP_CONCAT(i.nome) AS imagens
+    FROM produto p
+    LEFT JOIN categoria c ON c.id_categoria = p.categoria_id_categoria
+    LEFT JOIN destaque d ON d.id_destaque = p.destaque_id_destaque
+    LEFT JOIN marca m ON m.id_marca = p.marca_id_marca
+    LEFT JOIN imagem_produto i ON i.produto_id_produto = p.id_produto
+    GROUP BY p.id_produto;
+  `);
 }
 
 function findById(id) {
-  return queryPromise(`SELECT * FROM Produto WHERE Id_Produto = ${id}`);
+  return queryPromise(`
+    SELECT p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome as categoria, m.nome as marca, d.nome as destaque, GROUP_CONCAT(i.nome) AS imagens
+    FROM produto p
+    LEFT JOIN categoria c ON c.id_categoria = p.categoria_id_categoria
+    LEFT JOIN destaque d ON d.id_destaque = p.destaque_id_destaque
+    LEFT JOIN marca m ON m.id_marca = p.marca_id_marca
+    LEFT JOIN imagem_produto i ON i.produto_id_produto = p.id_produto
+    WHERE p.id_produto = ${id}
+    GROUP BY p.id_produto;
+  `);
+}
+
+function insert(dados) {
+  const {
+    nome,
+    descricao,
+    preco,
+    ativo,
+    categoria_id_categoria,
+    marca_id_marca,
+    destaque_id_destaque,
+  } = dados;
+
+  let destaqueValue = destaque_id_destaque === 0 ? destaque_id_destaque : null;
+
+  let sql = `INSERT INTO Produto 
+  (nome, descricao, preco, ativo, data_criacao, categoria_id_categoria, marca_id_marca`;
+
+  let values = `VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?`;
+
+  const params = [
+    nome,
+    descricao,
+    preco,
+    ativo,
+    categoria_id_categoria,
+    marca_id_marca,
+  ];
+
+  if (destaqueValue !== null) {
+    sql += ", destaque_id_destaque)";
+    values += ", ?)";
+    params.push(destaqueValue);
+  } else {
+    sql += ")";
+    values += ")";
+  }
+
+  sql += ` ${values}`;
+
+  return queryPromise(sql, params);
+}
+
+function update(dados) {
+  const {
+    id,
+    nome,
+    descricao,
+    preco,
+    ativo,
+    data_criacao,
+    categoria_id_categoria,
+    marca_id_marca,
+    destaque_id_destaque,
+  } = dados;
+  const params = [];
+  let sql = "UPDATE Produto SET";
+
+  if (nome) {
+    sql += " nome = ?,";
+    params.push(nome);
+  }
+
+  if (descricao) {
+    sql += " descricao = ?,";
+    params.push(descricao);
+  }
+
+  if (preco) {
+    sql += " preco = ?,";
+    params.push(preco);
+  }
+
+  if (ativo) {
+    sql += " ativo = ?,";
+    params.push(ativo);
+  }
+
+  if (data_criacao) {
+    sql += " data_criacao = ?,";
+    params.push(data_criacao);
+  }
+
+  if (categoria_id_categoria) {
+    sql += " categoria_id_categoria = ?,";
+    params.push(categoria_id_categoria);
+  }
+
+  if (marca_id_marca) {
+    sql += " marca_id_marca = ?,";
+    params.push(marca_id_marca);
+  }
+
+  if (destaque_id_destaque !== null) {
+    sql += " destaque_id_destaque = ?,";
+    params.push(destaque_id_destaque);
+  }
+
+  params.push(id);
+
+  sql = sql.slice(0, -1);
+
+  sql += " WHERE Id_Produto = ?";
+  return queryPromise(sql, params);
+}
+
+function deleteById(ids) {
+  const idsDelete = ids.toString();
+  return queryPromise(`DELETE FROM Produto WHERE Id_Produto IN (${idsDelete})`);
 }
 
 module.exports = {
   findAll,
   findById,
+  insert,
+  update,
+  deleteById,
 };
