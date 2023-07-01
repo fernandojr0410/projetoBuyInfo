@@ -1,5 +1,5 @@
 const express = require("express");
-// const path = require("path");
+const bodyParser = require("body-parser");
 
 const conn = require("./db/mysql.js");
 const produtos = require("./produtos/produtos.js");
@@ -10,6 +10,8 @@ const marcas = require("./marcas/marcas.js");
 const app = express();
 app.use(express.json());
 app.use(express.static("public"));
+app.use(bodyParser.json({ limit: "10mb" }));
+app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 
 const PORT = 5000;
 const HOST = "http://localhost";

@@ -36,14 +36,16 @@ function insert(dados) {
     categoria_id_categoria,
     marca_id_marca,
     destaque_id_destaque,
+    imagens,
   } = dados;
 
-  let destaqueValue = destaque_id_destaque === 0 ? destaque_id_destaque : null;
+  let destaqueValue = destaque_id_destaque ? destaque_id_destaque : null;
+
+  console.log("dados", dados);
+  return "";
 
   let sql = `INSERT INTO Produto 
-  (nome, descricao, preco, ativo, data_criacao, categoria_id_categoria, marca_id_marca`;
-
-  let values = `VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?`;
+  (nome, descricao, preco, ativo, categoria_id_categoria, marca_id_marca, destaque_id_destaque)VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
   const params = [
     nome,
@@ -52,18 +54,8 @@ function insert(dados) {
     ativo,
     categoria_id_categoria,
     marca_id_marca,
+    destaqueValue,
   ];
-
-  if (destaqueValue !== null) {
-    sql += ", destaque_id_destaque)";
-    values += ", ?)";
-    params.push(destaqueValue);
-  } else {
-    sql += ")";
-    values += ")";
-  }
-
-  sql += ` ${values}`;
 
   return queryPromise(sql, params);
 }
