@@ -35,7 +35,7 @@ app.get("/produtos/findAll", (req, res) => {
       );
     })
     .catch((error) => {
-      console.error(error);
+      console.error("teste", error);
     });
 });
 
