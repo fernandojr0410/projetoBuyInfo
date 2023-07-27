@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/phosphor-icons"></script>
+
+    <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="./css/global.css" />
+    <link rel="stylesheet" type="text/css" href="./css/header.css" />
+    <link rel="stylesheet" type="text/css" href="./css/carrinho.css" />
+    <link rel="stylesheet" type="text/css" href="./css/footer.css" />
+
+    <title>Carrinho</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="header-container">
+        <a href="home.html">
+          <img src="./img/logo.png" alt="logo empresa" />
+        </a>
+
+          <a href="#" class="header-container-icones">
+            <i class="ph-user-circle"></i>
+            <span>Entrar</span>
+          </a>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+      <div class="fundo-main-container">  
+      <div class="fundo">
+        
+        <div class="titulo-meu-carrinho">
+          <h3>Meu carrinho</h3>
+        </div>
+          <div class="fundo-meu-carrinho">
+            <div class="produto">
+            <div class="imagem-produto">
+              <img src="../back-end/public/imagens/produtos/placa-de-video/11-img-1.jpg" 
+              alt="">
+              <div class="informacao-produto">
+                <h3>Placa de Video GTX</h3>
+                <span>Ref: # 16F-4478-631-22</span>
+                <span>Vendido e entregue por Buy Info</span>
+                <span>Cor: Preto</span>
+                <span>Marca: Galax</span>
+              </div>
+            </div>
+            
+            <div class="lixeira">
+              <i class="ph-light ph-trash"></i>
+            </div> 
+          </div>
+
+            <div class="quantidade-produto">
+                <div class="counter">
+                    <h3>Quantidade:</h3>
+                    <p></p>
+                    <button class="botao diminui" onclick="decrement()">-</button>
+                    <span id="value">0</span>
+                    <button class="botao soma" onclick="increment()">+</button>
+                </div>
+
+                <div class="valor-produto">
+                    <span>R$ 1.200,00</span>
+                    <span>ou R$ 1.150,00 no Pix</span>
+                </div>
+            </div>   
+          </div>  
+
+          
+          <div class="frete">
+            <span>Simule frete e prazo de entrega</span>
+          </div>  
+            <div class="digite-cep">
+              <input type="number" placeholder="Digite aqui seu CEP">
+              <button type="button">Calcular</button><span>Não sei meu cep</span>
+            </div>
+                       
+        </div>
+        
+        <div class="fundo-resumo-container">
+        <div class="titulo-resumo-compra">
+          <h3>Resumo da Compra</h3>
+        </div>
+          <div class="fundo-resumo-compra">
+            <div class="detalhes-pedido">
+            <div class="resumo">
+              <div class="informacao">
+              <span>Subtotal ( 1 item)</span>
+              <div class="valor"> <span>R$ 1.200,00</span>
+              </div>
+            </div>
+              <div class="quantidade-produto"></div>
+              <div class="informacao">
+                <span>Cupom de Desconto</span>
+                <div class="valor"> <p>Adicionar</p>
+                </div>
+              </div>
+              <div class="quantidade-produto"></div>
+              <div class="informacao">
+                <span>Valor Total</span>
+                <div class="valor"> <span>R$ 1.200,00</span>
+                  <span>Em até 10x de R$ 120,00 sem juros</span>
+                </div>
+              </div>
+              <div class="quantidade-produto"></div>
+            </div>
+          
+            <div class="button">
+              <div class="botao-finalizar">
+                <button type="button">FINALIZAR
+                  <i class="ph-light ph-arrow-circle-right"></i></button>
+                </div>
+              </div>
+
+              <div class="button">
+                <div class="botao-escolher-pedidos">
+                  <button type="button">ESCOLHER MAIS PRODUTOS</button>
+              </div>
+            </div>
+            </div>
+          </div>
+          </div>
+    </div>
+    </div>
+  </main>
+
+    <div class="informacoes-pagamento">
+      <span>CENTRAL DE RELACIONAMENTO</span>
+      <span>Preparada para esclarecer suas dúvidas</span>
+      <span>TIRE SUAS DÚVIDAS</span>
+    </div>
+
+    <div class="pagamento">
+      <span>Precisa de Ajuda?</span><img src="../front-end/img/Cartao de Credito.png" alt="">
+    </div>
+
+    <footer>
+
+      <div class="fundo-footer">
+        <div class="informacao-footer">
+          <i class="ph-info">
+            <span>Ajuda e contato</span>
+          </i>
+          <i class="ph-keyhole">
+            <span>Dicas de segurança</span>
+          </i>
+          <i class="ph-megaphone">
+            <span>Anunciar</span>
+          </i>
+        </div>
+        <div class="logo">
+          <div class="logo-empresa">
+            <img src="./img/logo.png" alt="Logo empresa" />
+          </div>
+        </div>
+      </div>
+
+      <div class="fundo-footer">
+        <span
+          >Buy Info é uma marca registrada. Todos os direitos reservados. Os
+          preços anunciados neste site promocional podem ser alterados sem
+          prévio aviso. O Buy Info não é responsável por erros descritivos. As
+          fotos contidas nesta página são meramente ilustrativas do produto e
+          podem variar de acordo com o fornecedor/lote do fabricante. Clique
+          aqui e veja as políticas de nossa empresa.</span
+        >
+      </div>
+    </footer>
+
+  
+    </body>
+  </html>

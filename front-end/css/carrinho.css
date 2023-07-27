@@ -1,0 +1,398 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.fundo-main-container {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+  gap: 20px;
+}
+
+.fundo {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex-grow: 1;
+  max-width: 600px;
+  padding: 33px 0;
+}
+
+.titulo-meu-carrinho > h3 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--azul-primario);
+}
+
+.fundo-meu-carrinho {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px gray;
+  width: 100%;
+  max-width: 600px;
+}
+
+.teste {
+  display: flex;
+  justify-content: space-between;
+}
+
+.produto {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+  padding: 0 10px;
+}
+
+.imagem-produto {
+  display: flex;
+  gap: 10px;
+}
+
+.imagem-produto > img {
+  width: 150px;
+  height: 120px;
+}
+
+.informacao-produto {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  font-size: 12px;
+}
+
+.informacao-produto > h3  {
+  color: black;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.informacao-produto > span  {
+  color: var(--azul-primario);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.lixeira > i {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.quantidade-produto {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--azul-primario);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.counter {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.counter > h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--azul-primario);
+}
+
+.counter >span {
+  border: 1px solid var(--azul-primario);
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 6px 0;
+}
+
+.botao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 18px;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  cursor: pointer;
+}
+
+.diminui {
+  margin-right: 10px;
+}
+
+.soma {
+  margin-left: 10px;
+}
+
+.valor-produto {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.valor-produto > span:nth-child(1) {
+  font-size: 16px;
+  text-align: center;
+  color: var(--azul-primario);
+  font-weight: 700;
+}
+
+.valor-produto > span {
+  font-size: 16px;
+  text-align: center;
+  color: var(--azul-primario);
+  font-weight: 700;
+}
+
+/* CARD - RESUMO DA COMPRA */
+
+.fundo-resumo-container {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  gap: 20px;
+  flex-grow: 1;
+  max-width: 600px;
+  padding: 33px 0;
+}
+
+.titulo-resumo-compra {
+display: flex; 
+align-content: center;
+}
+
+.titulo-resumo-compra > h3 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--azul-primario);
+}
+
+.fundo-resumo-compra {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px gray;
+  width: 100%;
+  max-width: 600px;
+}
+
+.resumo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.informacao {
+  display: flex;
+  justify-content: space-between;
+}
+
+.informacao > span {
+  font-size: 13px;
+  color: black;
+  font-weight: 700;
+}
+
+.quantidade-produto {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--azul-primario);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.valor {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 45%;
+}
+
+.valor > span:nth-child(1) {
+  font-size: 13px;
+  color: var(--azul-primario);
+  font-weight: 800;
+}
+
+.valor > p {
+  font-size: 13px;
+  color: var(--azul-primario);
+  text-decoration: underline;
+  font-weight: 700;
+  content: " ";
+}
+
+.valor > span:nth-child(2) {
+  font-size: 12px;
+  color: var(--azul-primario);
+  text-align: right;
+  font-weight: 500;
+}
+
+.button {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.botao-finalizar {
+  display: flex;
+  flex-direction: row;  
+}
+
+.botao-finalizar > button {
+  flex: 1; 
+  background-color: #127036;
+  border: none;
+  color: white; 
+  font-size: 14px; 
+  font-weight: 600;
+  text-align: center; 
+  padding: 10px 20px; 
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.botao-finalizar > button:hover {
+  opacity: 1px;
+}
+
+.botao-escolher-pedidos {
+  display: flex;
+  flex-direction: row;  
+}
+
+.botao-escolher-pedidos > button {
+  flex: 1; 
+  border: 1px solid var(--azul-primario);
+  color: var(--azul-primario);
+  font-size: 14px; 
+  font-weight: 600;
+  text-align: center; 
+  padding: 10px 20px; 
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.botao-escolher-pedidos > button:hover {
+  opacity: 1px;
+}
+
+/* Simular Frete */
+
+.frete {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.frete > span {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--azul-primario);
+}
+
+.digite-cep {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+}
+
+.digite-cep > input {
+  width: 45%;
+  height: 30px;
+  font-size: 12px;
+  padding: 0 10px;
+  font-weight: 500;
+  border-radius: 8px;
+  border: 1px solid var(--azul-primario);
+  outline: 0;
+}
+
+.digite-cep > button {
+  width: 10%;
+  height: 30px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid var(--azul-primario);
+  color: var(--azul-primario);
+}
+
+.digite-cep > span {
+  font-size: 12px;
+  text-decoration: underline;
+  font-weight: 700;
+  color: var(--azul-primario);
+  cursor: pointer;
+}
+
+/* Pagamento */
+
+.informacoes-pagamento {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding-top: 200px;
+}
+
+.informacoes-pagamento > span:nth-child(odd) {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--azul-primario);
+}
+
+.informacoes-pagamento > span:nth-child(even) {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(94, 94, 94);
+}
+
+.pagamento {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  gap: 20px;
+}
+
+.pagamento img {
+  width: 30%;
+  height: 40px;
+}
+
+.pagamento > span {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(94, 94, 94);
+}
