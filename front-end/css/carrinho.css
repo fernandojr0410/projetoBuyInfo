@@ -5,6 +5,12 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .container {
   display: block;
   position: relative;
@@ -76,13 +82,13 @@
   font-size: 12px;
 }
 
-.informacao-produto > h3  {
+.informacao-produto > h3 {
   color: black;
   font-size: 16px;
   font-weight: 700;
 }
 
-.informacao-produto > span  {
+.informacao-produto > span {
   color: var(--azul-primario);
   font-size: 14px;
   font-weight: 500;
@@ -117,7 +123,7 @@
   color: var(--azul-primario);
 }
 
-.counter >span {
+.counter > span {
   border: 1px solid var(--azul-primario);
   width: 30px;
   height: 30px;
@@ -174,17 +180,17 @@
   display: flex;
   position: sticky;
   top: 33px;
-  width: 10%;
+  width: 50%;
   flex-direction: column;
   gap: 18px;
   flex-grow: 1;
-  max-height: calc(100vh - 80px); 
+  max-height: calc(100vh - 80px);
   overflow-y: auto;
 }
 
 .titulo-resumo-compra {
-display: flex; 
-align-content: center;
+  display: flex;
+  align-content: center;
 }
 
 .titulo-resumo-compra > h3 {
@@ -199,7 +205,7 @@ align-content: center;
   padding: 10px;
   background-color: #fff;
   border-radius: 10px;
-  box-shadow: 0  0 10px gray;
+  box-shadow: 0 0 10px gray;
   width: 100%;
   max-width: 500px;
 }
@@ -268,18 +274,18 @@ align-content: center;
 
 .botao-finalizar {
   display: flex;
-  flex-direction: row;  
+  flex-direction: row;
 }
 
 .botao-finalizar > button {
-  flex: 1; 
+  flex: 1;
   background-color: #127036;
   border: none;
-  color: white; 
-  font-size: 14px; 
+  color: white;
+  font-size: 14px;
   font-weight: 600;
-  text-align: center; 
-  padding: 10px 20px; 
+  text-align: center;
+  padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
 }
@@ -290,17 +296,17 @@ align-content: center;
 
 .botao-escolher-pedidos {
   display: flex;
-  flex-direction: row;  
+  flex-direction: row;
 }
 
 .botao-escolher-pedidos > button {
-  flex: 1; 
+  flex: 1;
   border: 1px solid var(--azul-primario);
   color: var(--azul-primario);
-  font-size: 14px; 
+  font-size: 14px;
   font-weight: 600;
-  text-align: center; 
-  padding: 10px 20px; 
+  text-align: center;
+  padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
 }

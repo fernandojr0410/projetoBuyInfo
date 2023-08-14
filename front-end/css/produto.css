@@ -91,21 +91,28 @@
   cursor: pointer;
 }
 
-.comprar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.btn-comprar,
+.btn-adicionar-carrinho {
   width: 280px;
   height: 40px;
   font-size: 20px;
-  background-color: rgb(65, 157, 76);
-  color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.comprar:hover {
+.btn-comprar {
+  background-color: rgb(65, 157, 76);
+  color: #fff;
+}
+
+.btn-adicionar-carrinho {
+  background-color: rgb(147, 236, 160);
+  color: rgb(65, 157, 76);
+}
+
+.btn-comprar:hover,
+.btn-adicionar-carrinho:hover {
   opacity: 0.8;
 }
 

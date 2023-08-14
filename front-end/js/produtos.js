@@ -7,6 +7,9 @@ const estaNaHome = url.pathname.includes("home");
 const categoria = url.searchParams.get("categoria");
 const marca = url.searchParams.get("marca");
 const produto = url.searchParams.get("produto");
+const carrinho = url.pathname.includes("carrinho");
+console.log(url);
+console.log(carrinho);
 
 const idMaisPesquisados = "99010004";
 const idUltimosAnuncios = "99010005";
@@ -117,9 +120,15 @@ function buscarProdutos(query) {
     });
 }
 
+function buscarProdutosCarrinho() {
+  const carrinho = JSON.parse(localStorage.getItem("carrinho"));
+  mostrarCarrinho(carrinho);
+}
+
 if (estaNaHome) buscarProdutos(queryProdutosHome);
 if (categoria) buscarProdutos(queryProdutosCategoria);
 if (produto) buscarProdutos(queryProduto);
+if (carrinho) buscarProdutosCarrinho();
 
 function mostrarTituloProdutos(categoriaOuMarca) {
   alterarTituloDaPagina(categoriaOuMarca.nome);
@@ -193,8 +202,15 @@ function mostrarProduto(produto) {
                 produto.preco
               })">ver mais opções de pagamento</span>
 
-              <button class="comprar" id="comprar" type="button">
-                COMPRAR
+              <button class="btn-comprar" id="comprar" type="button">
+                Comprar agora
+              </button>
+              <button 
+                class="btn-adicionar-carrinho" 
+                id="btnAddCarrinho"
+                type="button" 
+              >
+                Adicionar ao carrinho
               </button>
 
               <div class="calcular-frete">
@@ -222,6 +238,10 @@ function mostrarProduto(produto) {
   containerProduto.appendChild(dadosProduto);
   criarGaleriaImagensProduto(produto);
   criarDescricaoProduto(produto);
+  const btnAddCarrinho = document.getElementById("btnAddCarrinho");
+  btnAddCarrinho.addEventListener("click", () => {
+    handleAdicionarAoCarrinho(produto);
+  });
 }
 
 function criarCardProduto(produto) {
@@ -373,6 +393,79 @@ function criarParcelaPixPagamento(precoProduto) {
       a gente explica direitinho como pagar com Pix.</p>
     `;
   parcelasPagamento.appendChild(parcela);
+}
+
+function mostrarCarrinho(carrinho) {
+  alterarTituloDaPagina("Carrinho");
+  const containerProdutosCarrinho = document.getElementById(
+    "containerProdutosCarrinho"
+  );
+  carrinho.forEach((item) => {
+    const dadosProduto = document.createElement("div");
+    dadosProduto.className = "fundo-meu-carrinho";
+    dadosProduto.innerHTML = `
+    <div class="produto">
+      <div class="imagem-produto">
+        <img
+          src="${item.imagens[0].url}"
+          alt="${item.nome}"
+        />
+        <div class="informacao-produto">
+          <h3>${item.nome}</h3>
+          <span>Vendido e entregue por Buy Info</span>
+          <span>Marca: ${item.brand.nome}</span>
+        </div>
+      </div>
+
+      <div class="lixeira">
+        <i class="ph-light ph-trash"></i>
+      </div>
+    </div>
+
+    <div class="quantidade-produto">
+      <div class="counter">
+        <h3>Quantidade:</h3>
+        <p></p>
+        <button class="botao diminui" onclick="decrement()">
+          -
+        </button>
+        <span id="value">${item.quantidade}</span>
+        <button class="botao soma" onclick="increment()">+</button>
+      </div>
+
+      <div class="valor-produto">
+        <span>${formatarValorMoeda(item.preco)}</span>
+        <span>ou R$ 1.150,00 no Pix</span>
+      </div>
+    </div>
+        `;
+    containerProdutosCarrinho.appendChild(dadosProduto);
+  });
+}
+
+function handleAdicionarAoCarrinho(produto) {
+  produto.quantidade = 1;
+  let carrinho = JSON.parse(localStorage.getItem("carrinho"));
+
+  if (!carrinho) {
+    carrinho = [produto];
+    adicionarAoCarrinho(carrinho);
+    return;
+  }
+
+  const produtoCarrinho = carrinho.filter((item) => item.id === produto.id);
+
+  if (produtoCarrinho.length === 0) {
+    carrinho.push(produto);
+    adicionarAoCarrinho(carrinho);
+  } else {
+    produtoCarrinho[0].quantidade += 1;
+    adicionarAoCarrinho(carrinho);
+  }
+}
+
+function adicionarAoCarrinho(carrinho) {
+  localStorage.setItem("carrinho", JSON.stringify(carrinho));
 }
 
 // FUNÇÕES DE USO GERAL
