@@ -8,8 +8,6 @@ const categoria = url.searchParams.get("categoria");
 const marca = url.searchParams.get("marca");
 const produto = url.searchParams.get("produto");
 const carrinho = url.pathname.includes("carrinho");
-console.log(url);
-console.log(carrinho);
 
 const idMaisPesquisados = "99010004";
 const idUltimosAnuncios = "99010005";
@@ -400,6 +398,9 @@ function mostrarCarrinho(carrinho) {
   const containerProdutosCarrinho = document.getElementById(
     "containerProdutosCarrinho"
   );
+
+  containerProdutosCarrinho.innerHTML = "";
+
   carrinho.forEach((item) => {
     const dadosProduto = document.createElement("div");
     dadosProduto.className = "fundo-meu-carrinho";
@@ -426,21 +427,57 @@ function mostrarCarrinho(carrinho) {
       <div class="counter">
         <h3>Quantidade:</h3>
         <p></p>
-        <button class="botao diminui" onclick="decrement()">
+        <button
+          type="button"
+          class="botao diminui"
+          onclick="diminuirQtdProdutoCarrinho(${item.id})"
+        >
           -
         </button>
         <span id="value">${item.quantidade}</span>
-        <button class="botao soma" onclick="increment()">+</button>
+        <button
+          type="button"
+          class="botao soma"
+          onclick="aumentarQtdProdutoCarrinho(${item.id})"
+        >
+          +
+        </button>
       </div>
 
       <div class="valor-produto">
-        <span>${formatarValorMoeda(item.preco)}</span>
-        <span>ou R$ 1.150,00 no Pix</span>
+        <span>Valor Unitário: ${formatarValorMoeda(item.preco)}</span>
+        <span>Valor Total: ${formatarValorMoeda(
+          item.quantidade * item.preco
+        )}</span>
       </div>
     </div>
         `;
     containerProdutosCarrinho.appendChild(dadosProduto);
   });
+}
+
+function diminuirQtdProdutoCarrinho(idProduto) {
+  const carrinho = JSON.parse(localStorage.getItem("carrinho"));
+  const produtoCarrinho = carrinho.filter(
+    (item) => item.id === idProduto.toString()
+  );
+
+  if (produtoCarrinho[0].quantidade > 1) {
+    produtoCarrinho[0].quantidade -= 1;
+    adicionarAoCarrinho(carrinho);
+    mostrarCarrinho(carrinho);
+  }
+}
+
+function aumentarQtdProdutoCarrinho(idProduto) {
+  const carrinho = JSON.parse(localStorage.getItem("carrinho"));
+  const produtoCarrinho = carrinho.filter(
+    (item) => item.id === idProduto.toString()
+  );
+
+  produtoCarrinho[0].quantidade += 1;
+  adicionarAoCarrinho(carrinho);
+  mostrarCarrinho(carrinho);
 }
 
 function handleAdicionarAoCarrinho(produto) {

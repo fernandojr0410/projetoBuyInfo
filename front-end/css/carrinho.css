@@ -189,7 +189,7 @@
 }
 
 .titulo-resumo-compra {
-  display: flex;
+  display: fixed;
   align-content: center;
 }
 
@@ -299,7 +299,7 @@
   flex-direction: row;
 }
 
-.botao-escolher-pedidos > button {
+.botao-escolher-pedidos > a {
   flex: 1;
   border: 1px solid var(--azul-primario);
   color: var(--azul-primario);
@@ -308,6 +308,7 @@
   text-align: center;
   padding: 10px 20px;
   border-radius: 8px;
+  text-decoration: none;
   cursor: pointer;
 }
 
@@ -348,7 +349,7 @@
 }
 
 .digite-cep > button {
-  width: 10%;
+  width: 13%;
   height: 30px;
   font-size: 12px;
   font-weight: 500;
@@ -356,6 +357,7 @@
   border-radius: 8px;
   border: 1px solid var(--azul-primario);
   color: var(--azul-primario);
+  cursor: pointer;
 }
 
 .digite-cep > span {
