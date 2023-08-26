@@ -7,7 +7,7 @@ const estaNaHome = url.pathname.includes("home");
 const categoria = url.searchParams.get("categoria");
 const marca = url.searchParams.get("marca");
 const produto = url.searchParams.get("produto");
-const carrinho = url.pathname.includes("carrinho");
+const paginaCarrinho = url.pathname.includes("carrinho");
 
 const idMaisPesquisados = "99010004";
 const idUltimosAnuncios = "99010005";
@@ -89,6 +89,8 @@ const produtosCategoriaEMarca = document.getElementById(
 );
 
 function buscarProdutos(query) {
+  atualizarItensCarrinho(JSON.parse(localStorage.getItem("carrinho")));
+
   fetch("https://graphql.datocms.com/", {
     method: "POST",
     headers: {
@@ -121,12 +123,13 @@ function buscarProdutos(query) {
 function buscarProdutosCarrinho() {
   const carrinho = JSON.parse(localStorage.getItem("carrinho"));
   mostrarCarrinho(carrinho);
+  calcularResumoCarrinho(carrinho);
 }
 
 if (estaNaHome) buscarProdutos(queryProdutosHome);
 if (categoria) buscarProdutos(queryProdutosCategoria);
 if (produto) buscarProdutos(queryProduto);
-if (carrinho) buscarProdutosCarrinho();
+if (paginaCarrinho) buscarProdutosCarrinho();
 
 function mostrarTituloProdutos(categoriaOuMarca) {
   alterarTituloDaPagina(categoriaOuMarca.nome);
@@ -200,7 +203,7 @@ function mostrarProduto(produto) {
                 produto.preco
               })">ver mais opções de pagamento</span>
 
-              <button class="btn-comprar" id="comprar" type="button">
+              <button class="btn-comprar" id="comprarAgora" type="button">
                 Comprar agora
               </button>
               <button 
@@ -236,9 +239,13 @@ function mostrarProduto(produto) {
   containerProduto.appendChild(dadosProduto);
   criarGaleriaImagensProduto(produto);
   criarDescricaoProduto(produto);
+  const btnComprarAgora = document.getElementById("comprarAgora");
+  btnComprarAgora.addEventListener("click", () => {
+    handleAdicionarAoCarrinho(produto, true);
+  });
   const btnAddCarrinho = document.getElementById("btnAddCarrinho");
   btnAddCarrinho.addEventListener("click", () => {
-    handleAdicionarAoCarrinho(produto);
+    handleAdicionarAoCarrinho(produto, false);
   });
 }
 
@@ -419,7 +426,9 @@ function mostrarCarrinho(carrinho) {
       </div>
 
       <div class="lixeira">
-        <i class="ph-light ph-trash"></i>
+        <i class="ph-light ph-trash" onclick="removerProdutoCarrinho(${
+          item.id
+        })"></i>
       </div>
     </div>
 
@@ -466,6 +475,7 @@ function diminuirQtdProdutoCarrinho(idProduto) {
     produtoCarrinho[0].quantidade -= 1;
     adicionarAoCarrinho(carrinho);
     mostrarCarrinho(carrinho);
+    calcularResumoCarrinho(carrinho);
   }
 }
 
@@ -478,15 +488,61 @@ function aumentarQtdProdutoCarrinho(idProduto) {
   produtoCarrinho[0].quantidade += 1;
   adicionarAoCarrinho(carrinho);
   mostrarCarrinho(carrinho);
+  calcularResumoCarrinho(carrinho);
 }
 
-function handleAdicionarAoCarrinho(produto) {
+function removerProdutoCarrinho(idProduto) {
+  const carrinho = JSON.parse(localStorage.getItem("carrinho"));
+  const produtoCarrinho = carrinho.filter(
+    (item) => item.id === idProduto.toString()
+  );
+
+  const index = carrinho.indexOf(produtoCarrinho[0]);
+  carrinho.splice(index, 1);
+  adicionarAoCarrinho(carrinho);
+  mostrarCarrinho(carrinho);
+  calcularResumoCarrinho(carrinho);
+}
+
+function calcularResumoCarrinho(carrinho) {
+  const valorTotal = carrinho.reduce((total, item) => {
+    const subtotal = item.preco * item.quantidade;
+    return total + subtotal;
+  }, 0);
+
+  const quantidadeItens =
+    carrinho.length > 1
+      ? `${carrinho.length} itens`
+      : `${carrinho.length} item`;
+
+  const resumoCarrinho = document.getElementById("resumoCarrinho");
+  resumoCarrinho.innerHTML = `
+    <div class="informacao">
+      <span>Subtotal (${quantidadeItens})</span>
+      <div class="valor"><span>${formatarValorMoeda(valorTotal)}</span></div>
+    </div>
+
+    <div class="quantidade-produto"></div>
+    <div class="informacao">
+      <span>Valor Total</span>
+      <div class="valor">
+        <span>${formatarValorMoeda(valorTotal)}</span>
+        <span>Em até ${MAXIMO_PARCELAS_PAGAMENTO}x de ${formatarValorMoeda(
+    valorTotal / MAXIMO_PARCELAS_PAGAMENTO
+  )} sem juros</span>
+      </div>
+    </div>
+    <div class="quantidade-produto"></div>
+  `;
+}
+
+function handleAdicionarAoCarrinho(produto, comprarAgora) {
   produto.quantidade = 1;
   let carrinho = JSON.parse(localStorage.getItem("carrinho"));
 
   if (!carrinho) {
     carrinho = [produto];
-    adicionarAoCarrinho(carrinho);
+    adicionarAoCarrinho(carrinho, comprarAgora);
     return;
   }
 
@@ -494,15 +550,28 @@ function handleAdicionarAoCarrinho(produto) {
 
   if (produtoCarrinho.length === 0) {
     carrinho.push(produto);
-    adicionarAoCarrinho(carrinho);
+    adicionarAoCarrinho(carrinho, comprarAgora);
   } else {
     produtoCarrinho[0].quantidade += 1;
-    adicionarAoCarrinho(carrinho);
+    adicionarAoCarrinho(carrinho, comprarAgora);
   }
 }
 
-function adicionarAoCarrinho(carrinho) {
+function adicionarAoCarrinho(carrinho, comprarAgora) {
   localStorage.setItem("carrinho", JSON.stringify(carrinho));
+  if (!paginaCarrinho) atualizarItensCarrinho(carrinho);
+  if (comprarAgora) window.location.href = "./carrinho.html";
+}
+
+function atualizarItensCarrinho(carrinho) {
+  const quantidadeItens = carrinho.length;
+  if (quantidadeItens === 0) return;
+
+  const headerItensCarrinho = document.getElementById("headerItensCarrinho");
+  const itensCarrinho = document.createElement("small");
+  itensCarrinho.className = "header-itens-carrinho";
+  itensCarrinho.innerText = quantidadeItens;
+  headerItensCarrinho.appendChild(itensCarrinho);
 }
 
 // FUNÇÕES DE USO GERAL
