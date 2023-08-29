@@ -9,10 +9,10 @@
     <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="./css/global.css" />
     <link rel="stylesheet" type="text/css" href="./css/header.css" />
-    <link rel="stylesheet" type="text/css" href="./css/carrinho.css" />
+    <link rel="stylesheet" type="text/css" href="./css/carrinho copy.css" />
     <link rel="stylesheet" type="text/css" href="./css/footer.css" />
 
-    <title>Carrinho</title>
+    <title>Carrinho Copy</title>
   </head>
 
   <body>
@@ -22,12 +22,7 @@
           <img src="./img/logo.png" alt="logo empresa" />
         </a>
         <div class="header-container-items">
-          <a href="#" class="header-container-icones">
-            <i class="ph ph-shopping-cart"></i>
-            <span>Carrinho</span>
-          </a>
-
-          <a href="./carrinho.html" class="header-container-icones">
+          <a href="./login.html" class="header-container-icones">
             <i class="ph-user-circle"></i>
             <span>Entrar</span>
           </a>
@@ -42,44 +37,9 @@
             <div class="titulo-meu-carrinho">
               <h3>Meu carrinho</h3>
             </div>
-            <div class="fundo-meu-carrinho">
-              <div class="produto">
-                <div class="imagem-produto">
-                  <img
-                    src="../back-end/public/imagens/produtos/placa-de-video/11-img-1.jpg"
-                    alt=""
-                  />
-                  <div class="informacao-produto">
-                    <h3>Placa de Video GTX</h3>
-                    <span>Ref: # 16F-4478-631-22</span>
-                    <span>Vendido e entregue por Buy Info</span>
-                    <span>Cor: Preto</span>
-                    <span>Marca: Galax</span>
-                  </div>
-                </div>
 
-                <div class="lixeira">
-                  <i class="ph-light ph-trash"></i>
-                </div>
-              </div>
+            <div class="cards" id="containerProdutosCarrinho"></div>
 
-              <div class="quantidade-produto">
-                <div class="counter">
-                  <h3>Quantidade:</h3>
-                  <p></p>
-                  <button class="botao diminui" onclick="decrement()">-</button>
-                  <span id="value">0</span>
-                  <button class="botao soma" onclick="increment()">+</button>
-                </div>
-
-                <div class="valor-produto">
-                  <span>R$ 1.200,00</span>
-                  <span>ou R$ 1.150,00 no Pix</span>
-                </div>
-              </div>
-            </div>
-
-            
             <div class="frete">
               <span>Simule frete e prazo de entrega</span>
             </div>
@@ -96,26 +56,7 @@
             </div>
             <div class="fundo-resumo-compra">
               <div class="detalhes-pedido">
-                <div class="resumo">
-                  <div class="informacao">
-                    <span>Subtotal ( 1 item)</span>
-                    <div class="valor"><span>R$ 1.200,00</span></div>
-                  </div>
-                  <div class="quantidade-produto"></div>
-                  <div class="informacao">
-                    <span>Cupom de Desconto</span>
-                    <div class="valor"><p>Adicionar</p></div>
-                  </div>
-                  <div class="quantidade-produto"></div>
-                  <div class="informacao">
-                    <span>Valor Total</span>
-                    <div class="valor">
-                      <span>R$ 1.200,00</span>
-                      <span>Em até 10x de R$ 120,00 sem juros</span>
-                    </div>
-                  </div>
-                  <div class="quantidade-produto"></div>
-                </div>
+                <div class="resumo" id="resumoCarrinho"></div>
 
                 <div class="button">
                   <div class="botao-finalizar">
@@ -127,7 +68,9 @@
 
                 <div class="button">
                   <div class="botao-escolher-pedidos">
-                    <button type="button">ESCOLHER MAIS PRODUTOS</button>
+                    <a href="./home.html" type="button"
+                      >ESCOLHER MAIS PRODUTOS</a
+                    >
                   </div>
                 </div>
               </div>
@@ -157,7 +100,6 @@
           <i class="ph-keyhole">
             <span>Dicas de segurança</span>
           </i>
-         
         </div>
         <div class="logo">
           <div class="logo-empresa">
@@ -177,5 +119,7 @@
         >
       </div>
     </footer>
+
+    <script src="./js/produtos.js"></script>
   </body>
 </html>
