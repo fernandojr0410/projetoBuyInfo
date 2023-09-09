@@ -1,5 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
 
 const conn = require("./db/mysql.js");
 const produtos = require("./produtos/produtos.js");
@@ -16,13 +18,50 @@ app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 const PORT = 5000;
 const HOST = "http://localhost";
 
+function verificarToken(req, res, next) {
+  const token = req.headers["x-access-token"];
+
+  if (!token) {
+    return res
+      .status(401)
+      .json({ auth: false, mensagem: "Token não fornecido." });
+  }
+
+  jwt.verify(token, process.env.SECRET, function (err, decoded) {
+    if (err) {
+      console.error("Erro na verificação do token:", err);
+      return res
+        .status(500)
+        .json({ auth: false, mensagem: "Falha ao autenticar token." });
+    }
+
+    console.log("Token verificado com sucesso:", decoded);
+
+    req.userID = decoded.id;
+    next();
+  });
+}
+
+app.post("/login", (req, res, next) => {
+  if (req.body.user === "fernando" && req.body.pwd === "300") {
+    const id = 1;
+    const token = jwt.sign({ id }, process.env.SECRET, {
+      expiresIn: 600,
+    });
+    return res.json({ auth: true, token: token });
+  }
+  res.status(500).json({ mensagem: "Login Inválido!" });
+});
+
 // Produtos
-app.get("/produtos/findAll", (req, res) => {
+app.get("/produtos/findAll", verificarToken, (req, res) => {
   produtos
     .findAll()
     .then((results) => {
       res.send(
         results.map((produto) => {
+          const produtosFixos = [{ id: 1, nome: "fernando" }];
+          res.send([...results, ...produtosFixos]);
           return {
             ...produto,
             imagens:
@@ -39,12 +78,14 @@ app.get("/produtos/findAll", (req, res) => {
     });
 });
 
-app.get("/produtos/findById", (req, res) => {
+app.get("/produtos/findById", verificarToken, (req, res) => {
   produtos
     .findById(req.query.id)
     .then((results) => {
       res.send(
         results.map((produto) => {
+          const produtosFixos = [{ id: 1, nome: "fernando" }];
+          res.send([...results, ...produtosFixos]);
           return {
             ...produto,
             imagens:
@@ -61,7 +102,7 @@ app.get("/produtos/findById", (req, res) => {
     });
 });
 
-app.post("/produtos/insert", (req, res) => {
+app.post("/produtos/insert", verificarToken, (req, res) => {
   produtos
     .insert(req.body)
     .then(() => {
@@ -73,7 +114,7 @@ app.post("/produtos/insert", (req, res) => {
     });
 });
 
-app.put("/produtos/update", (req, res) => {
+app.put("/produtos/update", verificarToken, (req, res) => {
   produtos
     .update(req.body)
     .then(() => {
@@ -85,7 +126,7 @@ app.put("/produtos/update", (req, res) => {
     });
 });
 
-app.delete("/produtos/delete", (req, res) => {
+app.delete("/produtos/delete", verificarToken, (req, res) => {
   produtos
     .deleteById(req.body)
     .then(() => {
@@ -98,10 +139,12 @@ app.delete("/produtos/delete", (req, res) => {
 });
 
 // Categorias
-app.get("/categorias/findAll", (req, res) => {
+app.get("/categorias/findAll", verificarToken, (req, res) => {
   categorias
     .findAll()
     .then((results) => {
+      const categoriasFixos = [{ id: 1, nome: "fernando" }];
+      res.send([...results, ...categoriasFixos]);
       res.send(results);
     })
     .catch((error) => {
@@ -109,10 +152,12 @@ app.get("/categorias/findAll", (req, res) => {
     });
 });
 
-app.get("/categorias/findById", (req, res) => {
+app.get("/categorias/findById", verificarToken, (req, res) => {
   categorias
     .findById(req.query.id)
     .then((results) => {
+      const categoriasFixos = [{ id: 1, nome: "fernando" }];
+      res.send([...results, ...categoriasFixos]);
       res.send(results);
     })
     .catch((error) => {
@@ -120,7 +165,7 @@ app.get("/categorias/findById", (req, res) => {
     });
 });
 
-app.post("/categorias/insert", (req, res) => {
+app.post("/categorias/insert", verificarToken, (req, res) => {
   categorias
     .insert(req.body)
     .then(() => {
@@ -132,7 +177,7 @@ app.post("/categorias/insert", (req, res) => {
     });
 });
 
-app.put("/categorias/update", (req, res) => {
+app.put("/categorias/update", verificarToken, (req, res) => {
   categorias
     .update(req.body)
     .then(() => {
@@ -144,7 +189,7 @@ app.put("/categorias/update", (req, res) => {
     });
 });
 
-app.delete("/categorias/delete", (req, res) => {
+app.delete("/categorias/delete", verificarToken, (req, res) => {
   categorias
     .deleteById(req.body)
     .then(() => {
@@ -157,10 +202,12 @@ app.delete("/categorias/delete", (req, res) => {
 });
 
 // Cliente
-app.get("/clientes/findAll", (req, res) => {
+app.get("/clientes/findAll", verificarToken, (req, res) => {
   clientes
     .findAll()
     .then((results) => {
+      const clientesFixos = [{ id: 1, nome: "fernando" }];
+      res.send([...results, ...clientesFixos]);
       res.send(results);
     })
     .catch((error) => {
@@ -168,10 +215,12 @@ app.get("/clientes/findAll", (req, res) => {
     });
 });
 
-app.get("/clientes/findById", (req, res) => {
+app.get("/clientes/findById", verificarToken, (req, res) => {
   clientes
     .findById(req.query.id)
     .then((results) => {
+      const clientesFixos = [{ id: 1, nome: "fernando" }];
+      res.send([...results, ...clientesFixos]);
       res.send(results);
     })
     .catch((error) => {
@@ -179,7 +228,7 @@ app.get("/clientes/findById", (req, res) => {
     });
 });
 
-app.post("/clientes/insert", (req, res) => {
+app.post("/clientes/insert", verificarToken, (req, res) => {
   clientes
     .insert(req.body)
     .then(() => {
@@ -191,7 +240,7 @@ app.post("/clientes/insert", (req, res) => {
     });
 });
 
-app.put("/clientes/update", (req, res) => {
+app.put("/clientes/update", verificarToken, (req, res) => {
   clientes
     .update(req.body)
     .then(() => {
@@ -203,7 +252,7 @@ app.put("/clientes/update", (req, res) => {
     });
 });
 
-app.delete("/clientes/delete", (req, res) => {
+app.delete("/clientes/delete", verificarToken, (req, res) => {
   clientes
     .deleteById(req.body)
     .then(() => {
@@ -216,10 +265,12 @@ app.delete("/clientes/delete", (req, res) => {
 });
 
 // Marca
-app.get("/marcas/findAll", (req, res) => {
+app.get("/marcas/findAll", verificarToken, (req, res) => {
   marcas
     .findAll()
     .then((results) => {
+      const marcasFixo = [{ id: 1, nome: "fernando" }];
+      res.send([...results, ...marcasFixo]);
       res.send(results);
     })
     .catch((error) => {
@@ -227,10 +278,12 @@ app.get("/marcas/findAll", (req, res) => {
     });
 });
 
-app.get("/marcas/findById", (req, res) => {
+app.get("/marcas/findById", verificarToken, (req, res) => {
   marcas
     .findById(req.query.id)
     .then((results) => {
+      const marcasFixo = [{ id: 1, nome: "fernando" }];
+      res.send([...results, ...marcasFixo]);
       res.send(results);
     })
     .catch((error) => {
@@ -238,7 +291,7 @@ app.get("/marcas/findById", (req, res) => {
     });
 });
 
-app.post("/marcas/insert", (req, res) => {
+app.post("/marcas/insert", verificarToken, (req, res) => {
   marcas
     .insert(req.body)
     .then(() => {
@@ -250,7 +303,7 @@ app.post("/marcas/insert", (req, res) => {
     });
 });
 
-app.put("/marcas/update", (req, res) => {
+app.put("/marcas/update", verificarToken, (req, res) => {
   marcas
     .update(req.body)
     .then(() => {
@@ -262,7 +315,7 @@ app.put("/marcas/update", (req, res) => {
     });
 });
 
-app.delete("/marcas/delete", (req, res) => {
+app.delete("/marcas/delete", verificarToken, (req, res) => {
   marcas
     .deleteById(req.body)
     .then(() => {

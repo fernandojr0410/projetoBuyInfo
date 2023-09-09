@@ -36,13 +36,13 @@ function insert(dados) {
     categoria_id_categoria,
     marca_id_marca,
     destaque_id_destaque,
-    imagens,
+    // imagens,
   } = dados;
 
   let destaqueValue = destaque_id_destaque ? destaque_id_destaque : null;
 
   console.log("dados", dados);
-  return "";
+  // return "";
 
   let sql = `INSERT INTO Produto 
   (nome, descricao, preco, ativo, categoria_id_categoria, marca_id_marca, destaque_id_destaque)VALUES (?, ?, ?, ?, ?, ?, ?)`;
