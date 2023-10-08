@@ -52,10 +52,7 @@
   flex-grow: 1;
 }
 
-.teste {
-  display: flex;
-  justify-content: space-between;
-}
+
 
 .produto {
   display: flex;
@@ -178,11 +175,10 @@
 
 .fundo-resumo-container {
   display: flex;
-  justify-content: center;
-  align-content: center;
+  padding-top: 31px;
   width: 50%;
   flex-direction: column;
-  gap: 18px;
+  gap: 22px;
   flex-grow: 1;
   max-height: calc(100vh - 80px);
   overflow-y: auto;
@@ -191,7 +187,6 @@
 .titulo-resumo-compra {
   display: fixed;
   align-content: center;
-  padding-top: 30px;
 }
 
 .titulo-resumo-compra > h3 {
@@ -203,6 +198,7 @@
 .fundo-resumo-compra {
   display: flex;
   flex-direction: column;
+  
   align-content: center;
   justify-content: center;
   padding: 10px;

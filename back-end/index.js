@@ -46,7 +46,7 @@ app.post("/login", (req, res, next) => {
   if (req.body.user === "fernando" && req.body.pwd === "300") {
     const id = 1;
     const token = jwt.sign({ id }, process.env.SECRET, {
-      expiresIn: 600,
+      expiresIn: 1200,
     });
     return res.json({ auth: true, token: token });
   }
