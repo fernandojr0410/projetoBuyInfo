@@ -3,7 +3,8 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./index.css";
 import Header from "./layout/header/header";
-import MainLayout from "./layout/main-layout/main-layout";
+// import MainLayout from "./layout/main-layout/main-layout";
+import Home from "./pages/Home";
 import Footer from "./layout/footer/footer";
 import Cart from "./pages/cart/cart";
 
@@ -14,7 +15,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         <Route exact path="/carrinho" element={<Cart />} />
       </Routes>
-      <MainLayout />
+      {/* <MainLayout /> */}
+      <Home />
       <Footer />
     </Router>
   </React.StrictMode>

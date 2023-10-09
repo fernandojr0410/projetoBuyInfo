@@ -1,23 +1,23 @@
 import Logo from "../../assets/images/logo-buy-info.png";
+import { AiOutlineShoppingCart } from "react-icons/ai";
+import { BiUserCircle } from "react-icons/bi";
 import { Link } from "react-router-dom";
 
 function Header() {
   return (
-    <header className="bg-white w-screen h-24 flex items-center justify-between p-8">
+    <header className="flex items-center justify-between bg-white w-screen h-24  p-8">
       <img src={Logo} alt="Logo Buy Info" className="w-56" />
 
-      <div className="flex gap-4">
-        <div className="flex items-center gap-2">
-          <Link to="/carrinho">
-            <i>icone</i>
-            <span>Carrinho</span>
-          </Link>
+      <div className="flex items-center gap-2">
+        <Link to="/carrinho" className="flex items-center gap-2 ">
+          <AiOutlineShoppingCart className="h-6 w-6" />
+          <span className="text-lg">Carrinho</span>
+        </Link>
 
-          <Link to="/#">
-            <i>icone</i>
-            <span>Entrar</span>
-          </Link>
-        </div>
+        <Link to="/#" className="flex items-center gap-2 ">
+          <BiUserCircle className="h-6 w-6" />
+          <span className="text-lg">Entrar</span>
+        </Link>
       </div>
     </header>
   );
