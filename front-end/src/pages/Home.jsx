@@ -155,28 +155,35 @@ function Home() {
         </div>
       </div>
 
-      <section className="flex flex-col bg-gray-200">
-        <div className="flex px-10 ">
-          <span className="text-gray-600 font-bold text-2xl pt-6 pb-6">
-            Mais pesquisados
-          </span>
-        </div>
+      <section className="flex flex-col w-screen">
+        <div className="flex flex-col bg-gray-200 ">
+          <div className="flex px-16 text-gray-600 font-bold text-2xl pt-6 pb-6">
+            <span>Mais pesquisados</span>
+          </div>
 
-        <div className="flex bg-white p-10 gap-2">
-          <div className="flex border-gray-800">
-            <div className="flex border-solid border-gray-300 border-2 p-8 w-60">
-              <div className="flex flex-col items-center text-center gap-5">
-                <img
-                  src={imagem_produto}
-                  alt="Imagem Cooler"
-                  className="flex h-40 w-40"
-                />
-                <span>
-                  Processador Intel Core i9-10900KF BX8070110900KF de 10 núcleos
-                  e 5.3GHz de frequência
-                </span>
-                <span>Intel</span>
-                <span>R$ 3.108,00</span>
+          <div className="flex items-center justify-center ">
+            <div className="flex bg-white p-4 gap-5 w-11/12">
+              <div className="border-solid border-gray-300 border-2 p-8 w-64 ">
+                <div className="flex flex-col items-center text-center">
+                  <div className="flex flex-col gap-5">
+                    <img src={imagem_produto} alt="" />
+
+                    <span className="font-bold text-lg">
+                      Processador Intel Core i9-10900KF BX8070110900KF de 10
+                      núcleos e 5.3GHz de frequência
+                    </span>
+
+                    <div className="flex justify-center">
+                      <span className="flex px-2 border-solid border-primary border-2 rounded-lg  text-primary text-lg">
+                        Intel
+                      </span>
+                    </div>
+
+                    <span className="font-bold text-primary text-xl">
+                      R$ 3.108,00
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
