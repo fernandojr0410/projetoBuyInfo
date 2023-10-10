@@ -6,7 +6,7 @@ import { BsFillMotherboardFill, BsFillProjectorFill } from "react-icons/bs";
 import { MdPower, MdCable } from "react-icons/md";
 import { PiComputerTowerFill } from "react-icons/pi";
 
-import imagem_produto from "../assets/images/12-img-1.jpg";
+import ProductHome from "./products/productHome";
 
 function Home() {
   return (
@@ -39,7 +39,7 @@ function Home() {
           <div className="flex flex-col text-center items-center">
             <div className="flex bg-gray-50 rounded-full p-2 w-14">
               <Link to="/">
-                <GiComputerFan className="h-10 w-10" />
+                <GiComputerFan className="h-10 w-10 text-zinc-500" />
               </Link>
             </div>
             <Link to="/">
@@ -51,8 +51,8 @@ function Home() {
 
           <div className="flex flex-col text-center items-center">
             <div className="flex  bg-gray-50 rounded-full p-2 w-14">
-              <Link to="/">
-                <BsFillMotherboardFill className="h-10 w-10" />
+              <Link to="/carrinho">
+                <BsFillMotherboardFill className="h-10 w-10 text-zinc-500" />
               </Link>
             </div>
             <Link to="/">
@@ -65,7 +65,7 @@ function Home() {
           <div className="flex flex-col text-center items-center">
             <div className="flex  bg-gray-50 rounded-full p-2 w-14">
               <Link to="/">
-                <FaMemory className="h-10 w-10" />
+                <FaMemory className="h-10 w-10 text-zinc-500" />
               </Link>
             </div>
             <Link to="/">
@@ -78,7 +78,7 @@ function Home() {
           <div className="flex flex-col text-center items-center">
             <div className="flex  bg-gray-50 rounded-full p-2 w-14">
               <Link to="/">
-                <MdPower className="h-10 w-10" />
+                <MdPower className="h-10 w-10 text-zinc-500" />
               </Link>
             </div>
             <Link to="/">
@@ -91,7 +91,7 @@ function Home() {
           <div className="flex flex-col text-center items-center">
             <div className="flex  bg-gray-50 rounded-full p-2 w-14">
               <Link to="/">
-                <PiComputerTowerFill className="h-10 w-10" />
+                <PiComputerTowerFill className="h-10 w-10 text-zinc-500" />
               </Link>
             </div>
             <Link to="/">
@@ -104,7 +104,7 @@ function Home() {
           <div className="flex flex-col text-center items-center">
             <div className="flex  bg-gray-50 rounded-full p-2 w-14">
               <Link to="/">
-                <MdCable className="h-10 w-10" />
+                <MdCable className="h-10 w-10 text-zinc-500" />
               </Link>
             </div>
             <Link to="/">
@@ -117,7 +117,7 @@ function Home() {
           <div className="flex flex-col text-center items-center">
             <div className="flex  bg-gray-50 rounded-full p-2 w-14">
               <Link to="/">
-                <BsFillProjectorFill className="h-10 w-10" />
+                <BsFillProjectorFill className="h-10 w-10 text-zinc-500" />
               </Link>
             </div>
             <Link to="/">
@@ -130,7 +130,7 @@ function Home() {
           <div className="flex flex-col text-center items-center">
             <div className="flex  bg-gray-50 rounded-full p-2 w-14">
               <Link to="/">
-                <FaComputerMouse className="h-10 w-10" />
+                <FaComputerMouse className="h-10 w-10 text-zinc-500" />
               </Link>
             </div>
             <Link to="/">
@@ -143,7 +143,7 @@ function Home() {
           <div className="flex flex-col text-center items-center">
             <div className="flex  bg-gray-50 rounded-full p-2 w-14">
               <Link to="/">
-                <GiProcessor className="h-10 w-10" />
+                <GiProcessor className="h-10 w-10 text-zinc-500" />
               </Link>
             </div>
             <Link to="/">
@@ -155,39 +155,110 @@ function Home() {
         </div>
       </div>
 
-      <section className="flex flex-col w-screen">
-        <div className="flex flex-col bg-gray-200 ">
-          <div className="flex px-16 text-gray-600 font-bold text-2xl pt-6 pb-6">
-            <span>Mais pesquisados</span>
-          </div>
+      <section className="flex flex-col gap-4 bg-gray-100 px-10 py-6">
+        <div>
+          <h3 className="flex text-gray-600 font-bold text-2xl">
+            Mais pesquisados
+          </h3>
+        </div>
 
-          <div className="flex items-center justify-center ">
-            <div className="flex bg-white p-4 gap-5 w-11/12">
-              <div className="border-solid border-gray-300 border-2 p-8 w-64 ">
-                <div className="flex flex-col items-center text-center">
-                  <div className="flex flex-col gap-5">
-                    <img src={imagem_produto} alt="" />
+        <ProductHome />
 
-                    <span className="font-bold text-lg">
-                      Processador Intel Core i9-10900KF BX8070110900KF de 10
-                      núcleos e 5.3GHz de frequência
-                    </span>
-
-                    <div className="flex justify-center">
-                      <span className="flex px-2 border-solid border-primary border-2 rounded-lg  text-primary text-lg">
-                        Intel
-                      </span>
-                    </div>
-
-                    <span className="font-bold text-primary text-xl">
-                      R$ 3.108,00
-                    </span>
-                  </div>
+        {/* <div className="flex p-4 border-solid border-2 border-gray-300 transition-transform transform hover:-translate-y-1 cursor-pointer">
+            <div className="flex items-center justify-center w-52">
+              <div className="flex flex-col items-center gap-6">
+                <div>
+                  <img src={imagem_produto} alt="" />
+                </div>
+                <span className="font-bold text-lg">
+                  Processador Intel Core i9-10900KF BX8070110900KF de 10 núcleos
+                  e 5.3GHz de frequência
+                </span>
+                <div className="flex">
+                  <span className="border-solid border-2 border-primary text-primary rounded-md	px-2">
+                    Intel
+                  </span>
+                </div>
+                <div>
+                  <span className="font-bold text-primary text-xl">
+                    R$ 3.108,00
+                  </span>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </div> */}
+
+        {/* <div className="flex p-4 border-solid border-2 border-gray-300 transition-transform transform hover:-translate-y-1 cursor-pointer">
+            <div className="flex items-center justify-center w-52">
+              <div className="flex flex-col items-center gap-6">
+                <div>
+                  <img src={imagem_produto} alt="" />
+                </div>
+                <span className="font-bold text-lg">
+                  Processador Intel Core i9-10900KF BX8070110900KF de 10 núcleos
+                  e 5.3GHz de frequência
+                </span>
+                <div className="flex">
+                  <span className="border-solid border-2 border-primary text-primary rounded-md	px-2">
+                    Intel
+                  </span>
+                </div>
+                <div>
+                  <span className="font-bold text-primary text-xl">
+                    R$ 3.108,00
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div> */}
+
+        {/* <div className="flex p-4 border-solid border-2 border-gray-300 transition-transform transform hover:-translate-y-1 cursor-pointer">
+            <div className="flex items-center justify-center w-52">
+              <div className="flex flex-col items-center gap-6">
+                <div>
+                  <img src={imagem_produto} alt="" />
+                </div>
+                <span className="font-bold text-lg">
+                  Processador Intel Core i9-10900KF BX8070110900KF de 10 núcleos
+                  e 5.3GHz de frequência
+                </span>
+                <div className="flex">
+                  <span className="border-solid border-2 border-primary text-primary rounded-md	px-2">
+                    Intel
+                  </span>
+                </div>
+                <div>
+                  <span className="font-bold text-primary text-xl">
+                    R$ 3.108,00
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div> */}
+
+        {/* <div className="flex p-4 border-solid border-2 border-gray-300 transition-transform transform hover:-translate-y-1 cursor-pointer">
+            <div className="flex items-center justify-center w-52">
+              <div className="flex flex-col items-center gap-6">
+                <div>
+                  <img src={imagem_produto} alt="" />
+                </div>
+                <span className="font-bold text-lg">
+                  Processador Intel Core i9-10900KF BX8070110900KF de 10 núcleos
+                  e 5.3GHz de frequência
+                </span>
+                <div className="flex">
+                  <span className="border-solid border-2 border-primary text-primary rounded-md	px-2">
+                    Intel
+                  </span>
+                </div>
+                <div>
+                  <span className="font-bold text-primary text-xl">
+                    R$ 3.108,00
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div> */}
       </section>
     </main>
   );

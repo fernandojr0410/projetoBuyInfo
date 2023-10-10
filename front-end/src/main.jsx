@@ -15,9 +15,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         <Route exact path="/carrinho" element={<Cart />} />
       </Routes>
-      {/* <MainLayout /> */}
-      <Home />
-      <Footer />
+      
+        {/* <MainLayout /> */}
+        <Home />
+       
+          <Footer />
+      
+     
     </Router>
   </React.StrictMode>
 );
