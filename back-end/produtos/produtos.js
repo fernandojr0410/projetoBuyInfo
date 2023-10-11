@@ -29,13 +29,14 @@ function findById(id) {
 
 function findAllDestaques() {
   return queryPromise(`
-    SELECT p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome as categoria, m.nome as marca, d.nome as destaque, GROUP_CONCAT(i.nome) AS imagens
+    SELECT p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome as categoria, m.nome as marca, p.destaque_id_destaque, d.nome as destaque, GROUP_CONCAT(i.nome) AS imagens
     FROM produto p
     LEFT JOIN categoria c ON c.id_categoria = p.categoria_id_categoria
     LEFT JOIN destaque d ON d.id_destaque = p.destaque_id_destaque
     LEFT JOIN marca m ON m.id_marca = p.marca_id_marca
     LEFT JOIN imagem_produto i ON i.produto_id_produto = p.id_produto
-    WHERE p.destaque_id_destaque = 1
+    WHERE p.destaque_id_destaque <> 0
+   
     GROUP BY p.id_produto;
   `);
 }
@@ -123,16 +124,17 @@ function update(dados) {
     params.push(marca_id_marca);
   }
 
-  if (destaque_id_destaque !== null) {
+  if (destaque_id_destaque != null) {
     sql += " destaque_id_destaque = ?,";
     params.push(destaque_id_destaque);
   }
 
-  params.push(id);
+  console.log("id do produto aqui:", id);
 
   sql = sql.slice(0, -1);
-
+  console.log(sql);
   sql += " WHERE Id_Produto = ?";
+  params.push(id);
   return queryPromise(sql, params);
 }
 

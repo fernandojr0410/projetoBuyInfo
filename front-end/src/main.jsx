@@ -7,6 +7,7 @@ import Header from "./layout/header/header";
 import Home from "./pages/Home";
 import Footer from "./layout/footer/footer";
 import Cart from "./pages/cart/cart";
+import Category from "./pages/categories/category";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -14,14 +15,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Header />
       <Routes>
         <Route exact path="/carrinho" element={<Cart />} />
+        <Route exact path="/category" element={<Category />} />
       </Routes>
-      
-        {/* <MainLayout /> */}
-        <Home />
-       
-          <Footer />
-      
-     
+
+      {/* <MainLayout /> */}
+      <Home />
+
+      <Footer />
     </Router>
   </React.StrictMode>
 );

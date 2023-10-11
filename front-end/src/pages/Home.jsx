@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { FaMagnifyingGlass, FaMemory, FaComputerMouse } from "react-icons/fa6";
 import { GiComputerFan, GiProcessor } from "react-icons/gi";
@@ -6,9 +8,40 @@ import { BsFillMotherboardFill, BsFillProjectorFill } from "react-icons/bs";
 import { MdPower, MdCable } from "react-icons/md";
 import { PiComputerTowerFill } from "react-icons/pi";
 
-import ProductHome from "./products/productHome";
+import ListProduct from "../components/listProduct/listProduct";
 
 function Home() {
+  const [produtosDestaque, setProdutosDestaque] = useState([]);
+
+  // const navigate = useNavigate();
+
+  // const handleHomeClick = () => {
+  //   navigate("/category");
+  // };
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/produtos/destaques`, {
+      method: "GET",
+      headers: {
+        "Contet-type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setProdutosDestaque(data);
+        console.log(data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+  const maisPesquisados = produtosDestaque.filter(
+    (produto) => produto.destaque_id_destaque === 1
+  );
+
+  const ultimosAnuncios = produtosDestaque.filter(
+    (produto) => produto.destaque_id_destaque === 2
+  );
+
   return (
     <main>
       <div className="flex flex-col bg-primary pt-10 px-10">
@@ -38,12 +71,12 @@ function Home() {
         <div className="flex justify-between pt-6">
           <div className="flex flex-col text-center items-center">
             <div className="flex bg-gray-50 rounded-full p-2 w-14">
-              <Link to="/">
+              <Link to="/category">
                 <GiComputerFan className="h-10 w-10 text-zinc-500" />
               </Link>
             </div>
-            <Link to="/">
-              <span className="flex items-center py-2 text-white text-lg font-bold">
+            <Link>
+              <span className="flex items-center py-2 text-white text-lg font-bold ">
                 Cooler
               </span>
             </Link>
@@ -162,103 +195,17 @@ function Home() {
           </h3>
         </div>
 
-        <ProductHome />
+        <ListProduct produtos={maisPesquisados} />
+      </section>
 
-        {/* <div className="flex p-4 border-solid border-2 border-gray-300 transition-transform transform hover:-translate-y-1 cursor-pointer">
-            <div className="flex items-center justify-center w-52">
-              <div className="flex flex-col items-center gap-6">
-                <div>
-                  <img src={imagem_produto} alt="" />
-                </div>
-                <span className="font-bold text-lg">
-                  Processador Intel Core i9-10900KF BX8070110900KF de 10 núcleos
-                  e 5.3GHz de frequência
-                </span>
-                <div className="flex">
-                  <span className="border-solid border-2 border-primary text-primary rounded-md	px-2">
-                    Intel
-                  </span>
-                </div>
-                <div>
-                  <span className="font-bold text-primary text-xl">
-                    R$ 3.108,00
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div> */}
+      <section className="flex flex-col gap-4  px-10 py-6">
+        <div>
+          <h3 className="flex text-gray-600 font-bold text-2xl">
+            Ultimos anuncios
+          </h3>
+        </div>
 
-        {/* <div className="flex p-4 border-solid border-2 border-gray-300 transition-transform transform hover:-translate-y-1 cursor-pointer">
-            <div className="flex items-center justify-center w-52">
-              <div className="flex flex-col items-center gap-6">
-                <div>
-                  <img src={imagem_produto} alt="" />
-                </div>
-                <span className="font-bold text-lg">
-                  Processador Intel Core i9-10900KF BX8070110900KF de 10 núcleos
-                  e 5.3GHz de frequência
-                </span>
-                <div className="flex">
-                  <span className="border-solid border-2 border-primary text-primary rounded-md	px-2">
-                    Intel
-                  </span>
-                </div>
-                <div>
-                  <span className="font-bold text-primary text-xl">
-                    R$ 3.108,00
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div> */}
-
-        {/* <div className="flex p-4 border-solid border-2 border-gray-300 transition-transform transform hover:-translate-y-1 cursor-pointer">
-            <div className="flex items-center justify-center w-52">
-              <div className="flex flex-col items-center gap-6">
-                <div>
-                  <img src={imagem_produto} alt="" />
-                </div>
-                <span className="font-bold text-lg">
-                  Processador Intel Core i9-10900KF BX8070110900KF de 10 núcleos
-                  e 5.3GHz de frequência
-                </span>
-                <div className="flex">
-                  <span className="border-solid border-2 border-primary text-primary rounded-md	px-2">
-                    Intel
-                  </span>
-                </div>
-                <div>
-                  <span className="font-bold text-primary text-xl">
-                    R$ 3.108,00
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div> */}
-
-        {/* <div className="flex p-4 border-solid border-2 border-gray-300 transition-transform transform hover:-translate-y-1 cursor-pointer">
-            <div className="flex items-center justify-center w-52">
-              <div className="flex flex-col items-center gap-6">
-                <div>
-                  <img src={imagem_produto} alt="" />
-                </div>
-                <span className="font-bold text-lg">
-                  Processador Intel Core i9-10900KF BX8070110900KF de 10 núcleos
-                  e 5.3GHz de frequência
-                </span>
-                <div className="flex">
-                  <span className="border-solid border-2 border-primary text-primary rounded-md	px-2">
-                    Intel
-                  </span>
-                </div>
-                <div>
-                  <span className="font-bold text-primary text-xl">
-                    R$ 3.108,00
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div> */}
+        <ListProduct produtos={ultimosAnuncios} />
       </section>
     </main>
   );

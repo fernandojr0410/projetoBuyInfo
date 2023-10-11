@@ -136,10 +136,12 @@ app.post("/produtos/insert", (req, res) => {
 });
 
 app.put("/produtos/update", (req, res) => {
+  const dadosAtualizados = req.body;
+
   produtos
-    .update(req.body)
+    .update(dadosAtualizados)
     .then(() => {
-      res.send("Produto atualizado com sucesso!");
+      res.send("Dados atualizados com sucesso!");
     })
     .catch((error) => {
       console.error(error);
