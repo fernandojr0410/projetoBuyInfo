@@ -14,12 +14,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Router>
       <Header />
       <Routes>
+      <Route exact path="/home" element={<Home />} />
         <Route exact path="/carrinho" element={<Cart />} />
         <Route exact path="/category" element={<Category />} />
       </Routes>
 
       {/* <MainLayout /> */}
-      <Home />
 
       <Footer />
     </Router>

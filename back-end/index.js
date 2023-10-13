@@ -78,6 +78,28 @@ app.get("/produtos/destaques", (req, res) => {
     });
 });
 
+app.get("/produtos/coolers", (req, res) => {
+  produtos
+    .findAllCoolers()
+    .then((results) => {
+      res.send(
+        results.map((produto) => {
+          return {
+            ...produto,
+            imagens:
+              produto.imagens &&
+              produto.imagens
+                .split(",")
+                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`),
+          };
+        })
+      );
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
 // Produtos
 app.get("/produtos/findAll", (req, res) => {
   produtos

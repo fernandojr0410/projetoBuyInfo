@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { FaMagnifyingGlass, FaMemory, FaComputerMouse } from "react-icons/fa6";
 import { GiComputerFan, GiProcessor } from "react-icons/gi";
@@ -12,12 +11,6 @@ import ListProduct from "../components/listProduct/listProduct";
 
 function Home() {
   const [produtosDestaque, setProdutosDestaque] = useState([]);
-
-  // const navigate = useNavigate();
-
-  // const handleHomeClick = () => {
-  //   navigate("/category");
-  // };
 
   useEffect(() => {
     fetch(`http://localhost:5000/produtos/destaques`, {
@@ -75,7 +68,7 @@ function Home() {
                 <GiComputerFan className="h-10 w-10 text-zinc-500" />
               </Link>
             </div>
-            <Link>
+            <Link to="/category">
               <span className="flex items-center py-2 text-white text-lg font-bold ">
                 Cooler
               </span>
