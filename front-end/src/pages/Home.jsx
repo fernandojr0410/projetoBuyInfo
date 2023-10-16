@@ -1,16 +1,13 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-import { FaMagnifyingGlass, FaMemory, FaComputerMouse } from "react-icons/fa6";
-import { GiComputerFan, GiProcessor } from "react-icons/gi";
-import { BsFillMotherboardFill, BsFillProjectorFill } from "react-icons/bs";
-import { MdPower, MdCable } from "react-icons/md";
-import { PiComputerTowerFill } from "react-icons/pi";
-
+import { FaMagnifyingGlass } from "react-icons/fa6";
 import ListProduct from "../components/listProduct/listProduct";
+import { menuCategories } from "../layout/menus/menusCategories";
+import { VscError } from "react-icons/vsc";
 
 function Home() {
   const [produtosDestaque, setProdutosDestaque] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     fetch(`http://localhost:5000/produtos/destaques`, {
@@ -22,7 +19,20 @@ function Home() {
       .then((response) => response.json())
       .then((data) => {
         setProdutosDestaque(data);
-        console.log(data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/categorias/findAll`, {
+      method: "GET",
+      headers: {
+        "Contet-type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setCategories(data);
       })
       .catch((error) => console.error(error));
   }, []);
@@ -34,6 +44,13 @@ function Home() {
   const ultimosAnuncios = produtosDestaque.filter(
     (produto) => produto.destaque_id_destaque === 2
   );
+
+  const menus = categories?.map((category) => {
+    return {
+      ...category,
+      icon: menuCategories[category.Id_Categoria].icon ?? <VscError />,
+    };
+  });
 
   return (
     <main>
@@ -62,122 +79,23 @@ function Home() {
         </div>
 
         <div className="flex justify-between pt-6">
-          <div className="flex flex-col text-center items-center">
-            <div className="flex bg-gray-50 rounded-full p-2 w-14">
-              <Link to="/category">
-                <GiComputerFan className="h-10 w-10 text-zinc-500" />
-              </Link>
-            </div>
-            <Link to="/category">
-              <span className="flex items-center py-2 text-white text-lg font-bold ">
-                Cooler
-              </span>
-            </Link>
-          </div>
+          {menus.map((menu) => {
+            return (
+              <Link
+                key={menu.Id_Categoria}
+                to={`/categoria/${menu.Id_Categoria}`}
+                className="flex flex-col text-center items-center"
+              >
+                <div className="flex bg-gray-50 rounded-full p-2 w-14">
+                  <menu.icon.type className="h-10 w-10 text-zinc-500" />
+                </div>
 
-          <div className="flex flex-col text-center items-center">
-            <div className="flex  bg-gray-50 rounded-full p-2 w-14">
-              <Link to="/carrinho">
-                <BsFillMotherboardFill className="h-10 w-10 text-zinc-500" />
+                <span className="flex items-center py-2 text-white text-lg font-bold ">
+                  {menu.Nome}
+                </span>
               </Link>
-            </div>
-            <Link to="/">
-              <span className="flex py-2 text-white text-lg font-bold">
-                Placa mãe
-              </span>
-            </Link>
-          </div>
-
-          <div className="flex flex-col text-center items-center">
-            <div className="flex  bg-gray-50 rounded-full p-2 w-14">
-              <Link to="/">
-                <FaMemory className="h-10 w-10 text-zinc-500" />
-              </Link>
-            </div>
-            <Link to="/">
-              <span className="flex py-2 text-white text-lg font-bold">
-                Memória
-              </span>
-            </Link>
-          </div>
-
-          <div className="flex flex-col text-center items-center">
-            <div className="flex  bg-gray-50 rounded-full p-2 w-14">
-              <Link to="/">
-                <MdPower className="h-10 w-10 text-zinc-500" />
-              </Link>
-            </div>
-            <Link to="/">
-              <span className="flex py-2 text-white text-lg font-bold">
-                Fonte
-              </span>
-            </Link>
-          </div>
-
-          <div className="flex flex-col text-center items-center">
-            <div className="flex  bg-gray-50 rounded-full p-2 w-14">
-              <Link to="/">
-                <PiComputerTowerFill className="h-10 w-10 text-zinc-500" />
-              </Link>
-            </div>
-            <Link to="/">
-              <span className="flex py-2 text-white text-lg font-bold">
-                Gabinete
-              </span>
-            </Link>
-          </div>
-
-          <div className="flex flex-col text-center items-center">
-            <div className="flex  bg-gray-50 rounded-full p-2 w-14">
-              <Link to="/">
-                <MdCable className="h-10 w-10 text-zinc-500" />
-              </Link>
-            </div>
-            <Link to="/">
-              <span className="flex py-2 text-white text-lg font-bold">
-                Cabo
-              </span>
-            </Link>
-          </div>
-
-          <div className="flex flex-col text-center items-center">
-            <div className="flex  bg-gray-50 rounded-full p-2 w-14">
-              <Link to="/">
-                <BsFillProjectorFill className="h-10 w-10 text-zinc-500" />
-              </Link>
-            </div>
-            <Link to="/">
-              <span className="flex py-2 text-white text-lg font-bold">
-                Placa de vídeo
-              </span>
-            </Link>
-          </div>
-
-          <div className="flex flex-col text-center items-center">
-            <div className="flex  bg-gray-50 rounded-full p-2 w-14">
-              <Link to="/">
-                <FaComputerMouse className="h-10 w-10 text-zinc-500" />
-              </Link>
-            </div>
-            <Link to="/">
-              <span className="flex py-2 text-white text-lg font-bold">
-                Acessórios
-              </span>
-            </Link>
-          </div>
-
-          <div className="flex flex-col text-center items-center">
-            <div className="flex  bg-gray-50 rounded-full p-2 w-14">
-              <Link to="/">
-                <GiProcessor className="h-10 w-10 text-zinc-500" />
-              </Link>
-            </div>
-            <Link to="/">
-              <span className="flex py-2 text-white text-lg font-bold">
-                Processador
-              </span>
-            </Link>
-          </div>
+            );
+          })}
         </div>
       </div>
 

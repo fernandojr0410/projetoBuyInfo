@@ -78,9 +78,9 @@ app.get("/produtos/destaques", (req, res) => {
     });
 });
 
-app.get("/produtos/coolers", (req, res) => {
+app.get("/produtos/categoria", (req, res) => {
   produtos
-    .findAllCoolers()
+    .findByCategory(req.query.id)
     .then((results) => {
       res.send(
         results.map((produto) => {

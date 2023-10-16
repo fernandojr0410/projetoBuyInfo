@@ -24,6 +24,7 @@ function findById(id) {
     LEFT JOIN imagem_produto i ON i.produto_id_produto = p.id_produto
     WHERE p.id_produto = ${id}
     GROUP BY p.id_produto;
+    
   `);
 }
 
@@ -41,7 +42,7 @@ function findAllDestaques() {
   `);
 }
 
-function findAllCoolers() {
+function findByCategory(id) {
   return queryPromise(`
     SELECT p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome as categoria, m.nome as marca, d.nome as destaque, GROUP_CONCAT(i.nome) AS imagens
     FROM produto p
@@ -49,7 +50,7 @@ function findAllCoolers() {
     LEFT JOIN destaque d ON d.id_destaque = p.destaque_id_destaque
     LEFT JOIN marca m ON m.id_marca = p.marca_id_marca
     LEFT JOIN imagem_produto i ON i.produto_id_produto = p.id_produto
-    WHERE c.nome = 'Cooler' -- Substitua 'Cooler' pelo nome correto da categoria de cooler
+    WHERE p.categoria_id_categoria = ${id}
     GROUP BY p.id_produto;
   `);
 }
@@ -160,7 +161,7 @@ module.exports = {
   findAll,
   findById,
   findAllDestaques,
-  findAllCoolers,
+  findByCategory,
   insert,
   update,
   deleteById,
