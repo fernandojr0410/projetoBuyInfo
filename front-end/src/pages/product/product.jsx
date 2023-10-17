@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import Modal from "../../components/modal/modal";
 
 function Product() {
   const [imagem, setImagem] = useState("");
-  // const [teste, setTeste] = useState("");
   const [produto, setProduto] = useState([]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -17,7 +20,7 @@ function Product() {
       .then((response) => response.json())
       .then((data) => {
         setProduto(data);
-        console.log(data);
+        // console.log(data);
         if (data?.imagens && data.imagens.length > 0) {
           setImagem(data.imagens[0]);
         }
@@ -30,12 +33,19 @@ function Product() {
       setImagem(produto[0]?.imagens[index]);
     }
   };
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <main className="flex justify-center bg-gray-100 py-6">
       <div className="flex flex-col bg-white rounded-lg w-[90%] p-6">
         <div className="flex justify-between pb-10">
-          <div className="flex flex-col gap-4 cursor-pointer w-16 h-16">
+          <div className="flex flex-col gap-4 cursor-pointer ">
             {produto[0]?.imagens.map((image, index) => (
               <img
                 key={index}
@@ -43,6 +53,7 @@ function Product() {
                 alt=""
                 className="border-solid border-2 border-gray-200 rounded-md p-1 hover:border-primary"
                 onMouseOver={() => setImagem(image)}
+                style={{ width: "60px", height: "60px" }}
               />
             ))}
           </div>
@@ -55,7 +66,7 @@ function Product() {
             />
           </div>
 
-          <div className="flex flex-col w-[30%] ">
+          <div className="flex flex-col w-[30%]">
             <div className="flex flex-col gap-6 border-solid border-2 border-gray-300 rounded-lg p-3">
               <div className="flex font-bold text-lg">
                 <span>{produto[0]?.nome}</span>
@@ -78,14 +89,15 @@ function Product() {
                 </span>
               </div>
 
-              <div>
-                <a
-                  href="#"
-                  className="text-gray-400 underline text-lg cursor-pointer"
-                >
-                  ver mais opções de pagamento
-                </a>
+              <div
+                className="text-gray-400 underline text-lg cursor-pointer"
+                onClick={openModal}
+              >
+                ver mais opções de pagamento
               </div>
+              {isModalOpen && (
+                <Modal isOpen={isModalOpen} onClose={closeModal} />
+              )}
 
               <Link>
                 <button
