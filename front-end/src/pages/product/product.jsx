@@ -99,7 +99,7 @@ function Product() {
                 <Modal isOpen={isModalOpen} onClose={closeModal} />
               )}
 
-              <Link>
+              <Link to="/carrinho">
                 <button
                   type="button"
                   className="bg-green-600 text-white text-lg rounded-md border-solid p-2 w-full md:w-[75%]"
