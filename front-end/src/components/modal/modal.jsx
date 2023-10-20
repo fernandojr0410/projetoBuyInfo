@@ -133,7 +133,7 @@ function Modal({ onClose }) {
                 {parcelas.map((parcela, index) => (
                   <div
                     key={index}
-                    className="flex text-base border-solid border-2 border-black rounded-md p-2"
+                    className="flex text-base border-solid border border-black rounded-md p-2"
                   >
                     <div className="flex justify-between w-full">
                       <div className="flex gap-2">
@@ -159,7 +159,7 @@ function Modal({ onClose }) {
           )}
 
           {metodoPagamento === "boleto" && (
-            <div className="flex flex-col gap-5 text-base border-solid border-2 border-black rounded-md p-2">
+            <div className="flex flex-col gap-5 text-base border-solid border border-black rounded-md p-2">
               <span className="flex gap-2">
                 1x{" "}
                 {precoProduto[0]?.preco.toLocaleString("pt-BR", {
