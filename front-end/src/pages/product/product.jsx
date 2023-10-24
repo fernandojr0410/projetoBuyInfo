@@ -5,10 +5,42 @@ import Modal from "../../components/modal/modal";
 function Product() {
   const [imagem, setImagem] = useState("");
   const [produto, setProduto] = useState([]);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [abrirModal, setAbrirModal] = useState(false);
+  const [quantidadesProdutos, setQuantidadeProduto] = useState({});
+  const [valorTotal, setValorTotal] = useState(0);
   const { id } = useParams();
+
+  const handleAdicionarCarrinho = (produto) => {
+    const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+    const produtoExiste = carrinho.find(
+      (item) => item.id_produto === produto.id_produto
+    );
+
+    if (produtoExiste) {
+      const index = carrinho.findIndex(
+        (item) => item.id_produto === produto.id_produto
+      );
+      carrinho[index].quantidade += 1;
+    } else {
+      produto.quantidade = 1;
+      carrinho.push(produto);
+    }
+
+    const novoTotal = carrinho.reduce(
+      (total, item) => total + item.preco * item.quantidade,
+      0
+    );
+
+    setQuantidadeProduto((quantidadesProdutos) => ({
+      ...quantidadesProdutos,
+      [produto.id_produto]: (quantidadesProdutos[produto.id_produto] || 0) + 1,
+    }));
+
+    localStorage.setItem("carrinho", JSON.stringify(carrinho));
+    setValorTotal(novoTotal);
+
+    console.log("produto:", produto);
+  };
 
   useEffect(() => {
     fetch(`http://localhost:5000/produtos/findById?id=${id}`, {
@@ -20,7 +52,6 @@ function Product() {
       .then((response) => response.json())
       .then((data) => {
         setProduto(data);
-        // console.log(data);
         if (data?.imagens && data.imagens.length > 0) {
           setImagem(data.imagens[0]);
         }
@@ -34,11 +65,11 @@ function Product() {
     }
   };
   const openModal = () => {
-    setIsModalOpen(true);
+    setAbrirModal(true);
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
+    setAbrirModal(false);
   };
 
   return (
@@ -95,9 +126,7 @@ function Product() {
               >
                 ver mais opções de pagamento
               </div>
-              {isModalOpen && (
-                <Modal isOpen={isModalOpen} onClose={closeModal} />
-              )}
+              {abrirModal && <Modal isOpen={abrirModal} onClose={closeModal} />}
 
               <Link to="/carrinho">
                 <button
@@ -108,14 +137,12 @@ function Product() {
                 </button>
               </Link>
 
-              <Link>
-                <button
-                  type="button"
-                  className="bg-green-400 text-green-700 text-lg rounded-md border-solid p-2 w-full md:w-[75%]"
-                >
-                  Adicionar carrinho
-                </button>
-              </Link>
+              <button
+                onClick={() => handleAdicionarCarrinho(produto[0])}
+                className="bg-green-400 text-green-700 text-lg rounded-md border-solid p-2 w-full md:w-[75%]"
+              >
+                Adicionar carrinho
+              </button>
 
               <div className="flex flex-col gap-2">
                 <span className="font-bold">

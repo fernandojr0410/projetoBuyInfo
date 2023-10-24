@@ -10,6 +10,7 @@ import Cart from "./pages/cart/cart";
 import Category from "./pages/categories/category";
 import Product from "./pages/product/product";
 import Modal from "./components/modal/modal";
+import CadastroEndereco from "./pages/cadastroEndereco/cadastroEndereco";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -21,6 +22,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route exact path="/categoria/:id" element={<Category />} />
         <Route exact path="/produto/:id" element={<Product />} />
         <Route exact path="/modal" element={<Modal />} />
+        <Route exact path="/cadastroEndereco" element={<CadastroEndereco />} />
       </Routes>
 
       {/* <MainLayout /> */}
