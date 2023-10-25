@@ -11,38 +11,79 @@ import { MdPix } from "react-icons/md";
 function Cart() {
   const [produtosDestaque, setProdutosDestaque] = useState([]);
   const [carrinho, setCarrinho] = useState([]);
-  const [quantidadesProdutos, setQuantidadeProduto] = useState({});
-  const [valorTotal, setValorTotal] = useState(0);
+  const [quantidades, setQuantidades] = useState({});
 
   useEffect(() => {
     const carrinhoData = JSON.parse(localStorage.getItem("carrinho")) || [];
+    let quantidadePorProduto = {};
+    carrinhoData.forEach((produto) => {
+      quantidadePorProduto[produto.id_produto] = produto.quantidade;
+    });
     setCarrinho(carrinhoData);
+    setQuantidades(quantidadePorProduto);
   }, []);
 
-  const handleIncrement = (idProduto, precoProduto) => {
-    const quantidadeAtual = quantidadesProdutos[idProduto] || 0;
-    setQuantidadeProduto((quantidades) => ({
-      ...quantidades,
-      [idProduto]: quantidadeAtual + 1,
-    }));
-
-    setValorTotal((valorTotal) => valorTotal + precoProduto);
-  };
-
-  const handleDecrement = (idProduto, quantidadesProdutos, precoProduto) => {
-    console.log("quantidade:", quantidadesProdutos);
-    const quantidadeAtual = quantidadesProdutos[idProduto] || 0;
-    console.log("quantidadeAtual:", quantidadeAtual);
-    if (quantidadeAtual > 0) {
-      console.log(quantidadeAtual);
-      setQuantidadeProduto((quantidadeAtual) => ({
-        ...quantidadeAtual,
-        [idProduto]: quantidadeAtual - 1,
-      }));
-
-      setValorTotal((valorTotal) => valorTotal - precoProduto);
+  const handleDecrement = (idProduto, quantidadeCarrinho) => {
+    const atualizarQuantidade = { ...quantidades };
+    const atualizarQuantidadeProduto =
+      (atualizarQuantidade[idProduto] || quantidadeCarrinho) - 1;
+    if (atualizarQuantidadeProduto < 1) {
+      return;
     }
+    atualizarQuantidade[idProduto] = atualizarQuantidadeProduto;
+    setQuantidades(atualizarQuantidade);
+
+    const updatedCarrinho = carrinho.map((produto) => {
+      if (produto.id_produto === idProduto) {
+        return {
+          ...produto,
+          quantidade: atualizarQuantidadeProduto,
+        };
+      }
+      return produto;
+    });
+
+    setCarrinho(updatedCarrinho);
+    localStorage.setItem("carrinho", JSON.stringify(updatedCarrinho));
   };
+
+  const handleIncrement = (idProduto, quantidadeCarrinho) => {
+    const atualizarQuantidade = { ...quantidades };
+    atualizarQuantidade[idProduto] =
+      (atualizarQuantidade[idProduto] || quantidadeCarrinho) + 1;
+    setQuantidades(atualizarQuantidade);
+
+    const atualizarCarrinho = carrinho.map((produto) => {
+      if (produto.id_produto === idProduto) {
+        return {
+          ...produto,
+          quantidade: atualizarQuantidade[idProduto],
+        };
+      }
+      return produto;
+    });
+
+    setCarrinho(atualizarCarrinho);
+    localStorage.setItem("carrinho", JSON.stringify(atualizarCarrinho));
+  };
+
+  const handleDelete = (id_produto) => {
+    console.log("id produto deletado", id_produto);
+    const atualizarCarrinho = carrinho.filter(
+      (produto) => produto.id_produto !== id_produto
+    );
+    setCarrinho(atualizarCarrinho);
+    localStorage.setItem("carrinho", JSON.stringify(atualizarCarrinho));
+  };
+
+  let valorTotal = 0;
+  carrinho.forEach((produto) => {
+    valorTotal +=
+      produto.preco * (quantidades[produto.id_produto] || produto.quantidade);
+  });
+
+  const numeroParcelas = 10;
+  const valorParcela = valorTotal / numeroParcelas;
 
   useEffect(() => {
     fetch(`http://localhost:5000/produtos/destaques`, {
@@ -84,13 +125,9 @@ function Cart() {
               className="flex flex-col bg-white p-4 rounded-md shadow-inner"
             >
               <div className="flex justify-between w-full">
-                <div className="flex">
+                <div className="flex w-48 h-32">
                   {produto.imagens.length > 0 && (
-                    <img
-                      src={produto.imagens[0]}
-                      alt=""
-                      className="w-40 h-32"
-                    />
+                    <img src={produto.imagens[0]} alt="" className="" />
                   )}
                 </div>
 
@@ -103,7 +140,10 @@ function Cart() {
                   </span>
                   <span className="text-primary">Marca: {produto.marca}</span>
                 </div>
-                <div className="cursor-pointer">
+                <div
+                  className="cursor-pointer"
+                  onClick={() => handleDelete(produto.id_produto)}
+                >
                   <HiOutlineTrash />
                 </div>
               </div>
@@ -116,25 +156,22 @@ function Cart() {
                   <button
                     type="button"
                     className="flex w-9 h-9 justify-center items-center bg-primary rounded-full text-white font-bold"
-                    onClick={() => handleDecrement(22, 2, 1000)}
+                    onClick={() =>
+                      handleDecrement(produto.id_produto, produto.quantidade)
+                    }
                   >
                     -
                   </button>
 
                   <span className="flex w-9 h-9 items-center justify-center font-bold text-xl border border-primary">
-                    {quantidadesProdutos[produto.quantidade] ||
-                      produto.quantidade}
+                    {quantidades[produto.id_produto] || produto.quantidade}
                   </span>
 
                   <button
                     type="button"
                     className="flex w-9 h-9 justify-center items-center bg-primary rounded-full text-white font-bold"
                     onClick={() =>
-                      handleIncrement(
-                        produto.id_produto,
-                        produto.quantidade,
-                        produto.preco
-                      )
+                      handleIncrement(produto.id_produto, produto.quantidade)
                     }
                   >
                     +
@@ -150,13 +187,13 @@ function Cart() {
                   </span>
                   <span>
                     Valor Total:{" "}
-                    {(
-                      produto.preco *
-                      (quantidadesProdutos[produto.quantidade] || 1)
-                    ).toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    })}
+                    {(produto.preco * [produto.quantidade]).toLocaleString(
+                      "pt-BR",
+                      {
+                        style: "currency",
+                        currency: "BRL",
+                      }
+                    )}
                   </span>
                 </div>
               </div>
@@ -200,7 +237,13 @@ function Cart() {
                 <span className="font-bold">Subtotal (1 item)</span>
               </div>
               <div className="flex">
-                <span className="font-bold text-primary">R$ 3.108,00</span>
+                <span className="font-bold text-primary">
+                  {" "}
+                  {valorTotal.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                </span>
               </div>
             </div>
             <div className="flex border-solid border border-primary"></div>
@@ -209,9 +252,19 @@ function Cart() {
                 <span className="font-bold">Valor Total</span>
               </div>
               <div className="flex flex-col items-end w-[40%]">
-                <span className="font-bold text-primary">R$ 3.108,00</span>
+                <span className="font-bold text-primary">
+                  {valorTotal.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                </span>
                 <span className="text-primary text-right">
-                  Em até 10x de R$ 310,80 sem juros
+                  Em até {numeroParcelas}x de{" "}
+                  {valorParcela.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}{" "}
+                  sem juros
                 </span>
               </div>
             </div>
@@ -229,7 +282,7 @@ function Cart() {
               </div>
               <Link
                 to="/home"
-                className="flex items-center justify-center w-full h-10 text-primary font-bold rounded-md border-primary border border-solid"
+                className="flex items-center justify-center w-full h-10 text-primary text-center font-bold rounded-md border-primary border border-solid"
               >
                 ESCOLHER MAIS PRODUTOS
               </Link>

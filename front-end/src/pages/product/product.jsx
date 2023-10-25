@@ -38,8 +38,6 @@ function Product() {
 
     localStorage.setItem("carrinho", JSON.stringify(carrinho));
     setValorTotal(novoTotal);
-
-    console.log("produto:", produto);
   };
 
   useEffect(() => {
@@ -130,7 +128,7 @@ function Product() {
 
               <Link to="/carrinho">
                 <button
-                  type="button"
+                  onClick={() => handleAdicionarCarrinho(produto[0])}
                   className="bg-green-600 text-white text-lg rounded-md border-solid p-2 w-full md:w-[75%]"
                 >
                   Comprar agora
