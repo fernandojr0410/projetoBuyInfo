@@ -106,8 +106,8 @@ function Cart() {
   const navigate = useNavigate();
 
   const finalizarCompra = () => {
-    if (produtosDestaque.length > 0) {
-      navigate("/cadastroEndereco");
+    if (carrinho.length > 0) {
+      navigate("/cadastroEndereco", { state: { carrinho } });
     }
   };
 
