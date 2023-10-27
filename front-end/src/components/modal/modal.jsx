@@ -4,7 +4,7 @@ import { MdPix } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-function Modal({ onClose }) {
+function Modal({ titulo, onClose }) {
   const [precoProduto, setPrecoProduto] = useState([]);
   const [metodoPagamento, setMetodoPagamento] = useState("cartaoCredito");
   const [modal, setModal] = useState(false);
@@ -77,7 +77,7 @@ function Modal({ onClose }) {
         <div className="flex flex-col py-4 px-6 w-full gap-2">
           <div className="flex justify-between items-center">
             <div className="flex text-xl font-bold text-gray-400">
-              <span>Mais formas de pagamento</span>
+              <span>{titulo}</span>
             </div>
 
             <div className="flex text-3xl cursor-pointer" onClick={onClose}>

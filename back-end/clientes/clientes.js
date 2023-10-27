@@ -11,24 +11,24 @@ function findById(id) {
 }
 
 function insert(dados) {
-  const { nome, CPF, endereco, telefone } = dados;
-  let sql = `INSERT INTO Cliente (Nome, CPF, endereco, telefone) values ('${nome}', '${CPF}', '${endereco}', '${telefone}')`;
+  const { nomeCompleto, cpf, senha } = dados;
+  let sql = `INSERT INTO Cliente (nomeCompleto, cpf, senha) values ('${nomeCompleto}', '${cpf}', '${senha}')`;
   return queryPromise(sql);
 }
 
 function update(dados) {
-  const { id, nome, CPF, endereco, telefone } = dados;
+  const { id, nomeCompleto, cpf, senha } = dados;
   const params = [];
   let sql = "UPDATE Cliente SET";
 
-  if (nome) {
-    sql += " nome = ?,";
-    params.push(nome);
+  if (nomeCompleto) {
+    sql += " nomeCompleto = ?,";
+    params.push(nomeCompleto);
   }
 
-  if (CPF) {
-    sql += " CPF = ?,";
-    params.push(CPF);
+  if (cpf) {
+    sql += " cpf = ?,";
+    params.push(cpf);
   }
 
   if (endereco) {
@@ -36,9 +36,9 @@ function update(dados) {
     params.push(endereco);
   }
 
-  if (telefone) {
-    sql += " telefone = ?,";
-    params.push(telefone);
+  if (senha) {
+    sql += " senha = ?,";
+    params.push(senha);
   }
 
   params.push(id);

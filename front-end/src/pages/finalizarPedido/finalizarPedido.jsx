@@ -15,9 +15,10 @@ import { FaCcMastercard, FaBarcode } from "react-icons/fa";
 import { SiNubank } from "react-icons/si";
 import { useLocation } from "react-router-dom";
 
-function CadastroEndereco() {
+function FinalizarPedido() {
   const location = useLocation();
   const { carrinho } = location.state;
+  const { valorTotal } = carrinho;
 
   return (
     <div className="flex flex-col justify-center bg-gray-200 p-10 ">
@@ -124,7 +125,24 @@ function CadastroEndereco() {
             </div>
             <div className="flex items-center gap-3">
               <span className="text-gray-500 font-bold line-through">
-                R$ 3.108,00
+                {/* R$ 3.108,00 */}
+                {valorTotal &&
+                  valorTotal.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                {/* {valorTotal &&
+                  valorTotal.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })} */}
+                {/* {(carrinho.preco * [carrinho.quantidade]).toLocaleString(
+                  "pt-BR",
+                  {
+                    style: "currency",
+                    currency: "BRL",
+                  }
+                )} */}
               </span>
               <span className="text-primary font-bold">R$ 3.108,00</span>
               <span className="text-green-400 text-sm">(10% de desconto)</span>
@@ -433,4 +451,4 @@ function CadastroEndereco() {
   );
 }
 
-export default CadastroEndereco;
+export default FinalizarPedido;

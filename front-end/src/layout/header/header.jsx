@@ -16,7 +16,7 @@ function Header() {
           <span className="text-lg">Carrinho</span>
         </Link>
 
-        <Link to="/#" className="flex items-center gap-2 ">
+        <Link to="/loginCliente" className="flex items-center gap-2 ">
           <BiUserCircle className="h-6 w-6" />
           <span className="text-lg">Entrar</span>
         </Link>

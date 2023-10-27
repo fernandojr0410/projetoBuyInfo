@@ -124,7 +124,13 @@ function Product() {
               >
                 ver mais opções de pagamento
               </div>
-              {abrirModal && <Modal isOpen={abrirModal} onClose={closeModal} />}
+              {abrirModal && (
+                <Modal
+                  titulo="Mais formas de pagamento"
+                  isOpen={abrirModal}
+                  onClose={closeModal}
+                />
+              )}
 
               <Link to="/carrinho">
                 <button

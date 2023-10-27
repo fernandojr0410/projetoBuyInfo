@@ -243,63 +243,63 @@ app.delete("/categorias/delete", (req, res) => {
 });
 
 // Cliente
-// app.get("/clientes/findAll", (req, res) => {
-//   clientes
-//     .findAll()
-//     .then((results) => {
-//       res.send(results);
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//     });
-// });
+app.get("/clientes/findAll", (req, res) => {
+  clientes
+    .findAll()
+    .then((results) => {
+      res.send(results);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
 
-// app.get("/clientes/findById", (req, res) => {
-//   clientes
-//     .findById(req.query.id)
-//     .then((results) => {
-//       res.send(results);
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//     });
-// });
+app.get("/clientes/findById", (req, res) => {
+  clientes
+    .findById(req.query.id)
+    .then((results) => {
+      res.send(results);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
 
-// app.post("/clientes/insert", (req, res) => {
-//   clientes
-//     .insert(req.body)
-//     .then(() => {
-//       res.send("Você foi cadastrado com sucesso!");
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//       res.send(error);
-//     });
-// });
+app.post("/clientes/insert", (req, res) => {
+  clientes
+    .insert(req.body)
+    .then(() => {
+      res.send("Você foi cadastrado com sucesso!");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
+    });
+});
 
-// app.put("/clientes/update", (req, res) => {
-//   clientes
-//     .update(req.body)
-//     .then(() => {
-//       res.send("Dados atualizados com sucesso!");
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//       res.send(error);
-//     });
-// });
+app.put("/clientes/update", (req, res) => {
+  clientes
+    .update(req.body)
+    .then(() => {
+      res.send("Dados atualizados com sucesso!");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
+    });
+});
 
-// app.delete("/clientes/delete", (req, res) => {
-//   clientes
-//     .deleteById(req.body)
-//     .then(() => {
-//       res.send("Informação deletada com sucesso!");
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//       res.send(error);
-//     });
-// });
+app.delete("/clientes/delete", (req, res) => {
+  clientes
+    .deleteById(req.body)
+    .then(() => {
+      res.send("Informação deletada com sucesso!");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
+    });
+});
 
 // Marca
 app.get("/marcas/findAll", (req, res) => {

@@ -10,7 +10,9 @@ import Cart from "./pages/cart/cart";
 import Category from "./pages/categories/category";
 import Product from "./pages/product/product";
 import Modal from "./components/modal/modal";
-import CadastroEndereco from "./pages/cadastroEndereco/cadastroEndereco";
+import FinalizarPedido from "./pages/finalizarPedido/finalizarPedido";
+import LoginCliente from "./pages/loginCliente/login";
+import CadastroCliente from "./pages/cadastroCliente/cadastroCliente";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -19,10 +21,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         <Route exact path="/home" element={<Home />} />
         <Route exact path="/carrinho" element={<Cart />} />
+        <Route exact path="/loginCliente" element={<LoginCliente />} />
+        <Route exact path="/cadastroCliente" element={<CadastroCliente />} />
         <Route exact path="/categoria/:id" element={<Category />} />
         <Route exact path="/produto/:id" element={<Product />} />
         <Route exact path="/modal" element={<Modal />} />
-        <Route exact path="/cadastroEndereco" element={<CadastroEndereco />} />
+        <Route exact path="/finalizarPedido" element={<FinalizarPedido />} />
       </Routes>
 
       {/* <MainLayout /> */}
