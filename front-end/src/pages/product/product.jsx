@@ -2,43 +2,11 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Modal from "../../components/modal/modal";
 
-function Product() {
+function Product({ handleAdicionarCarrinho }) {
   const [imagem, setImagem] = useState("");
   const [produto, setProduto] = useState([]);
   const [abrirModal, setAbrirModal] = useState(false);
-  const [quantidadesProdutos, setQuantidadeProduto] = useState({});
-  const [valorTotal, setValorTotal] = useState(0);
   const { id } = useParams();
-
-  const handleAdicionarCarrinho = (produto) => {
-    const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-    const produtoExiste = carrinho.find(
-      (item) => item.id_produto === produto.id_produto
-    );
-
-    if (produtoExiste) {
-      const index = carrinho.findIndex(
-        (item) => item.id_produto === produto.id_produto
-      );
-      carrinho[index].quantidade += 1;
-    } else {
-      produto.quantidade = 1;
-      carrinho.push(produto);
-    }
-
-    const novoTotal = carrinho.reduce(
-      (total, item) => total + item.preco * item.quantidade,
-      0
-    );
-
-    setQuantidadeProduto((quantidadesProdutos) => ({
-      ...quantidadesProdutos,
-      [produto.id_produto]: (quantidadesProdutos[produto.id_produto] || 0) + 1,
-    }));
-
-    localStorage.setItem("carrinho", JSON.stringify(carrinho));
-    setValorTotal(novoTotal);
-  };
 
   useEffect(() => {
     fetch(`http://localhost:5000/produtos/findById?id=${id}`, {
@@ -57,11 +25,11 @@ function Product() {
       .catch((error) => console.error(error));
   }, []);
 
-  const handleMouseOver = (index) => {
-    if (index !== 0) {
-      setImagem(produto[0]?.imagens[index]);
-    }
-  };
+  // const handleMouseOver = (index) => {
+  //   if (index !== 0) {
+  //     setImagem(produto[0]?.imagens[index]);
+  //   }
+  // };
   const openModal = () => {
     setAbrirModal(true);
   };

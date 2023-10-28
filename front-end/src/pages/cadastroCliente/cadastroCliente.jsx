@@ -1,10 +1,14 @@
 import Logo from "../../assets/images/logo-buy-info.png";
-import { Link } from "react-router-dom";
+
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-function CadastroCliente() {
-  const [nomeCompleto, setNomeCompleto] = useState("");
-  const [nomeCompletoError, setNomeCompletoError] = useState("");
+function CadastroCliente({ handleUser }) {
+  const [nome, setNome] = useState("");
+  const [nomeError, setNomeError] = useState("");
+
+  const [sobrenome, setSobrenome] = useState("");
+  const [sobrenomeError, setSobrenomeError] = useState("");
 
   const [cpf, setcpf] = useState("");
   const [cpfError, setCpfError] = useState("");
@@ -17,25 +21,30 @@ function CadastroCliente() {
 
   const [formularioValido, setFormularioValido] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     validarFormulario();
-  }, [
-    nomeCompleto,
-    cpf,
-    email,
-    senha,
-    nomeCompletoError,
-    cpfError,
-    emailError,
-    senhaError,
-  ]);
+  }, [nome, sobrenome, cpf, email, senha]);
 
   // Validação Nome
-  const validarNomeCompleto = (valor) => {
-    if (valor.match(/\d/)) {
-      setNomeCompletoError("O campo nome completo não pode ter números");
+  const validarNome = (valor) => {
+    if (valor === "") {
+      setNomeError("Preencha o nome");
+    } else if (/\d/.test(valor)) {
+      setNomeError("O campo nome não pode ter números");
     } else {
-      setNomeCompletoError("");
+      setNomeError("");
+    }
+  };
+
+  const validarSobrenome = (valor) => {
+    if (valor === "") {
+      setSobrenomeError("Preencha o sobrenome");
+    } else if (/\d/.test(valor)) {
+      setSobrenomeError("O campo sobrenome não pode ter números");
+    } else {
+      setSobrenomeError("");
     }
   };
 
@@ -65,11 +74,10 @@ function CadastroCliente() {
       setCpfError("CPF inválido");
     }
   };
-  const validarEmail = (valor) => {
+  const validarEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (re.test(valor)) {
-      setEmailError("");
-    }
+
+    return re.test(email);
   };
 
   const validarSenha = (valor) => {
@@ -82,8 +90,12 @@ function CadastroCliente() {
 
   const validarFormulario = () => {
     if (
-      nomeCompletoError === "" &&
-      nomeCompleto !== "" &&
+      nomeError === "" &&
+      nome !== "" &&
+      sobrenomeError === "" &&
+      sobrenome !== "" &&
+      sobrenomeError === "" &&
+      sobrenome !== "" &&
       cpfError === "" &&
       cpf !== "" &&
       cpf.length >= 14 &&
@@ -101,43 +113,43 @@ function CadastroCliente() {
   const handleSubmit = (evento) => {
     evento.preventDefault();
 
-    if (!nomeCompleto) {
-      setNomeCompletoError("Preencha o nome completo");
-    } else {
-      validarNomeCompleto(nomeCompleto);
-    }
-    if (!cpf) {
-      setCpfError("Preencha o seu CPF");
-    } else if (cpf.length < 14) {
-      setCpfError("CPF precisa ter 11 dígitos");
-    } else {
-      validarCpf(cpf);
-    }
-    if (!email) {
-      setEmailError("Preencha o e-mail");
-    } else if (!validarEmail(email)) {
-      setEmailError("Email inválido");
-    } else {
-      setEmailError("");
-    }
-    if (!senha) {
-      setSenhaError("Preencha a senha");
-    } else if (senha.length < 6) {
-      setSenhaError("A senha precisa ter no mínimo 6 caracteres");
-    } else {
-      setSenhaError("");
+    setNomeError("");
+    setSobrenomeError("");
+    setCpfError("");
+    setEmailError("");
+    setSenhaError("");
+
+    validarNome(nome);
+    validarSobrenome(sobrenome);
+    validarCpf(cpf);
+    validarEmail(email);
+    validarSenha(senha);
+
+    if (
+      nome !== "" &&
+      sobrenome !== "" &&
+      cpf !== "" &&
+      email !== "" &&
+      senha !== ""
+    ) {
+      if (senha.length < 6) {
+        setSenhaError("A senha precisa ter pelo menos 6 caracteres");
+      } else {
+        setSenhaError("");
+      }
     }
 
     validarFormulario();
 
-    if (nomeCompleto !== "" && cpf !== "" && email !== "" && senha !== "") {
+    if (formularioValido) {
       const dadosClientes = {
         method: "POST",
         headers: {
           "Content-type": "application/json",
         },
         body: JSON.stringify({
-          nomeCompleto,
+          nome,
+          sobrenome,
           cpf,
           email,
           senha,
@@ -151,22 +163,46 @@ function CadastroCliente() {
           }
 
           if (response.status === 200) {
-            console.log("Cliente cadastrado com sucesso!");
+            const nomeUsuario = nome.split(" ")[0];
+            handleUser(nomeUsuario);
+            navigate("/home");
+            console.log("Nome cadastrado:", nome);
+            console.log("Usuário logado:", nomeUsuario);
           }
         })
         .catch((error) => console.error(error));
     }
   };
 
-  const handleCpfChange = (evento) => {
-    const formattedCpf = formatCPF(evento.target.value);
-    setcpf(formattedCpf);
-    validarCpf(formattedCpf);
+  const handleNomeChange = (evento) => {
+    const { value } = evento.target;
+    if (/\d/.test(value)) {
+      const newValue = value.replace(/\d/g, "");
+      setNome(newValue);
+    } else {
+      setNome(value);
+    }
+    validarNome(value);
   };
 
-  const handleEmailChange = (evento) => {
-    setEmail(evento.target.value);
-    validarEmail(evento.target.value);
+  const handleSobrenomeChange = (evento) => {
+    const { value } = evento.target;
+    if (/\d/.test(value)) {
+      const newValue = value.replace(/\d/g, "");
+      setSobrenome(newValue);
+    } else {
+      setSobrenome(value);
+    }
+    validarSobrenome(value);
+  };
+
+  const handleCpfChange = (evento) => {
+    const { value } = evento.target;
+    if (!/(\d)\1{10}/.test(value)) {
+      const formattedCpf = formatCPF(value);
+      setcpf(formattedCpf);
+      validarCpf(formattedCpf);
+    }
   };
 
   const handleSenhaChange = (evento) => {
@@ -184,33 +220,49 @@ function CadastroCliente() {
           <div className="flex pt-16 justify-center">
             <form className="flex flex-col gap-6 w-3/4" onSubmit={handleSubmit}>
               <div className="flex flex-col gap-1">
-                <label
-                  className={`text-lg ${
-                    nomeCompletoError ? "text-red-500" : ""
-                  }`}
-                >
-                  Nome Completo
+                <label className={`text-lg ${nomeError ? "text-red-500" : ""}`}>
+                  Nome
                 </label>
 
                 <input
                   type="text"
                   name="nome"
-                  value={nomeCompleto}
-                  placeholder="Nome completo"
+                  value={nome}
+                  placeholder="Nome"
                   className={`border ${
-                    nomeCompletoError ? "border-red-500" : "border-gray-400"
+                    nomeError ? "border-red-500" : "border-gray-400"
                   } rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9`}
-                  onChange={(evento) => {
-                    setNomeCompleto(evento.target.value);
-                    validarNomeCompleto(evento.target.value);
-                  }}
+                  onChange={handleNomeChange}
                 />
-                {nomeCompletoError && (
+                {nomeError && (
+                  <span className={`text-red-500 text-xs`}>{nomeError}</span>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label
+                  className={`text-lg ${sobrenomeError ? "text-red-500" : ""}`}
+                >
+                  Sobrenome
+                </label>
+
+                <input
+                  type="text"
+                  name="Sobrenome"
+                  value={sobrenome}
+                  placeholder="Sobrenome"
+                  className={`border ${
+                    nomeError ? "border-red-500" : "border-gray-400"
+                  } rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9`}
+                  onChange={handleSobrenomeChange}
+                />
+                {sobrenomeError && (
                   <span className={`text-red-500 text-xs`}>
-                    {nomeCompletoError}
+                    {sobrenomeError}
                   </span>
                 )}
               </div>
+
               <div className="flex flex-col gap-1">
                 <label className={`text-lg ${cpfError ? "text-red-500" : ""}`}>
                   CPF
@@ -238,15 +290,19 @@ function CadastroCliente() {
                   E-mail
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   name="email"
+                  value={email}
                   placeholder="E-mail"
                   className={`border ${
                     emailError ? "border-red-500" : "border-gray-400"
                   }
                       border rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9
                   `}
-                  onChange={handleEmailChange}
+                  onChange={(evento) => {
+                    setEmail(evento.target.value);
+                    validarEmail(evento.target.value);
+                  }}
                 />
 
                 {emailError && (
@@ -283,7 +339,7 @@ function CadastroCliente() {
               </div>
               <div className="flex items-center justify-center gap-2 text-lg pt-2">
                 <span className="text-gray-800">Já tem uma conta?</span>
-                <Link to="/loginCliente">
+                <Link to="/home">
                   <span className="text-primary">Entrar</span>
                 </Link>
               </div>
