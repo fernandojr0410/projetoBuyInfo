@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import Imagem from "../../assets/images/12-img-1.jpg";
 import { FiTruck } from "react-icons/fi";
 import { BsHouseDoor } from "react-icons/bs";
 import { AiOutlineCreditCard, AiOutlineBarcode } from "react-icons/ai";
@@ -15,7 +14,7 @@ import { FaCcMastercard, FaBarcode } from "react-icons/fa";
 import { SiNubank } from "react-icons/si";
 import { useLocation } from "react-router-dom";
 
-function FinalizarPedido() {
+function FinishOrder() {
   const location = useLocation();
   const { carrinho } = location.state;
   const { valorTotal } = carrinho;
@@ -451,4 +450,4 @@ function FinalizarPedido() {
   );
 }
 
-export default FinalizarPedido;
+export default FinishOrder;

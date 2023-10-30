@@ -10,13 +10,14 @@ import Cart from "./pages/cart/cart";
 import Category from "./pages/categories/category";
 import Product from "./pages/product/product";
 import Modal from "./components/modal/modal";
-import FinalizarPedido from "./pages/finalizarPedido/finalizarPedido";
-import LoginCliente from "./pages/loginCliente/login";
-import CadastroCliente from "./pages/cadastroCliente/cadastroCliente";
+import FinishOrder from "./pages/finishOrder/finishOrder";
+import LoginClient from "./pages/loginClient/loginClient";
+import RegistrationClient from "./pages/registrationClient/registrationClient";
 
 function Main() {
   const [nomeUsuario, setNomeUsuario] = useState(null);
   const [itemsCart, setItemsCart] = useState(0);
+  const [carrinho, setCarrinho] = useState([]);
 
   function handleUser(user) {
     setNomeUsuario(user);
@@ -45,6 +46,28 @@ function Main() {
     setItemsCart(carrinho.length ?? 0);
   }
 
+  function handleDelete(id_produto) {
+    const atualizarCarrinho = carrinho.filter(
+      (produto) => produto.id_produto !== id_produto
+    );
+
+    setCarrinho(atualizarCarrinho);
+    localStorage.removeItem("carrinho", JSON.stringify(atualizarCarrinho));
+  }
+
+  // const handleDelete = (id_produto) => {
+  //   console.log("id produto deletado", id_produto);
+
+  //   const atualizarCarrinho = carrinho.filter(
+  //     (produto) => produto.id_produto !== id_produto
+  //   );
+
+  //   setCarrinho(atualizarCarrinho);
+  //   console.log("Carrinho Atualizado", atualizarCarrinho);
+  //   setItemsCart(atualizarCarrinho.length ?? 0);
+  //   localStorage.setItem("carrinho", JSON.stringify(atualizarCarrinho));
+  // };
+
   return (
     <React.StrictMode>
       <Router>
@@ -52,15 +75,24 @@ function Main() {
           nomeUsuario={nomeUsuario}
           itemsCart={itemsCart}
           handleUser={handleUser}
+          handleDelete={handleDelete}
         />
         <Routes>
           <Route exact path="/home" element={<Home />} />
-          <Route exact path="/carrinho" element={<Cart />} />
-          <Route exact path="/loginCliente" element={<LoginCliente />} />
+          <Route
+            exact
+            path="/carrinho"
+            element={<Cart handleDelete={handleDelete} />}
+          />
+          <Route
+            exact
+            path="/loginCliente"
+            element={<LoginClient handleUser={handleUser} />}
+          />
           <Route
             exact
             path="/cadastroCliente"
-            element={<CadastroCliente handleUser={handleUser} />}
+            element={<RegistrationClient handleUser={handleUser} />}
           />
           <Route exact path="/categoria/:id" element={<Category />} />
           <Route
@@ -71,7 +103,7 @@ function Main() {
             }
           />
           <Route exact path="/modal" element={<Modal />} />
-          <Route exact path="/finalizarPedido" element={<FinalizarPedido />} />
+          <Route exact path="/finalizarPedido" element={<FinishOrder />} />
         </Routes>
         <Footer />
       </Router>
@@ -80,32 +112,3 @@ function Main() {
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(<Main />);
-
-// function Main() {
-//   const [nomeUsuario, setNomeUsuario] = useState("");
-
-//   ReactDOM.createRoot(document.getElementById("root")).render(
-//     <React.StrictMode>
-//       <Router>
-//         <Header nomeUsuario={nomeUsuario} />
-//         <Routes>
-//           <Route exact path="/home" element={<Home />} />
-//           <Route exact path="/carrinho" element={<Cart />} />
-//           <Route exact path="/loginCliente" element={<LoginCliente />} />
-//           <Route
-//             exact
-//             path="/cadastroCliente"
-//             element={<CadastroCliente setNomeUsuario={setNomeUsuario} />}
-//           />
-//           <Route exact path="/categoria/:id" element={<Category />} />
-//           <Route exact path="/produto/:id" element={<Product />} />
-//           <Route exact path="/modal" element={<Modal />} />
-//           <Route exact path="/finalizarPedido" element={<FinalizarPedido />} />
-//         </Routes>
-//         <Footer />
-//       </Router>
-//     </React.StrictMode>
-//   );
-// }
-
-// ReactDOM.createRoot(document.getElementById("root")).render(<Main />);

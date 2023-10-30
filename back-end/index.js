@@ -265,6 +265,18 @@ app.get("/clientes/findById", (req, res) => {
     });
 });
 
+app.get("/clientes/findByEmailSenha", (req, res) => {
+  clientes
+    .findByEmailSenha(req.query.email, req.query.senha)
+    .then((results) => {
+      res.setHeader("Cache-Control", "no-store");
+      res.send(results);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
 app.post("/clientes/insert", (req, res) => {
   clientes
     .insert(req.body)

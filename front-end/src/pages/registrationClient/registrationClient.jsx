@@ -3,7 +3,7 @@ import Logo from "../../assets/images/logo-buy-info.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-function CadastroCliente({ handleUser }) {
+function RegistrationClient({ handleUser }) {
   const [nome, setNome] = useState("");
   const [nomeError, setNomeError] = useState("");
 
@@ -212,102 +212,112 @@ function CadastroCliente({ handleUser }) {
   return (
     <div className="flex justify-center bg-primary w-full items-center">
       <div className="flex justify-center p-10 h-full w-full">
-        <div className="flex flex-col justify-center py-4 bg-white w-[40%] rounded-md">
+        <div className="flex flex-col justify-center py-4 bg-white w-[60%] rounded-md">
           <div className="flex items-center flex-col gap-4">
             <img src={Logo} alt="" className="w-60" />
             <h1 className="text-2xl text-gray-800">Crie sua conta grátis</h1>
           </div>
           <div className="flex pt-16 justify-center">
-            <form className="flex flex-col gap-6 w-3/4" onSubmit={handleSubmit}>
-              <div className="flex flex-col gap-1">
-                <label className={`text-lg ${nomeError ? "text-red-500" : ""}`}>
-                  Nome
-                </label>
+            <form className="flex flex-col gap-6 " onSubmit={handleSubmit}>
+              <div className="flex gap-8">
+                <div className="flex flex-col gap-1">
+                  <label
+                    className={`text-lg ${nomeError ? "text-red-500" : ""}`}
+                  >
+                    Nome
+                  </label>
 
-                <input
-                  type="text"
-                  name="nome"
-                  value={nome}
-                  placeholder="Nome"
-                  className={`border ${
-                    nomeError ? "border-red-500" : "border-gray-400"
-                  } rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9`}
-                  onChange={handleNomeChange}
-                />
-                {nomeError && (
-                  <span className={`text-red-500 text-xs`}>{nomeError}</span>
-                )}
+                  <input
+                    type="text"
+                    name="nome"
+                    value={nome}
+                    placeholder="Nome"
+                    className={`border ${
+                      nomeError ? "border-red-500" : "border-gray-400"
+                    } rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9`}
+                    onChange={handleNomeChange}
+                  />
+                  {nomeError && (
+                    <span className={`text-red-500 text-xs`}>{nomeError}</span>
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label
+                    className={`text-lg ${
+                      sobrenomeError ? "text-red-500" : ""
+                    }`}
+                  >
+                    Sobrenome
+                  </label>
+
+                  <input
+                    type="text"
+                    name="Sobrenome"
+                    value={sobrenome}
+                    placeholder="Sobrenome"
+                    className={`border ${
+                      nomeError ? "border-red-500" : "border-gray-400"
+                    } rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9`}
+                    onChange={handleSobrenomeChange}
+                  />
+                  {sobrenomeError && (
+                    <span className={`text-red-500 text-xs`}>
+                      {sobrenomeError}
+                    </span>
+                  )}
+                </div>
               </div>
 
-              <div className="flex flex-col gap-1">
-                <label
-                  className={`text-lg ${sobrenomeError ? "text-red-500" : ""}`}
-                >
-                  Sobrenome
-                </label>
+              <div className="flex gap-8">
+                <div className="flex flex-col gap-1">
+                  <label
+                    className={`text-lg ${cpfError ? "text-red-500" : ""}`}
+                  >
+                    CPF
+                  </label>
+                  <input
+                    type="text"
+                    maxLength="14"
+                    name="cpf"
+                    placeholder="CPF"
+                    className={`border ${
+                      cpfError ? "border-red-500" : "border-gray-400"
+                    }  rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9`}
+                    value={cpf}
+                    onChange={handleCpfChange}
+                  />
 
-                <input
-                  type="text"
-                  name="Sobrenome"
-                  value={sobrenome}
-                  placeholder="Sobrenome"
-                  className={`border ${
-                    nomeError ? "border-red-500" : "border-gray-400"
-                  } rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9`}
-                  onChange={handleSobrenomeChange}
-                />
-                {sobrenomeError && (
-                  <span className={`text-red-500 text-xs`}>
-                    {sobrenomeError}
-                  </span>
-                )}
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <label className={`text-lg ${cpfError ? "text-red-500" : ""}`}>
-                  CPF
-                </label>
-                <input
-                  type="text"
-                  maxLength="14"
-                  name="cpf"
-                  placeholder="CPF"
-                  className={`border ${
-                    cpfError ? "border-red-500" : "border-gray-400"
-                  }  rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9`}
-                  value={cpf}
-                  onChange={handleCpfChange}
-                />
-
-                {cpfError && (
-                  <span className={`text-red-500 text-xs`}>{cpfError}</span>
-                )}
-              </div>
-              <div className="flex flex-col gap-1">
-                <label
-                  className={`text-lg ${emailError ? "text-red-500" : ""}`}
-                >
-                  E-mail
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={email}
-                  placeholder="E-mail"
-                  className={`border ${
-                    emailError ? "border-red-500" : "border-gray-400"
-                  }
+                  {cpfError && (
+                    <span className={`text-red-500 text-xs`}>{cpfError}</span>
+                  )}
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label
+                    className={`text-lg ${emailError ? "text-red-500" : ""}`}
+                  >
+                    E-mail
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={email}
+                    placeholder="E-mail"
+                    className={`border ${
+                      emailError ? "border-red-500" : "border-gray-400"
+                    }
                       border rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9
                   `}
-                  onChange={(evento) => {
-                    setEmail(evento.target.value);
-                    validarEmail(evento.target.value);
-                  }}
-                />
+                    onChange={(evento) => {
+                      setEmail(evento.target.value);
+                      validarEmail(evento.target.value);
+                    }}
+                  />
 
-                {emailError && (
-                  <span className={`text-red-500 text-xs`}>{emailError}</span>
-                )}
+                  {emailError && (
+                    <span className={`text-red-500 text-xs`}>{emailError}</span>
+                  )}
+                </div>
               </div>
               <div className="flex flex-col gap-1">
                 <label
@@ -339,7 +349,7 @@ function CadastroCliente({ handleUser }) {
               </div>
               <div className="flex items-center justify-center gap-2 text-lg pt-2">
                 <span className="text-gray-800">Já tem uma conta?</span>
-                <Link to="/home">
+                <Link to="/loginCliente">
                   <span className="text-primary">Entrar</span>
                 </Link>
               </div>
@@ -351,4 +361,4 @@ function CadastroCliente({ handleUser }) {
   );
 }
 
-export default CadastroCliente;
+export default RegistrationClient;

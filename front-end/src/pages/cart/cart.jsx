@@ -9,10 +9,12 @@ import { SiNubank } from "react-icons/si";
 import { MdPix } from "react-icons/md";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 
-function Cart() {
+function Cart({ handleDelete }) {
   const [produtosDestaque, setProdutosDestaque] = useState([]);
   const [carrinho, setCarrinho] = useState([]);
   const [quantidades, setQuantidades] = useState({});
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const carrinhoData = JSON.parse(localStorage.getItem("carrinho")) || [];
@@ -68,15 +70,6 @@ function Cart() {
     localStorage.setItem("carrinho", JSON.stringify(atualizarCarrinho));
   };
 
-  const handleDelete = (id_produto) => {
-    console.log("id produto deletado", id_produto);
-    const atualizarCarrinho = carrinho.filter(
-      (produto) => produto.id_produto !== id_produto
-    );
-    setCarrinho(atualizarCarrinho);
-    localStorage.setItem("carrinho", JSON.stringify(atualizarCarrinho));
-  };
-
   let valorTotal = 0;
   carrinho.forEach((produto) => {
     valorTotal +=
@@ -103,8 +96,6 @@ function Cart() {
   const maisVendidos = produtosDestaque.filter(
     (produto) => produto.destaque_id_destaque === 3
   );
-
-  const navigate = useNavigate();
 
   const finalizarCompra = () => {
     if (carrinho.length > 0) {

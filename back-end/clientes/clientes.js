@@ -10,20 +10,31 @@ function findById(id) {
   return queryPromise(`SELECT * FROM Cliente WHERE Id_Cliente = ${id}`);
 }
 
+function findByEmailSenha(email, senha) {
+  return queryPromise(
+    `SELECT * FROM Cliente WHERE email = '${email}' AND senha = '${senha}'`
+  );
+}
+
 function insert(dados) {
-  const { nomeCompleto, cpf, senha } = dados;
-  let sql = `INSERT INTO Cliente (nomeCompleto, cpf, senha) values ('${nomeCompleto}', '${cpf}', '${senha}')`;
+  const { nome, sobrenome, cpf, email, senha } = dados;
+  let sql = `INSERT INTO Cliente (nome, sobrenome, cpf, email, senha) values ('${nome}', '${sobrenome}', '${cpf}', '${email}', '${senha}')`;
   return queryPromise(sql);
 }
 
 function update(dados) {
-  const { id, nomeCompleto, cpf, senha } = dados;
+  const { id, nome, sobrenome, cpf, email, senha } = dados;
   const params = [];
   let sql = "UPDATE Cliente SET";
 
-  if (nomeCompleto) {
-    sql += " nomeCompleto = ?,";
-    params.push(nomeCompleto);
+  if (nome) {
+    sql += " nome = ?,";
+    params.push(nome);
+  }
+
+  if (sobrenome) {
+    sql += " sobrenome = ?,";
+    params.push(sobrenome);
   }
 
   if (cpf) {
@@ -31,9 +42,9 @@ function update(dados) {
     params.push(cpf);
   }
 
-  if (endereco) {
-    sql += " endereco = ?,";
-    params.push(endereco);
+  if (email) {
+    sql += " email = ?,";
+    params.push(email);
   }
 
   if (senha) {
@@ -57,6 +68,7 @@ function deleteById(ids) {
 module.exports = {
   findAll,
   findById,
+  findByEmailSenha,
   insert,
   update,
   deleteById,
