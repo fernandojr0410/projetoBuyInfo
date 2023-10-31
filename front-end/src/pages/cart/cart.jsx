@@ -9,7 +9,7 @@ import { SiNubank } from "react-icons/si";
 import { MdPix } from "react-icons/md";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 
-function Cart({ handleDelete }) {
+function Cart({ handleItemsCart }) {
   const [produtosDestaque, setProdutosDestaque] = useState([]);
   const [carrinho, setCarrinho] = useState([]);
   const [quantidades, setQuantidades] = useState({});
@@ -76,8 +76,28 @@ function Cart({ handleDelete }) {
       produto.preco * (quantidades[produto.id_produto] || produto.quantidade);
   });
 
+  const handleDelete = (id_produto) => {
+    console.log("id produto deletado", id_produto);
+    const atualizarCarrinho = carrinho.filter(
+      (produto) => produto.id_produto !== id_produto
+    );
+    setCarrinho(atualizarCarrinho);
+    handleItemsCart(atualizarCarrinho.length);
+    localStorage.setItem("carrinho", JSON.stringify(atualizarCarrinho));
+  };
+
   const numeroParcelas = 10;
   const valorParcela = valorTotal / numeroParcelas;
+
+  const maisVendidos = produtosDestaque.filter(
+    (produto) => produto.destaque_id_destaque === 3
+  );
+
+  const finalizarCompra = () => {
+    if (carrinho.length > 0) {
+      navigate("/finalizarPedido", { state: { carrinho } });
+    }
+  };
 
   useEffect(() => {
     fetch(`http://localhost:5000/produtos/destaques`, {
@@ -92,16 +112,6 @@ function Cart({ handleDelete }) {
       })
       .catch((error) => console.error(error));
   }, []);
-
-  const maisVendidos = produtosDestaque.filter(
-    (produto) => produto.destaque_id_destaque === 3
-  );
-
-  const finalizarCompra = () => {
-    if (carrinho.length > 0) {
-      navigate("/finalizarPedido", { state: { carrinho } });
-    }
-  };
 
   return (
     <div className="flex flex-col justify-center items-center  bg-gray-200">

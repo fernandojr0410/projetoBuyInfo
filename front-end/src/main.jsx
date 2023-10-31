@@ -13,11 +13,13 @@ import Modal from "./components/modal/modal";
 import FinishOrder from "./pages/finishOrder/finishOrder";
 import LoginClient from "./pages/loginClient/loginClient";
 import RegistrationClient from "./pages/registrationClient/registrationClient";
+import EditRegistration from "./pages/editRegistration/editRegistration";
 
 function Main() {
-  const [nomeUsuario, setNomeUsuario] = useState(null);
+  const [nomeUsuario, setNomeUsuario] = useState(
+    localStorage.getItem("nomeUsuario") || null
+  );
   const [itemsCart, setItemsCart] = useState(0);
-  const [carrinho, setCarrinho] = useState([]);
 
   function handleUser(user) {
     setNomeUsuario(user);
@@ -46,27 +48,9 @@ function Main() {
     setItemsCart(carrinho.length ?? 0);
   }
 
-  function handleDelete(id_produto) {
-    const atualizarCarrinho = carrinho.filter(
-      (produto) => produto.id_produto !== id_produto
-    );
-
-    setCarrinho(atualizarCarrinho);
-    localStorage.removeItem("carrinho", JSON.stringify(atualizarCarrinho));
+  function handleItemsCart(items) {
+    setItemsCart(items);
   }
-
-  // const handleDelete = (id_produto) => {
-  //   console.log("id produto deletado", id_produto);
-
-  //   const atualizarCarrinho = carrinho.filter(
-  //     (produto) => produto.id_produto !== id_produto
-  //   );
-
-  //   setCarrinho(atualizarCarrinho);
-  //   console.log("Carrinho Atualizado", atualizarCarrinho);
-  //   setItemsCart(atualizarCarrinho.length ?? 0);
-  //   localStorage.setItem("carrinho", JSON.stringify(atualizarCarrinho));
-  // };
 
   return (
     <React.StrictMode>
@@ -75,14 +59,13 @@ function Main() {
           nomeUsuario={nomeUsuario}
           itemsCart={itemsCart}
           handleUser={handleUser}
-          handleDelete={handleDelete}
         />
         <Routes>
           <Route exact path="/home" element={<Home />} />
           <Route
             exact
             path="/carrinho"
-            element={<Cart handleDelete={handleDelete} />}
+            element={<Cart handleItemsCart={handleItemsCart} />}
           />
           <Route
             exact
@@ -94,7 +77,11 @@ function Main() {
             path="/cadastroCliente"
             element={<RegistrationClient handleUser={handleUser} />}
           />
+
+          <Route exact path="/edicaoCadastro" element={<EditRegistration />} />
+
           <Route exact path="/categoria/:id" element={<Category />} />
+
           <Route
             exact
             path="/produto/:id"
@@ -102,6 +89,7 @@ function Main() {
               <Product handleAdicionarCarrinho={handleAdicionarCarrinho} />
             }
           />
+
           <Route exact path="/modal" element={<Modal />} />
           <Route exact path="/finalizarPedido" element={<FinishOrder />} />
         </Routes>
