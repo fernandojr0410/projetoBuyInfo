@@ -163,11 +163,11 @@ function RegistrationClient({ handleUser }) {
           }
 
           if (response.status === 200) {
-            const nomeUsuario = nome.split(" ")[0];
-            handleUser(nomeUsuario);
+            const cliente = nome.split(" ")[0];
+            handleUser(cliente);
             navigate("/home");
             console.log("Nome cadastrado:", nome);
-            console.log("Usuário logado:", nomeUsuario);
+            console.log("Usuário logado:", cliente);
           }
         })
         .catch((error) => console.error(error));
@@ -211,8 +211,8 @@ function RegistrationClient({ handleUser }) {
   };
   return (
     <div className="flex justify-center bg-primary w-full items-center">
-      <div className="flex justify-center p-10 h-full w-full">
-        <div className="flex flex-col justify-center py-4 bg-white w-[60%] rounded-md">
+      <div className="flex justify-center p-10 h-full w-[50%]">
+        <div className="flex flex-col justify-center py-4 bg-white w-full rounded-md">
           <div className="flex items-center flex-col gap-4">
             <img src={Logo} alt="" className="w-60" />
             <h1 className="text-2xl text-gray-800">Crie sua conta grátis</h1>

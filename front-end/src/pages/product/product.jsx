@@ -25,11 +25,6 @@ function Product({ handleAdicionarCarrinho }) {
       .catch((error) => console.error(error));
   }, []);
 
-  // const handleMouseOver = (index) => {
-  //   if (index !== 0) {
-  //     setImagem(produto[0]?.imagens[index]);
-  //   }
-  // };
   const openModal = () => {
     setAbrirModal(true);
   };

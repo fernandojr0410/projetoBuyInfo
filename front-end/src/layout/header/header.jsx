@@ -5,7 +5,7 @@ import ItemsCart from "./components/itemsCart";
 import { BiUserCircle } from "react-icons/bi";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 
-function Header({ nomeUsuario, handleUser, itemsCart }) {
+function Header({ cliente, handleUser, itemsCart }) {
   const location = useLocation();
   const hideCartIcon =
     location.pathname === "/loginCliente" ||
@@ -31,8 +31,8 @@ function Header({ nomeUsuario, handleUser, itemsCart }) {
 
         {!hideLoginIcon && (
           <div className="flex items-center gap-4">
-            {nomeUsuario ? (
-              <UserProfile handleUser={handleUser} nomeUsuario={nomeUsuario} />
+            {cliente ? (
+              <UserProfile cliente={cliente} handleUser={handleUser} /> 
             ) : (
               <Link to="/loginCliente" className="flex items-center gap-2">
                 <BiUserCircle className="h-6 w-6" />

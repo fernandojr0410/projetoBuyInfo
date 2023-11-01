@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useParams,
+} from "react-router-dom";
 import "./index.css";
 import Header from "./layout/header/header";
 import Home from "./pages/home";
@@ -16,16 +21,25 @@ import RegistrationClient from "./pages/registrationClient/registrationClient";
 import EditRegistration from "./pages/editRegistration/editRegistration";
 
 function Main() {
-  const [nomeUsuario, setNomeUsuario] = useState(
-    localStorage.getItem("nomeUsuario") || null
+  const [cliente, setCliente] = useState(
+    localStorage.getItem("cliente") || null
   );
-  const [itemsCart, setItemsCart] = useState(0);
+
+  const carrinhoLocal = JSON.parse(localStorage.getItem("carrinho")) || [];
+  const [itemsCart, setItemsCart] = useState(carrinhoLocal.length || 0);
+
+  useEffect(() => {
+    const dadosCliente = JSON.parse(localStorage.getItem("cliente"));
+    if (dadosCliente) {
+      setCliente(dadosCliente);
+    }
+  }, []);
 
   function handleUser(user) {
-    setNomeUsuario(user);
+    setCliente(user);
 
-    if (user) localStorage.setItem("nomeUsuario", user);
-    else localStorage.removeItem("nomeUsuario");
+    if (user) localStorage.setItem("cliente", JSON.stringify(user));
+    else localStorage.removeItem("cliente");
   }
 
   function handleAdicionarCarrinho(produto) {
@@ -56,7 +70,7 @@ function Main() {
     <React.StrictMode>
       <Router>
         <Header
-          nomeUsuario={nomeUsuario}
+          cliente={cliente}
           itemsCart={itemsCart}
           handleUser={handleUser}
         />
@@ -70,7 +84,7 @@ function Main() {
           <Route
             exact
             path="/loginCliente"
-            element={<LoginClient handleUser={handleUser} />}
+            element={<LoginClient handleUser={handleUser} cliente={cliente} />}
           />
           <Route
             exact
@@ -78,7 +92,11 @@ function Main() {
             element={<RegistrationClient handleUser={handleUser} />}
           />
 
-          <Route exact path="/edicaoCadastro" element={<EditRegistration />} />
+          <Route
+            exact
+            path="/edicaoCadastro/:id"
+            element={<EditRegistration />}
+          />
 
           <Route exact path="/categoria/:id" element={<Category />} />
 

@@ -255,8 +255,10 @@ app.get("/clientes/findAll", (req, res) => {
 });
 
 app.get("/clientes/findById", (req, res) => {
+  const id = req.query.id;
+  console.log("ID recebido no back-end:", id);
   clientes
-    .findById(req.query.id)
+    .findById(id)
     .then((results) => {
       res.send(results);
     })
@@ -264,6 +266,18 @@ app.get("/clientes/findById", (req, res) => {
       console.error(error);
     });
 });
+
+// app.get("/clientes/findById", (req, res) => {
+//   console.log("ID recebido no back-end:", req.query.id);
+//   clientes
+//     .findById(req.query.id)
+//     .then((results) => {
+//       res.send(results);
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//     });
+// });
 
 app.get("/clientes/findByEmailSenha", (req, res) => {
   clientes

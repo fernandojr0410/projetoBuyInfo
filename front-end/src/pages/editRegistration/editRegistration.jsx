@@ -1,10 +1,32 @@
-import Modal from "../../components/modal/modal";
+import { useState, useEffect } from "react";
+import { BsPencil } from "react-icons/bs";
+import { useParams } from "react-router-dom";
+import RegistrationClient from "../registrationClient/registrationClient";
 
-function EditRegistration() {
+function EditRegistration({ nome, sobrenome, email, senha }) {
+  const [cliente, setCliente] = useState(null);
+  const { id } = useParams();
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/clientes/findById?id=${id}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+      .then((Response) => Response.json())
+      .then((data) => {
+        setCliente(data[0]);
+        console.log("clientes", data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
   return (
-    <div className="bg-red-500">
+    <div className="">
       <span>Edição de Cadastro</span>
-      <Modal/>
+      <input type="text" name="name" value={cliente?.nome ?? ""} />
+      <input type="text" name="name" value={cliente?.sobrenome ?? ""} />
     </div>
   );
 }

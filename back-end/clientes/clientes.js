@@ -7,7 +7,8 @@ function findAll() {
 }
 
 function findById(id) {
-  return queryPromise(`SELECT * FROM Cliente WHERE Id_Cliente = ${id}`);
+  console.log("ID Cliente:", id);
+  return queryPromise(`SELECT * FROM Cliente WHERE id_cliente = ${id}`);
 }
 
 function findByEmailSenha(email, senha) {

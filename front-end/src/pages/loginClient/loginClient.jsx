@@ -43,8 +43,9 @@ function LoginClient({ handleUser }) {
       })
       .then((data) => {
         if (data.length > 0) {
-          const nomeUsuario = data[0].nome;
-          handleUser(nomeUsuario);
+          const cliente = data[0];
+
+          handleUser(cliente);
           setEmail("");
           setSenha("");
           navigate("/home");
