@@ -1,12 +1,7 @@
 import { useState, useEffect } from "react";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useParams,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./index.css";
 import Header from "./layout/header/header";
 import Home from "./pages/home";
@@ -18,11 +13,14 @@ import Modal from "./components/modal/modal";
 import FinishOrder from "./pages/finishOrder/finishOrder";
 import LoginClient from "./pages/loginClient/loginClient";
 import RegistrationClient from "./pages/registrationClient/registrationClient";
-import EditRegistration from "./pages/editRegistration/editRegistration";
+
+import SidebarCustomer from "./pages/customer/components/sideBarCustomer";
+import CustomerData from "./pages/customer/customerData";
+import CustomerOrders from "./pages/customer/customerOrders";
 
 function Main() {
   const [cliente, setCliente] = useState(
-    localStorage.getItem("cliente") || null
+    JSON.parse(localStorage.getItem("cliente")) || null
   );
 
   const carrinhoLocal = JSON.parse(localStorage.getItem("carrinho")) || [];
@@ -83,23 +81,32 @@ function Main() {
           />
           <Route
             exact
-            path="/loginCliente"
+            path="/login-cliente"
             element={<LoginClient handleUser={handleUser} cliente={cliente} />}
           />
           <Route
             exact
-            path="/cadastroCliente"
+            path="/cadastro-cliente"
             element={<RegistrationClient handleUser={handleUser} />}
+          />
+          <Route
+            exact
+            path="/edicao-cadastro/:id"
+            element={<SidebarCustomer />}
           />
 
           <Route
             exact
-            path="/edicaoCadastro/:id"
-            element={<EditRegistration />}
+            path="/edicao-cadastro/meus-dados/:id"
+            element={<CustomerData handleUser={handleUser} cliente={cliente} />}
+          />
+          <Route
+            exact
+            path="/edicao-cadastro/meus-pedidos/:id"
+            element={<CustomerOrders />}
           />
 
           <Route exact path="/categoria/:id" element={<Category />} />
-
           <Route
             exact
             path="/produto/:id"
@@ -107,7 +114,6 @@ function Main() {
               <Product handleAdicionarCarrinho={handleAdicionarCarrinho} />
             }
           />
-
           <Route exact path="/modal" element={<Modal />} />
           <Route exact path="/finalizarPedido" element={<FinishOrder />} />
         </Routes>

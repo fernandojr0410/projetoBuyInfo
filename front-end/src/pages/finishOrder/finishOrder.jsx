@@ -360,7 +360,12 @@ function FinishOrder() {
                     type="onclick"
                     className="flex items-center justify-center bg-primary w-full h-10 rounded-md"
                   >
-                    <span className="text-white">USAR OUTRO ENDEREÇO</span>
+                    <Link
+                      to=""
+                      className="text-white"
+                    >
+                      USAR OUTRO ENDEREÇO
+                    </Link>
                   </button>
                 </div>
               </div>

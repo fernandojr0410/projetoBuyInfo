@@ -127,7 +127,7 @@ function LoginClient({ handleUser }) {
               </div>
               <div className="flex items-center justify-center gap-2 text-lg pt-2">
                 <span className="text-gray-800">Não tem uma conta?</span>
-                <Link to="/cadastroCliente">
+                <Link to="/cadastro-cliente">
                   <span className="text-primary">Cadastre-se</span>
                 </Link>
               </div>

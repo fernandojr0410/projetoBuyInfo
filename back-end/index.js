@@ -9,6 +9,7 @@ const conn = require("./db/mysql.js");
 const produtos = require("./produtos/produtos.js");
 const categorias = require("./categorias/categorias.js");
 const clientes = require("./clientes/clientes.js");
+const enderecos = require("./enderecos/enderecos.js");
 const marcas = require("./marcas/marcas.js");
 
 const app = express();
@@ -267,18 +268,6 @@ app.get("/clientes/findById", (req, res) => {
     });
 });
 
-// app.get("/clientes/findById", (req, res) => {
-//   console.log("ID recebido no back-end:", req.query.id);
-//   clientes
-//     .findById(req.query.id)
-//     .then((results) => {
-//       res.send(results);
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//     });
-// });
-
 app.get("/clientes/findByEmailSenha", (req, res) => {
   clientes
     .findByEmailSenha(req.query.email, req.query.senha)
@@ -320,6 +309,67 @@ app.delete("/clientes/delete", (req, res) => {
     .deleteById(req.body)
     .then(() => {
       res.send("Informação deletada com sucesso!");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
+    });
+});
+
+// Endereco
+app.get("/enderecos/findAll", (req, res) => {
+  enderecos
+    .findAll()
+    .then((results) => {
+      res.send(results);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
+app.get("/enderecos/findById", (req, res) => {
+  const id = req.query.id;
+  console.log("ID recebido no back-end:", id);
+  enderecos
+    .findById(id)
+    .then((results) => {
+      res.send(results);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
+app.post("/enderecos/insert", (req, res) => {
+  enderecos
+    .insert(req.body)
+    .then(() => {
+      res.send("Endereço cadastrado com sucesso!");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
+    });
+});
+
+app.put("/enderecos/update", (req, res) => {
+  enderecos
+    .update(req.body)
+    .then(() => {
+      res.send("Endereço atualizado com sucesso!");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
+    });
+});
+
+app.delete("/enderecos/delete", (req, res) => {
+  enderecos
+    .deleteById(req.body)
+    .then(() => {
+      res.send("Endereço deletado com sucesso!");
     })
     .catch((error) => {
       console.error(error);

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { FiTruck } from "react-icons/fi";
 import { BiUserCircle } from "react-icons/bi";
 import { ImExit } from "react-icons/im";
 
@@ -24,17 +25,29 @@ function UserProfile({ cliente, handleUser }) {
           <>
             <li>
               <Link
-                to={`/edicaoCadastro/${cliente.Id_Cliente}`}
-                className="flex gap-2 items-center py-1"
+                to={`/edicao-cadastro/meus-pedidos/${cliente.Id_Cliente}`}
+                className="flex flex-col gap-6 py-1"
               >
-                <BiUserCircle className="h-6 w-6" />
-                <span>Meu cadastro</span>
+                <div className="flex items-center gap-2">
+                  <FiTruck className="h-6 w-6" />
+                  <span>Meus Pedidos</span>
+                </div>
+              </Link>
+
+              <Link
+                to={`/edicao-cadastro/meus-dados/${cliente.Id_Cliente}`}
+                className="flex flex-col gap-6 py-1"
+              >
+                <div className="flex items-center gap-2">
+                  <BiUserCircle className="h-6 w-6" />
+                  <span>Minha Conta</span>
+                </div>
               </Link>
             </li>
             <li>
               <button
                 type="button"
-                className="flex gap-2 items-center py-1"
+                className="flex gap-2 items-center pt-4"
                 onClick={logout}
               >
                 <ImExit className="h-6 w-6" />

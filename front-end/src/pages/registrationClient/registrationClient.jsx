@@ -13,6 +13,9 @@ function RegistrationClient({ handleUser }) {
   const [cpf, setcpf] = useState("");
   const [cpfError, setCpfError] = useState("");
 
+  const [telefone, setTelefone] = useState("");
+  const [telefoneError, setTelefoneError] = useState("");
+
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
 
@@ -25,7 +28,7 @@ function RegistrationClient({ handleUser }) {
 
   useEffect(() => {
     validarFormulario();
-  }, [nome, sobrenome, cpf, email, senha]);
+  }, [nome, sobrenome, cpf, telefone, email, senha]);
 
   // Validação Nome
   const validarNome = (valor) => {
@@ -96,6 +99,8 @@ function RegistrationClient({ handleUser }) {
       sobrenome !== "" &&
       sobrenomeError === "" &&
       sobrenome !== "" &&
+      telefoneError === "" &&
+      telefone !== "" &&
       cpfError === "" &&
       cpf !== "" &&
       cpf.length >= 14 &&
@@ -117,6 +122,7 @@ function RegistrationClient({ handleUser }) {
     setSobrenomeError("");
     setCpfError("");
     setEmailError("");
+    setTelefoneError("");
     setSenhaError("");
 
     validarNome(nome);
@@ -129,6 +135,7 @@ function RegistrationClient({ handleUser }) {
       nome !== "" &&
       sobrenome !== "" &&
       cpf !== "" &&
+      telefone !== "" &&
       email !== "" &&
       senha !== ""
     ) {
@@ -151,6 +158,7 @@ function RegistrationClient({ handleUser }) {
           nome,
           sobrenome,
           cpf,
+          telefone,
           email,
           senha,
         }),
@@ -205,6 +213,11 @@ function RegistrationClient({ handleUser }) {
     }
   };
 
+  const handleTelefoneChange = (evento) => {
+    setSenha(evento.target.value);
+    validarSenha(evento.target.value);
+  };
+
   const handleSenhaChange = (evento) => {
     setSenha(evento.target.value);
     validarSenha(evento.target.value);
@@ -218,7 +231,7 @@ function RegistrationClient({ handleUser }) {
             <h1 className="text-2xl text-gray-800">Crie sua conta grátis</h1>
           </div>
           <div className="flex pt-16 justify-center">
-            <form className="flex flex-col gap-6 " onSubmit={handleSubmit}>
+            <form className="flex flex-col gap-6 " >
               <div className="flex gap-8">
                 <div className="flex flex-col gap-1">
                   <label
@@ -294,30 +307,55 @@ function RegistrationClient({ handleUser }) {
                 </div>
                 <div className="flex flex-col gap-1">
                   <label
-                    className={`text-lg ${emailError ? "text-red-500" : ""}`}
+                    className={`text-lg ${telefoneError ? "text-red-500" : ""}`}
                   >
-                    E-mail
+                    Telefone
                   </label>
                   <input
-                    type="email"
-                    name="email"
-                    value={email}
-                    placeholder="E-mail"
+                    type="tel"
+                    name="telefone"
+                    value={telefone}
+                    placeholder="Telefone"
                     className={`border ${
-                      emailError ? "border-red-500" : "border-gray-400"
+                      telefoneError ? "border-red-500" : "border-gray-400"
                     }
                       border rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9
                   `}
-                    onChange={(evento) => {
-                      setEmail(evento.target.value);
-                      validarEmail(evento.target.value);
-                    }}
+                    onChange={handleTelefoneChange}
                   />
 
-                  {emailError && (
-                    <span className={`text-red-500 text-xs`}>{emailError}</span>
+                  {telefoneError && (
+                    <span className={`text-red-500 text-xs`}>
+                      {telefoneError}
+                    </span>
                   )}
                 </div>
+              </div>
+              <div className="flex flex-col gap-1">
+                <label
+                  className={`text-lg ${emailError ? "text-red-500" : ""}`}
+                >
+                  E-mail
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={email}
+                  placeholder="E-mail"
+                  className={`border ${
+                    emailError ? "border-red-500" : "border-gray-400"
+                  }
+                      border rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9
+                  `}
+                  onChange={(evento) => {
+                    setEmail(evento.target.value);
+                    validarEmail(evento.target.value);
+                  }}
+                />
+
+                {emailError && (
+                  <span className={`text-red-500 text-xs`}>{emailError}</span>
+                )}
               </div>
               <div className="flex flex-col gap-1">
                 <label
@@ -349,7 +387,7 @@ function RegistrationClient({ handleUser }) {
               </div>
               <div className="flex items-center justify-center gap-2 text-lg pt-2">
                 <span className="text-gray-800">Já tem uma conta?</span>
-                <Link to="/loginCliente">
+                <Link to="/login-cliente">
                   <span className="text-primary">Entrar</span>
                 </Link>
               </div>
