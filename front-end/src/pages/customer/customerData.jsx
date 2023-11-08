@@ -1,17 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SidebarCustomer from "./components/sideBarCustomer";
-import { useParams } from "react-router-dom";
 
 function CustomerData({ cliente }) {
   const [dadosCliente, setDadosCliente] = useState(cliente);
-  const [endereco, setEndereco] = useState("");
+  const [endereco, setEndereco] = useState([]);
 
   function handleChange(value, field) {
     setDadosCliente({ ...dadosCliente, [field]: value });
+    setEndereco({ ...endereco, [field]: value });
   }
 
-  const handleCadastrarEndereco = (event) => {
+  const handleCadastrarEndereco = (event, Id_Cliente, idEndereco) => {
+    console.log("Id_Cliente:", Id_Cliente);
+    console.log("idEndereco:", idEndereco);
+    // Restante do código...
+
     event.preventDefault();
+
     const enderecoCliente = JSON.stringify({
       cep: event.target.elements.cep.value,
       cidade: event.target.elements.cidade.value,
@@ -31,9 +36,49 @@ function CustomerData({ cliente }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        setEndereco("Endereço cliente:", data);
+        setEndereco(data);
+        console.log("Endereço cliente:", data);
+
+        const idEndereco = endereco.idEndereco;
+        const Id_Cliente = dadosCliente.Id_Cliente;
+        console.log(idEndereco);
+
+        const clienteEndereco = JSON.stringify({
+          id_cliente: Id_Cliente,
+          id_endereco: idEndereco,
+        });
+
+        fetch(`http://localhost:5000/clientes/updateClienteEndereco`, {
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: clienteEndereco,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Update realizado", data);
+          })
+          .catch((error) =>
+            console.error("Não foi atualizado cliente:", error)
+          );
+      });
+
+    fetch(
+      `http://localhost:5000/clientes/findByIdClienteEndereco?Id_Cliente=${Id_Cliente}&idEndereco=${idEndereco}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setEndereco(data);
+        console.log("endereco dentro fetch", data);
       })
-      .catch((error) => console.error("Não foi atualizado:", error));
+      .catch((error) => console.error(error));
   };
 
   return (
@@ -140,6 +185,23 @@ function CustomerData({ cliente }) {
           </div>
           <div className="flex flex-col gap-6 w-[50%]">
             <span className="font-bold text-primary text-xl">Meu Endereço</span>
+            {/* {!mostrarFormulario && endereco ? (
+              <div>
+                <p>CEP: {endereco.cep}</p>
+                <p>Cidade: {endereco.cidade}</p>
+                <p>Estado: {endereco.estado}</p>
+                <p>Bairro: {endereco.bairro}</p>
+                <p>Rua: {endereco.rua}</p>
+                <p>Numero: {endereco.numero}</p>
+                <p>Complemento: {endereco.complemento}</p>
+              </div>
+            ) : (
+              <button onClick={() => setMostrarFormulario(true)}>
+                Cadastrar Endereço
+              </button>
+            )} */}
+
+            {/* {mostrarFormulario && ( */}
             <form onSubmit={handleCadastrarEndereco}>
               <div className="flex flex-col gap-6 bg-white border-gray-400 border rounded-md p-4">
                 <div className="flex flex-col gap-1 w-full">
@@ -147,8 +209,10 @@ function CustomerData({ cliente }) {
                   <input
                     type="text"
                     name="cep"
+                    value={endereco.cep}
                     placeholder="CEP"
                     className="text-sm px-1 border-gray-300 border rounded-md h-8 cursor-pointer"
+                    onChange={({ target }) => handleChange(target.value, "cep")}
                   />
                 </div>
                 <div className="flex gap-4">
@@ -203,23 +267,11 @@ function CustomerData({ cliente }) {
 
                 <div className="flex flex-col gap-1 w-full">
                   <label className="text-gray-600">Complemento</label>
-                  <input
-                    type="text"
+                  <textarea
                     name="complemento"
-                    placeholder="Complemento"
-                    className="text-sm px-1 border-gray-300 border rounded-md h-8 w-full cursor-pointer"
-                  />
+                    className="text-sm px-1 border-gray-300 border rounded-md py-10 w-full cursor-pointer"
+                  ></textarea>
                 </div>
-                {/* <div className="flex flex-col gap-1 w-full">
-                  <label className="text-gray-600">
-                    Informações adicionais deste endereço (opcional)
-                  </label>
-                  <input
-                    type="text"
-                    name="telefone"
-                    className="text-sm px-1 border-gray-300 border rounded-md h-28 cursor-pointer"
-                  />
-                </div> */}
               </div>
               <div className="flex pt-3">
                 <button
@@ -230,6 +282,7 @@ function CustomerData({ cliente }) {
                 </button>
               </div>
             </form>
+            {/* )} */}
           </div>
         </div>
       </div>

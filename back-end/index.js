@@ -280,6 +280,33 @@ app.get("/clientes/findByEmailSenha", (req, res) => {
     });
 });
 
+app.put("/clientes/updateClienteEndereco", (req, res) => {
+  const { id_cliente, id_endereco } = req.body;
+  console.log("id do cliente - rota:", id_cliente);
+  console.log("id do endereço - rota:", id_endereco);
+  clientes
+    .updateClienteEndereco(id_cliente, id_endereco)
+    .then(() => {
+      res.status(200).json({
+        message: "Cliente atualizado com sucesso com o ID do endereço",
+      });
+    })
+
+    .catch((error) => console.error(error));
+});
+
+app.get("/clientes/findByIdClienteEndereco", (req, res) => {
+  clientes
+    .findByIdClienteEndereco(req.query.Id_Cliente, req.query.idEndereco)
+    .then((results) => {
+      res.setHeader("Cache-Control", "no-store");
+      res.send(results);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
 app.post("/clientes/insert", (req, res) => {
   clientes
     .insert(req.body)
@@ -344,12 +371,16 @@ app.get("/enderecos/findById", (req, res) => {
 app.post("/enderecos/insert", (req, res) => {
   enderecos
     .insert(req.body)
-    .then(() => {
-      res.send("Endereço cadastrado com sucesso!");
+    .then((data) => {
+      const idEndereco = data.insertId;
+      console.log(idEndereco);
+      res
+        .status(200)
+        .json({ message: "Endereço cadastrado com sucesso!", idEndereco });
     })
     .catch((error) => {
       console.error(error);
-      res.send(error);
+      res.status(500).json({ error: "Erro ao cadastrar endereço" });
     });
 });
 

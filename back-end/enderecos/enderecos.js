@@ -23,7 +23,7 @@ function update(dados) {
   const { idEndereco, cep, cidade, estado, bairro, rua, numero, complemento } =
     dados;
   const params = [];
-  let sql = "UPDATE Cliente SET";
+  let sql = "UPDATE endereco SET";
 
   if (cep) {
     sql += " cep = ?,";
@@ -66,6 +66,54 @@ function update(dados) {
   sql += " WHERE idEndereco = ?";
   return queryPromise(sql, params);
 }
+
+// function update(dados) {
+//   const { idEndereco, cep, cidade, estado, bairro, rua, numero, complemento } =
+//     dados;
+//   const params = [];
+//   let sql = "UPDATE Cliente SET";
+
+//   if (cep) {
+//     sql += " cep = ?,";
+//     params.push(cep);
+//   }
+
+//   if (cidade) {
+//     sql += " cidade = ?,";
+//     params.push(cidade);
+//   }
+
+//   if (estado) {
+//     sql += " estado = ?,";
+//     params.push(estado);
+//   }
+
+//   if (bairro) {
+//     sql += " bairro = ?,";
+//     params.push(bairro);
+//   }
+
+//   if (rua) {
+//     sql += " rua = ?,";
+//     params.push(rua);
+//   }
+
+//   if (numero) {
+//     sql += " numero = ?,";
+//     params.push(numero);
+//   }
+//   if (complemento) {
+//     sql += " complemento = ?,";
+//     params.push(complemento);
+//   }
+
+//   params.push(idEndereco);
+
+//   sql = sql.slice(0, -1);
+
+//   sql += " WHERE idEndereco = ?";
+//   return queryPromise(sql, params);
+// }
 
 function deleteById(ids) {
   const idsDelete = ids.toString();
