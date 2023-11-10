@@ -80,14 +80,16 @@ function Main() {
             element={<Cart handleItemsCart={handleItemsCart} />}
           />
           <Route
-            exact
+            exactx
             path="/login-cliente"
             element={<LoginClient handleUser={handleUser} cliente={cliente} />}
           />
           <Route
             exact
             path="/cadastro-cliente"
-            element={<RegistrationClient handleUser={handleUser} />}
+            element={
+              <RegistrationClient handleUser={handleUser} />
+            }
           />
           <Route
             exact

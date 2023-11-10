@@ -171,7 +171,7 @@ function RegistrationClient({ handleUser }) {
           }
 
           if (response.status === 200) {
-            const cliente = nome.split(" ")[0];
+            const cliente = nome.split("")[0];
             handleUser(cliente);
             navigate("/home");
             console.log("Nome cadastrado:", nome);
@@ -214,8 +214,7 @@ function RegistrationClient({ handleUser }) {
   };
 
   const handleTelefoneChange = (evento) => {
-    setSenha(evento.target.value);
-    validarSenha(evento.target.value);
+    setTelefone(evento.target.value);
   };
 
   const handleSenhaChange = (evento) => {
@@ -231,7 +230,7 @@ function RegistrationClient({ handleUser }) {
             <h1 className="text-2xl text-gray-800">Crie sua conta grátis</h1>
           </div>
           <div className="flex pt-16 justify-center">
-            <form className="flex flex-col gap-6 " >
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6 ">
               <div className="flex gap-8">
                 <div className="flex flex-col gap-1">
                   <label
@@ -312,7 +311,7 @@ function RegistrationClient({ handleUser }) {
                     Telefone
                   </label>
                   <input
-                    type="tel"
+                    type="text"
                     name="telefone"
                     value={telefone}
                     placeholder="Telefone"

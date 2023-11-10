@@ -17,33 +17,16 @@ function findByEmailSenha(email, senha) {
   );
 }
 
-function updateClienteEndereco(Id_Cliente, idEndereco) {
-  console.log("update cliente:", Id_Cliente);
-  console.log("update endereço:", idEndereco);
-  const sql = `UPDATE cliente SET idEndereco = ${idEndereco} WHERE id_cliente = ${Id_Cliente}`;
-  return queryPromise(sql);
-}
-
-function findByIdClienteEndereco(Id_Cliente, idEndereco) {
-  console.log("idCliente e Endereco", Id_Cliente, idEndereco);
-  const sql = `SELECT clientes.Id_Cliente, clientes.nome, clientes.sobrenome, clientes.cpf, clientes.telefone, clientes.email, 
-  enderecos.cep, enderecos.cidade, enderecos.estado, enderecos.bairro, enderecos.rua, enderecos.numero, enderecos.complemento
-  FROM clientes
-  JOIN enderecos ON clientes.Id_Cliente = enderecos.id_cliente
-  WHERE clientes.Id_Cliente = ${Id_Cliente} AND enderecos.idEndereco = ${idEndereco}`;
-  return queryPromise(sql);
-}
-
 function insert(dados) {
-  const { nome, sobrenome, cpf, email, senha, idEndereco } = dados;
-  let sql = `INSERT INTO cliente (nome, sobrenome, cpf, email, senha, idEndereco) values ('${nome}', '${sobrenome}', '${cpf}', '${email}', '${senha}, ${idEndereco}')`;
+  const { nome, sobrenome, cpf, telefone, email, senha } = dados;
+  let sql = `INSERT INTO cliente (nome, sobrenome, cpf, telefone, email, senha) values ('${nome}', '${sobrenome}', '${cpf}', '${telefone}', '${email}', '${senha}')`;
   return queryPromise(sql);
 }
 
 function update(dados) {
-  const { id, nome, sobrenome, cpf, email, senha } = dados;
+  const { id, nome, sobrenome, cpf, telefone, email, senha } = dados;
   const params = [];
-  let sql = "UPDATE Cliente SET";
+  let sql = "UPDATE cliente SET";
 
   if (nome) {
     sql += " nome = ?,";
@@ -59,6 +42,12 @@ function update(dados) {
     sql += " cpf = ?,";
     params.push(cpf);
   }
+
+  if (telefone) {
+    sql += " telefone = ?,";
+    params.push(telefone);
+  }
+
 
   if (email) {
     sql += " email = ?,";
@@ -87,8 +76,7 @@ module.exports = {
   findAll,
   findById,
   findByEmailSenha,
-  findByIdClienteEndereco,
-  updateClienteEndereco,
+  // findByIdClienteEndereco,
   insert,
   update,
   deleteById,

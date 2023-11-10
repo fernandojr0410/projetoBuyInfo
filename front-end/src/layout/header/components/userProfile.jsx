@@ -7,6 +7,8 @@ import { ImExit } from "react-icons/im";
 function UserProfile({ cliente, handleUser }) {
   const [showDropDownUser, setShowDropDownUser] = useState(false);
 
+  // console.log(cliente);
+
   function logout() {
     handleUser(null);
   }
@@ -19,7 +21,6 @@ function UserProfile({ cliente, handleUser }) {
     >
       <BiUserCircle className="h-6 w-6" />
       <span>Olá, {cliente.nome}</span>
-
       {showDropDownUser && (
         <ul className="absolute top-6 right-0 w-48 p-4 bg-white rounded shadow border border-gray-300">
           <>
@@ -45,14 +46,16 @@ function UserProfile({ cliente, handleUser }) {
               </Link>
             </li>
             <li>
-              <button
-                type="button"
-                className="flex gap-2 items-center pt-4"
-                onClick={logout}
-              >
-                <ImExit className="h-6 w-6" />
-                <span>Sair</span>
-              </button>
+              <Link to="/home">
+                <button
+                  type="button"
+                  className="flex gap-2 items-center pt-4"
+                  onClick={logout}
+                >
+                  <ImExit className="h-6 w-6" />
+                  <span>Sair</span>
+                </button>
+              </Link>
             </li>
           </>
         </ul>
