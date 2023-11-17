@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ListProduct from "../../components/listProduct/listProduct";
 import { HiOutlineTrash } from "react-icons/hi";
@@ -95,7 +95,7 @@ function Cart({ handleItemsCart }) {
 
   const finalizarCompra = () => {
     if (carrinho.length > 0) {
-      navigate("/finalizarPedido", { state: { carrinho } });
+      navigate(`/finalizarPedido`, { state: { carrinho } });
     }
   };
 

@@ -21,6 +21,7 @@ function UserProfile({ cliente, handleUser }) {
     >
       <BiUserCircle className="h-6 w-6" />
       <span>Olá, {cliente.nome}</span>
+      {/* {cliente && <span>Olá, {cliente.nome}</span>} */}
       {showDropDownUser && (
         <ul className="absolute top-6 right-0 w-48 p-4 bg-white rounded shadow border border-gray-300">
           <>

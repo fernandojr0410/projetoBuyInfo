@@ -1,6 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Logo from "../../assets/images/logo-buy-info.png";
+import ModalRegistration from "../../components/modal/modalRegistration";
+import Loading from "../../layout/loading/loading";
 
 function LoginClient({ handleUser }) {
   const [email, setEmail] = useState("");
@@ -8,6 +10,8 @@ function LoginClient({ handleUser }) {
 
   const [senha, setSenha] = useState("");
   const [senhaError, setSenhaError] = useState("");
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [carregamento, setCarregamento] = useState(false);
 
   const navigate = useNavigate();
 
@@ -20,6 +24,8 @@ function LoginClient({ handleUser }) {
     if (senha === "") {
       setSenhaError("Preencha a senha");
     }
+
+    setCarregamento(true);
 
     fetch(
       `http://localhost:5000/clientes/findByEmailSenha?email=${email}&senha=${senha}`,
@@ -34,7 +40,7 @@ function LoginClient({ handleUser }) {
         if (response.status === 200) {
           return response.json();
         } else if (response.status === 401) {
-          console.log("Conta não encontrada");
+          setMostrarModal("Conta não encontrada");
           throw new Error("Falha na autenticação");
         } else {
           console.log("Erro no Servidor");
@@ -49,13 +55,18 @@ function LoginClient({ handleUser }) {
           setEmail("");
           setSenha("");
           navigate("/home");
-          console.log("Conta encontrada");
+          setMostrarModal(true);
         } else {
-          console.log("Conta não encontrada");
+          setMostrarModal(true);
         }
       })
       .catch((error) => {
         console.error(error);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setCarregamento(false);
+        }, 2000);
       });
     console.log("email", email);
     console.log("senha", senha);
@@ -135,6 +146,18 @@ function LoginClient({ handleUser }) {
           </div>
         </div>
       </div>
+
+      {mostrarModal && (
+        <ModalRegistration
+          titulo={
+            mostrarModal === "Conta encontrada"
+              ? "Conta encontrada!"
+              : "Conta não encontrada!"
+          }
+          onClose={() => setMostrarModal(false)}
+          link={mostrarModal === "Conta encontrada" ? "/home" : null}
+        />
+      )}
     </div>
   );
 }

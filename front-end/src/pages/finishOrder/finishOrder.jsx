@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { FiTruck } from "react-icons/fi";
 import { BsHouseDoor } from "react-icons/bs";
 import { AiOutlineCreditCard, AiOutlineBarcode } from "react-icons/ai";
@@ -13,11 +13,63 @@ import { RiVisaLine } from "react-icons/ri";
 import { FaCcMastercard, FaBarcode } from "react-icons/fa";
 import { SiNubank } from "react-icons/si";
 import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-function FinishOrder() {
+function FinishOrder({ cliente }) {
   const location = useLocation();
   const { carrinho } = location.state;
   const { valorTotal } = carrinho;
+
+  const [endereco, setEndereco] = useState([]);
+
+  useEffect(() => {
+    if (cliente && cliente.Id_Cliente) {
+      fetch(
+        `http://localhost:5000/enderecos/findByIdClienteEndereco?Id_Cliente=${cliente.Id_Cliente}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json",
+          },
+        }
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Erro ao buscar endereço");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data && data.length > 0) {
+            const enderecoData = {
+              Cliente: {
+                Id_Cliente: data[0].Id_Cliente,
+                nome: data[0].nome,
+                sobrenome: data[0].sobrenome,
+                cpf: data[0].cpf,
+                telefone: data[0].telefone,
+                email: data[0].email,
+                senha: data[0].senha,
+
+                Enderecos: {
+                  idEndereco: data[0].idEndereco,
+                  cep: data[0].cep,
+                  cidade: data[0].cidade,
+                  estado: data[0].estado,
+                  bairro: data[0].bairro,
+                  rua: data[0].rua,
+                  numero: data[0].numero,
+                  complemento: data[0].complemento,
+                },
+              },
+            };
+            setEndereco(enderecoData);
+            console.log("dados endereco", enderecoData);
+          }
+        })
+        .catch((error) => console.error("erro no front:", error));
+    }
+  }, [cliente]);
 
   return (
     <div className="flex flex-col justify-center bg-gray-200 p-10 ">
@@ -340,12 +392,13 @@ function FinishOrder() {
                   name="tipoEntrega"
                   className="cursor-pointer"
                 />
-                Avenida das Flores, 123
               </div>
               <div className="flex px-4 pb-2">
                 <span className=" text-gray-500 text-sm">
                   {" "}
-                  Praça da Liberdade - CEP 85801-021 - Nova Esperança - SP
+                  // printar Enderecos.Cliente e depois Cliente.Enderecos
+                  {endereco[0]?.Cliente.Enderecos.rua}
+                  {/* - CEP 85801-021 - Nova Esperança - SP */}
                 </span>
               </div>
               <div className="flex border border-gray-400"></div>
@@ -360,10 +413,7 @@ function FinishOrder() {
                     type="onclick"
                     className="flex items-center justify-center bg-primary w-full h-10 rounded-md"
                   >
-                    <Link
-                      to=""
-                      className="text-white"
-                    >
+                    <Link to="" className="text-white">
                       USAR OUTRO ENDEREÇO
                     </Link>
                   </button>

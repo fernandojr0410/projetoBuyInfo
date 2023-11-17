@@ -7,6 +7,7 @@ function findAll() {
 }
 
 function findById(idEndereco) {
+  console.log("id do endereco", idEndereco);
   return queryPromise(
     `SELECT * FROM endereco WHERE idEndereco = ${idEndereco}`
   );
@@ -19,22 +20,47 @@ function updateClienteEndereco(idEndereco, Id_Cliente) {
   return queryPromise(sql);
 }
 
-// function findByIdClienteEndereco(Id_Cliente) {
-//   console.log("id cliente:", Id_Cliente);
-//   return queryPromise(`
-//     SELECT *
-//     FROM cliente
-//     JOIN endereco ON cliente.Id_Cliente = endereco.Id_Cliente
-//     WHERE cliente.Id_Cliente = ${Id_Cliente};
-//   `);
-// }
+function findByIdEndereco(Id_Cliente) {
+  const sql = `SELECT
+  endereco.idEndereco,
+  endereco.cep,
+  endereco.cidade,
+  endereco.estado,
+  endereco.bairro,
+  endereco.rua,
+  endereco.numero,
+  endereco.complemento
+FROM
+  cliente
+JOIN
+  endereco ON cliente.Id_Cliente = endereco.id_cliente
+WHERE
+  cliente.Id_Cliente = ${Id_Cliente}`;
+  return queryPromise(sql);
+}
 
 function findByIdClienteEndereco(Id_Cliente) {
-  const sql = `SELECT cliente.Id_Cliente, cliente.nome, cliente.sobrenome, cliente.cpf, cliente.telefone, cliente.email, endereco.idEndereco,
-  endereco.cep, endereco.cidade, endereco.estado, endereco.bairro, endereco.rua, endereco.numero, endereco.complemento
-  FROM cliente
-  JOIN endereco ON cliente.Id_Cliente = endereco.id_cliente
-  WHERE cliente.Id_Cliente = ${Id_Cliente}`;
+  const sql = `SELECT
+  cliente.Id_Cliente,
+  cliente.nome,
+  cliente.sobrenome,
+  cliente.cpf,
+  cliente.telefone,
+  cliente.email,
+  endereco.idEndereco,
+  endereco.cep,
+  endereco.cidade,
+  endereco.estado,
+  endereco.bairro,
+  endereco.rua,
+  endereco.numero,
+  endereco.complemento
+FROM
+  cliente
+JOIN
+  endereco ON cliente.Id_Cliente = endereco.id_cliente
+WHERE
+  cliente.Id_Cliente = ${Id_Cliente}`;
   return queryPromise(sql);
 }
 
@@ -118,6 +144,7 @@ module.exports = {
   findAll,
   findById,
   updateClienteEndereco,
+  findByIdEndereco,
   findByIdClienteEndereco,
   insert,
   update,

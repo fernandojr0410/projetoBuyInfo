@@ -1,5 +1,5 @@
 import Logo from "../../assets/images/logo-buy-info.png";
-
+import ModalRegistration from "../../components/modal/modalRegistration";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -23,6 +23,7 @@ function RegistrationClient({ handleUser }) {
   const [senhaError, setSenhaError] = useState("");
 
   const [formularioValido, setFormularioValido] = useState(false);
+  const [mostrarModal, setMostrarModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -171,14 +172,21 @@ function RegistrationClient({ handleUser }) {
           }
 
           if (response.status === 200) {
-            const cliente = nome.split("")[0];
+            const cliente = {
+              nome,
+              sobrenome,
+              cpf,
+              telefone,
+              email,
+              senha,
+            };
             handleUser(cliente);
-            navigate("/home");
+            setMostrarModal(true);
             console.log("Nome cadastrado:", nome);
             console.log("Usuário logado:", cliente);
           }
         })
-        .catch((error) => console.error(error));
+        .catch((error) => console.error("Erro durante a solicitação:", error));
     }
   };
 
@@ -220,6 +228,11 @@ function RegistrationClient({ handleUser }) {
   const handleSenhaChange = (evento) => {
     setSenha(evento.target.value);
     validarSenha(evento.target.value);
+  };
+
+  const handleCloseMensagemSucesso = () => {
+    setMostrarModal(false);
+    // navigate("/home");
   };
   return (
     <div className="flex justify-center bg-primary w-full items-center">
@@ -376,6 +389,15 @@ function RegistrationClient({ handleUser }) {
                   <span className={`text-red-500 text-xs`}>{senhaError}</span>
                 )}
               </div>
+
+              {mostrarModal && (
+                <ModalRegistration
+                  titulo="Cadastro realizado com sucesso!"
+                  onClose={handleCloseMensagemSucesso}
+                  link="/home"
+                />
+              )}
+
               <div className="flex justify-center pt-4">
                 <button
                   type="submit"

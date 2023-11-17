@@ -284,23 +284,42 @@ app.post("/clientes/insert", (req, res) => {
   clientes
     .insert(req.body)
     .then(() => {
-      res.send("Você foi cadastrado com sucesso!");
-    })
-    .catch((error) => {
-      console.error(error);
-      res.send(error);
-    });
-});
-
-app.put("/clientes/update", (req, res) => {
-  clientes
-    .update(req.body)
-    .then(() => {
       res.status(200).json({
-        message: "Dados do cliente atualizado com sucesso",
+        message: "Cliente cadastrado com sucesso",
       });
     })
     .catch((error) => console.error(error));
+});
+
+app.put("/clientes/update", async (req, res) => {
+  try {
+    console.log("Dados da solicitação:", req.body);
+
+    const { Id_Cliente, ...dadosAtualizados } = req.body;
+
+    console.log("Id_Cliente recebido:", Id_Cliente);
+
+    if (!Id_Cliente) {
+      console.error(
+        "Id_Cliente está indefinido. Não é possível executar a atualização."
+      );
+      return res.status(400).json({
+        message:
+          "Id_Cliente está indefinido. Não é possível executar a atualização.",
+      });
+    }
+
+    await clientes.update({ Id_Cliente, ...dadosAtualizados });
+
+    res.status(200).json({
+      message: "Dados do cliente atualizado com sucesso",
+    });
+  } catch (error) {
+    console.error("Erro ao processar a solicitação:", error);
+    res.status(500).json({
+      message: "Erro interno no servidor ao processar a solicitação",
+    });
+  }
 });
 
 app.delete("/clientes/delete", (req, res) => {
@@ -328,31 +347,32 @@ app.get("/enderecos/findAll", (req, res) => {
 });
 
 app.get("/enderecos/findById", (req, res) => {
-  const id = req.query.id;
-  console.log("ID recebido no back-end:", id);
+  const idEndereco = req.query.id;
+  console.log("ID recebido no back-end:", idEndereco);
   enderecos
-    .findById(id)
-    .then((results) => {
-      res.send(results);
+    .findById(idEndereco)
+    .then((data) => {
+      res.status(200).json(data);
     })
     .catch((error) => {
       console.error(error);
+      res.status(500).send({ error: "Erro interno do servidor" });
     });
 });
 
-// app.put("/enderecos/updateEnderecoCliente", (req, res) => {
-//   const { idEndereco, Id_Cliente } = req.body;
-//   console.log("id do endereço - rota:", idEndereco);
-//   console.log("id do cliente - rota:", Id_Cliente);
-//   enderecos
-//     .updateClienteEndereco(idEndereco, Id_Cliente)
-//     .then(() => {
-//       res.status(200).json({
-//         message: "Endereço atualizado com sucesso com o ID do cliente",
-//       });
-//     })
-//     .catch((error) => console.error(error));
-// });
+app.get("/enderecos/findByIdEndereco", (req, res) => {
+  const { Id_Cliente } = req.query;
+  console.log("id cliente filtrado:", Id_Cliente);
+  enderecos
+    .findByIdClienteEndereco(Id_Cliente)
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((error) => {
+      console.error("erro no back:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    });
+});
 
 app.get("/enderecos/findByIdClienteEndereco", (req, res) => {
   const { Id_Cliente } = req.query;
@@ -389,11 +409,11 @@ app.put("/enderecos/update", (req, res) => {
   enderecos
     .update(req.body)
     .then(() => {
-      res.send("Endereço atualizado com sucesso!");
+      res.status(200).json({ message: "Endereço atualizado com sucesso!" });
     })
     .catch((error) => {
       console.error(error);
-      res.send(error);
+      res.status(500).json({ error: "Erro ao atualizar endereço" });
     });
 });
 

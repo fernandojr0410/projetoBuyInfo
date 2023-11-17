@@ -6,25 +6,38 @@ function CustomerData({ cliente }) {
   const [dadosCliente, setDadosCliente] = useState(cliente);
   const [endereco, setEndereco] = useState({});
 
+  console.log("dados cliente", dadosCliente);
+  console.log("cliente", cliente);
   // function handleChange(value, field) {
   //   setDadosCliente({ ...dadosCliente, [field]: value });
   // }
 
   function handleChangeCliente(value, field) {
-    setDadosCliente({ ...dadosCliente, [field]: value });
+    // setDadosCliente({ ...dadosCliente, [field]: value });
+
+    setDadosCliente((prevDadosCliente) => ({
+      ...prevDadosCliente,
+      [field]: value,
+    }));
+    console.log("setando dados", dadosCliente);
   }
 
+  // function handleChangeEndereco(value, field) {
+  //   setEndereco({ ...endereco, [field]: value });
+  // }
+
   function handleChangeEndereco(value, field) {
-    setEndereco({ ...endereco, [field]: value });
+    setEndereco((prevEndereco) => ({ ...prevEndereco, [field]: value }));
   }
 
   // const id_cliente = dadosCliente.Id_Cliente;
 
-  // retornar tabela clinete e endereco
+  // console.log("Estado de dadosCliente antes da solicitação:", dadosCliente);
+
   useEffect(() => {
-    if (dadosCliente.Id_Cliente) {
+    if (cliente && cliente.Id_Cliente) {
       fetch(
-        `http://localhost:5000/enderecos/findByIdClienteEndereco?Id_Cliente=${dadosCliente.Id_Cliente}`,
+        `http://localhost:5000/enderecos/findByIdClienteEndereco?Id_Cliente=${cliente.Id_Cliente}`,
         {
           method: "GET",
           headers: {
@@ -39,17 +52,32 @@ function CustomerData({ cliente }) {
           return response.json();
         })
         .then((data) => {
-          console.log("dados do endereco:", data);
-          setEndereco(data[0]);
-          console.log("id cliente front:", dadosCliente.Id_Cliente);
+          // console.log("dados do endereco:", data);
+          // setEndereco(data[0]);
+          
+          console.log("id cliente front:", cliente.Id_Cliente);
         })
         .catch((error) => console.error("erro no front:", error));
     }
-  }, [dadosCliente.Id_Cliente]);
+  }, [cliente]);
 
   const handleCadastrarEndereco = (event) => {
     event.preventDefault();
-    // setEndereco(event.target.value || "");
+
+    console.log("Valor de cliente:", cliente);
+    console.log("Valor de cliente.Id_Cliente:", cliente.Id_Cliente);
+
+    if (!cliente || !cliente.Id_Cliente) {
+      console.error(
+        "Cliente ou Id_Cliente está indefinido. Não é possível fazer a solicitação PUT."
+      );
+      return;
+    }
+
+    setDadosCliente((prevDadosCliente) => ({
+      ...prevDadosCliente,
+      Id_Cliente: cliente.Id_Cliente,
+    }));
 
     const enderecoCliente = {
       idEndereco: endereco.idEndereco ?? null,
@@ -65,8 +93,6 @@ function CustomerData({ cliente }) {
 
     // update no banco where idEndereco (tabela de endereco)
     if (enderecoCliente.idEndereco) {
-      console.log("endereco cliente", enderecoCliente);
-
       fetch(`http://localhost:5000/enderecos/update`, {
         method: "PUT",
         headers: {
@@ -76,7 +102,7 @@ function CustomerData({ cliente }) {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("Update endereco / cliente", data);
+          // console.log("Update endereco / cliente", data);
           setEndereco({ ...endereco, ...enderecoCliente });
         })
         .catch((error) => console.error("Não foi atualizado cliente:", error));
@@ -86,7 +112,7 @@ function CustomerData({ cliente }) {
         headers: {
           "Content-type": "application/json",
         },
-        body: enderecoCliente,
+        body: JSON.stringify(enderecoCliente),
       })
         .then((response) => response.json())
         .then((data) => {
@@ -101,21 +127,30 @@ function CustomerData({ cliente }) {
           // });
         });
     }
-
-    fetch(`http://localhost:5000/clientes/update`, {
-      method: "PUT",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(dadosCliente),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setDadosCliente(data);
-        console.log("Cliente Atualizado:", data);
+    console.log("Id_Cliente enviado:", cliente.Id_Cliente);
+    if (cliente.Id_Cliente) {
+      console.log("Id_Cliente dentro do fetch:", cliente.Id_Cliente);
+      fetch(`http://localhost:5000/clientes/update`, {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(dadosCliente),
       })
-      .catch((error) => console.error("Erro ao atualizar cliente", error));
+        .then((response) => response.json())
+        .then((data) => {
+          setDadosCliente(data);
+          console.log("Cliente Atualizado:", data);
+        })
+        .catch((error) => console.error("Erro ao atualizar cliente", error));
+    } else {
+      console.error(
+        "Id_Cliente está indefinido. Não é possível fazer a solicitação PUT."
+      );
+    }
   };
+  // console.log("Id_Cliente fora:", cliente.Id_Cliente);
+  // console.log("dados do cliente fora:", dadosCliente);
 
   return (
     <div className="flex pt-4 bg-gray-200 pb-16">
@@ -312,7 +347,8 @@ function CustomerData({ cliente }) {
                     type="text"
                     name="complemento"
                     value={endereco ? endereco.complemento || "" : ""}
-                    className="text-sm px-1 border-gray-300 border rounded-md py-10 w-full cursor-pointer"
+                    className="text-sm px-1 border-gray-300 border rounded-md h-32 pt-2 overflow-y-auto cursor-pointer"
+                    style={{ textAlign: "top" }}
                     onChange={({ target }) => {
                       handleChangeEndereco(target.value, "complemento");
                     }}

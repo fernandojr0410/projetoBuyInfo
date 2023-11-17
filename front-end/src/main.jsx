@@ -17,6 +17,8 @@ import RegistrationClient from "./pages/registrationClient/registrationClient";
 import SidebarCustomer from "./pages/customer/components/sideBarCustomer";
 import CustomerData from "./pages/customer/customerData";
 import CustomerOrders from "./pages/customer/customerOrders";
+import ModalRegistration from "./components/modal/modalRegistration";
+import Loading from "./layout/loading/loading";
 
 function Main() {
   const [cliente, setCliente] = useState(
@@ -84,13 +86,15 @@ function Main() {
             path="/login-cliente"
             element={<LoginClient handleUser={handleUser} cliente={cliente} />}
           />
+          <Route exactx path="/carregamento" element={<Loading />} />
           <Route
             exact
             path="/cadastro-cliente"
             element={
-              <RegistrationClient handleUser={handleUser} />
+              <RegistrationClient handleUser={handleUser} cliente={cliente} />
             }
           />
+          <Route exact path="/modal" element={<ModalRegistration />} />
           <Route
             exact
             path="/edicao-cadastro/:id"
@@ -117,7 +121,11 @@ function Main() {
             }
           />
           <Route exact path="/modal" element={<Modal />} />
-          <Route exact path="/finalizarPedido" element={<FinishOrder />} />
+          <Route
+            exact
+            path="/finalizarPedido"
+            element={<FinishOrder cliente={cliente}  />}
+          />
         </Routes>
         <Footer />
       </Router>
