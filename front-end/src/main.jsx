@@ -79,7 +79,13 @@ function Main() {
           <Route
             exact
             path="/carrinho"
-            element={<Cart handleItemsCart={handleItemsCart} />}
+            element={
+              <Cart
+                handleItemsCart={handleItemsCart}
+                cliente={cliente}
+                handleUser={handleUser}
+              />
+            }
           />
           <Route
             exactx
@@ -123,8 +129,8 @@ function Main() {
           <Route exact path="/modal" element={<Modal />} />
           <Route
             exact
-            path="/finalizarPedido"
-            element={<FinishOrder cliente={cliente}  />}
+            path="/finalizar-pedido"
+            element={<FinishOrder cliente={cliente} />}
           />
         </Routes>
         <Footer />

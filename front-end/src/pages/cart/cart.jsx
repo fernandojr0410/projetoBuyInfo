@@ -8,8 +8,9 @@ import { FaCcMastercard, FaBarcode } from "react-icons/fa";
 import { SiNubank } from "react-icons/si";
 import { MdPix } from "react-icons/md";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import ModalRegistration from "../../components/modal/modalRegistration";
 
-function Cart({ handleItemsCart }) {
+function Cart({ handleItemsCart, cliente, handleUser }) {
   const [produtosDestaque, setProdutosDestaque] = useState([]);
   const [carrinho, setCarrinho] = useState([]);
   const [quantidades, setQuantidades] = useState({});
@@ -94,8 +95,14 @@ function Cart({ handleItemsCart }) {
   );
 
   const finalizarCompra = () => {
-    if (carrinho.length > 0) {
-      navigate(`/finalizarPedido`, { state: { carrinho } });
+    // Verifica se o usuário está logado
+    if (cliente) {
+      if (carrinho.length > 0) {
+        navigate(`/finalizar-pedido`, { state: { carrinho } });
+      }
+    } else {
+      // Redireciona para a página de login se o usuário não estiver logado
+      navigate("/login-cliente");
     }
   };
 
@@ -298,12 +305,15 @@ function Cart({ handleItemsCart }) {
                     <BsArrowRightCircle className="ml-2" />
                   </button>
                 </div>
-                <Link
-                  to="/home"
-                  className="flex items-center justify-center w-full h-10 text-primary text-center font-bold rounded-md border-primary border border-solid"
-                >
-                  ESCOLHER MAIS PRODUTOS
-                </Link>
+
+                {cliente && (
+                  <Link
+                    to="/home"
+                    className="flex items-center justify-center w-full h-10 text-primary text-center font-bold rounded-md border-primary border border-solid"
+                  >
+                    ESCOLHER MAIS PRODUTOS
+                  </Link>
+                )}
               </div>
             </div>
           </div>

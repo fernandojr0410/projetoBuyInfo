@@ -5,7 +5,7 @@ import { BiUserCircle } from "react-icons/bi";
 import { ImExit } from "react-icons/im";
 import { BsPencil } from "react-icons/bs";
 
-function SidebarCustomer({handleUser}) {
+function SidebarCustomer({ handleUser }) {
   const { state } = useLocation();
   const [selectedMenu, setSelectedMenu] = useState(state?.menu);
   const { id } = useParams();
@@ -20,8 +20,8 @@ function SidebarCustomer({handleUser}) {
   }
 
   return (
-    <div className="flex px-10 py-2 h-[30%] ">
-      <div className="flex flex-col gap-6 p-4 border-gray-400 border rounded-md text-gray-600 font-bold">
+    <div className="flex  px-10 py-2 h-[30%] ">
+      <div className="flex flex-col gap-6 p-4 bg-white border-gray-400 border rounded-md text-gray-600 font-bold">
         <Link
           to={`/edicao-cadastro/meus-pedidos/${id}`}
           state={{ menu: "pedidos" }}

@@ -171,6 +171,8 @@ function RegistrationClient({ handleUser }) {
             throw new Error("Erro na solicitação.");
           }
 
+          console.log("response", response);
+
           if (response.status === 200) {
             const cliente = {
               nome,
@@ -186,6 +188,7 @@ function RegistrationClient({ handleUser }) {
             console.log("Usuário logado:", cliente);
           }
         })
+
         .catch((error) => console.error("Erro durante a solicitação:", error));
     }
   };

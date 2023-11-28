@@ -2,6 +2,18 @@ const conn = require("../db/mysql.js");
 const util = require("util");
 const queryPromise = util.promisify(conn().query).bind(conn());
 
+function queryPromiseReturn(sql) {
+  return new Promise((resolve, reject) => {
+    conn().query(sql, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
 function findAll() {
   return queryPromise("SELECT * FROM Cliente");
 }
@@ -20,7 +32,15 @@ function findByEmailSenha(email, senha) {
 function insert(dados) {
   const { nome, sobrenome, cpf, telefone, email, senha } = dados;
   let sql = `INSERT INTO cliente (nome, sobrenome, cpf, telefone, email, senha) values ('${nome}', '${sobrenome}', '${cpf}', '${telefone}', '${email}', '${senha}')`;
-  return queryPromise(sql);
+  return queryPromiseReturn(sql)
+    .then((result) => {
+      console.log("Registro inserido com sucesso. ID:", result.insertId);
+      return result.insertId;
+    })
+    .catch((error) => {
+      console.error("Erro ao inserir registro:", error);
+      throw error;
+    });
 }
 
 function update(dados) {

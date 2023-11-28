@@ -53,8 +53,8 @@ function CustomerData({ cliente }) {
         })
         .then((data) => {
           // console.log("dados do endereco:", data);
-          // setEndereco(data[0]);
-          
+          setEndereco(data[0]);
+
           console.log("id cliente front:", cliente.Id_Cliente);
         })
         .catch((error) => console.error("erro no front:", error));
