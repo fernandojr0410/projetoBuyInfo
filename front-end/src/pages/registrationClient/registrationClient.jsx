@@ -1,7 +1,8 @@
 import Logo from "../../assets/images/logo-buy-info.png";
-import ModalRegistration from "../../components/modal/modalRegistration";
+// import ModalRegistration from "../../components/modal/modalRegistration";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import Modal from "../../components/modal/modal";
 
 function RegistrationClient({ handleUser }) {
   const [nome, setNome] = useState("");
@@ -23,7 +24,7 @@ function RegistrationClient({ handleUser }) {
   const [senhaError, setSenhaError] = useState("");
 
   const [formularioValido, setFormularioValido] = useState(false);
-  const [mostrarModal, setMostrarModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -183,14 +184,16 @@ function RegistrationClient({ handleUser }) {
               senha,
             };
             handleUser(cliente);
-            setMostrarModal(true);
             console.log("Nome cadastrado:", nome);
             console.log("Usuário logado:", cliente);
+            setShowModal(true);
           }
         })
 
         .catch((error) => console.error("Erro durante a solicitação:", error));
     }
+    // console.log("showModal", showModal);
+    // setShowModal(true)
   };
 
   const handleNomeChange = (evento) => {
@@ -234,8 +237,8 @@ function RegistrationClient({ handleUser }) {
   };
 
   const handleCloseMensagemSucesso = () => {
-    setMostrarModal(false);
-    // navigate("/home");
+    setShowModal(false);
+    navigate("/home");
   };
   return (
     <div className="flex justify-center bg-primary w-full items-center">
@@ -393,11 +396,12 @@ function RegistrationClient({ handleUser }) {
                 )}
               </div>
 
-              {mostrarModal && (
-                <ModalRegistration
-                  titulo="Cadastro realizado com sucesso!"
+              {showModal && (
+                <Modal
+                  showModal={showModal}
+                  title="Cadastro realizado com sucesso!"
                   onClose={handleCloseMensagemSucesso}
-                  link="/home"
+                  // link="/home"
                 />
               )}
 

@@ -9,7 +9,7 @@ import Footer from "./layout/footer/footer";
 import Cart from "./pages/cart/cart";
 import Category from "./pages/categories/category";
 import Product from "./pages/product/product";
-import Modal from "./components/modal/modal";
+// import Modal from "./components/modal/modal";
 import FinishOrder from "./pages/finishOrder/finishOrder";
 import LoginClient from "./pages/loginClient/loginClient";
 import RegistrationClient from "./pages/registrationClient/registrationClient";
@@ -19,6 +19,7 @@ import CustomerData from "./pages/customer/customerData";
 import CustomerOrders from "./pages/customer/customerOrders";
 import ModalRegistration from "./components/modal/modalRegistration";
 import Loading from "./layout/loading/loading";
+import Modal from "./components/modal/modal";
 
 function Main() {
   const [cliente, setCliente] = useState(
@@ -127,6 +128,8 @@ function Main() {
             }
           />
           <Route exact path="/modal" element={<Modal />} />
+          {/* <Route exact path="/modal" element={<Modal />} /> */}
+
           <Route
             exact
             path="/finalizar-pedido"

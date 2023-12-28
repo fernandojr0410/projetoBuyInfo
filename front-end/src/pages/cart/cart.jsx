@@ -306,14 +306,12 @@ function Cart({ handleItemsCart, cliente, handleUser }) {
                   </button>
                 </div>
 
-                {cliente && (
-                  <Link
-                    to="/home"
-                    className="flex items-center justify-center w-full h-10 text-primary text-center font-bold rounded-md border-primary border border-solid"
-                  >
-                    ESCOLHER MAIS PRODUTOS
-                  </Link>
-                )}
+                <Link
+                  to="/home"
+                  className="flex items-center justify-center w-full h-10 text-primary text-center font-bold rounded-md border-primary border border-solid"
+                >
+                  ESCOLHER MAIS PRODUTOS
+                </Link>
               </div>
             </div>
           </div>

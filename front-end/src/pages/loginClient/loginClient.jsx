@@ -3,6 +3,7 @@ import { useState } from "react";
 import Logo from "../../assets/images/logo-buy-info.png";
 import ModalRegistration from "../../components/modal/modalRegistration";
 import Loading from "../../layout/loading/loading";
+import Modal from "../../components/modal/modal";
 
 function LoginClient({ handleUser }) {
   const [email, setEmail] = useState("");
@@ -10,8 +11,8 @@ function LoginClient({ handleUser }) {
 
   const [senha, setSenha] = useState("");
   const [senhaError, setSenhaError] = useState("");
-  const [mostrarModal, setMostrarModal] = useState(false);
-  const [carregamento, setCarregamento] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  // const [carregamento, setCarregamento] = useState(false);
 
   const navigate = useNavigate();
 
@@ -25,7 +26,7 @@ function LoginClient({ handleUser }) {
       setSenhaError("Preencha a senha");
     }
 
-    setCarregamento(true);
+    // setCarregamento(true);
 
     fetch(
       `http://localhost:5000/clientes/findByEmailSenha?email=${email}&senha=${senha}`,
@@ -55,19 +56,19 @@ function LoginClient({ handleUser }) {
           setEmail("");
           setSenha("");
           navigate("/home");
-          setMostrarModal(true);
+          setShowModal(true);
         } else {
-          setMostrarModal(true);
+          setShowModal(true);
         }
       })
       .catch((error) => {
         console.error(error);
-      })
-      .finally(() => {
-        setTimeout(() => {
-          setCarregamento(false);
-        }, 2000);
       });
+    // .finally(() => {
+    //   setTimeout(() => {
+    //     // setCarregamento(false);
+    //   }, 2000);
+    // });
     console.log("email", email);
     console.log("senha", senha);
   };
@@ -147,15 +148,16 @@ function LoginClient({ handleUser }) {
         </div>
       </div>
 
-      {mostrarModal && (
-        <ModalRegistration
-          titulo={
-            mostrarModal === "Conta encontrada"
+      {showModal && (
+        <Modal
+          showModal={showModal}
+          title={
+            showModal === "Conta encontrada"
               ? "Conta encontrada!"
               : "Conta não encontrada!"
           }
-          onClose={() => setMostrarModal(false)}
-          link={mostrarModal === "Conta encontrada" ? "/home" : null}
+          onClose={() => setShowModal(false)}
+          // link={showModal === "Conta encontrada" ? "/home" : null}
         />
       )}
     </div>

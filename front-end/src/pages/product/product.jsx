@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { AiOutlineCreditCard, AiOutlineBarcode } from "react-icons/ai";
 import { MdPix } from "react-icons/md";
+// import Modal from "../../components/modal/modal";
+// import ModalJuca from "../../components/modal/modal";
 import Modal from "../../components/modal/modal";
-import ModalJuca from "../../components/modal/modalJuca";
 
 function Product({ handleAdicionarCarrinho }) {
   const [imagem, setImagem] = useState("");
   const [produto, setProduto] = useState([]);
-  const [abrirModal, setAbrirModal] = useState(false);
+  // const [abrirModal, setAbrirModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const { id } = useParams();
 
@@ -76,7 +77,7 @@ function Product({ handleAdicionarCarrinho }) {
 
   return (
     <main className="flex justify-center bg-gray-100 py-6">
-      <ModalJuca
+      <Modal
         showModal={showModal}
         title="Forma de pagamento"
         onClose={closeModal}
@@ -196,7 +197,7 @@ function Product({ handleAdicionarCarrinho }) {
             </span>
           </div>
         )}
-      </ModalJuca>
+      </Modal>
 
       <div className="flex flex-col bg-white rounded-lg w-[90%] p-6">
         <div className="flex justify-between pb-10">
@@ -250,13 +251,13 @@ function Product({ handleAdicionarCarrinho }) {
               >
                 ver mais opções de pagamento
               </div>
-              {abrirModal && (
+              {/* {abrirModal && (
                 <Modal
                   titulo="Mais formas de pagamento"
                   isOpen={abrirModal}
                   onClose={closeModal}
                 />
-              )}
+              )} */}
 
               <Link to="/carrinho">
                 <button
