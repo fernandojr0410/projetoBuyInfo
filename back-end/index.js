@@ -11,6 +11,7 @@ const categorias = require("./categorias/categorias.js");
 const clientes = require("./clientes/clientes.js");
 const enderecos = require("./enderecos/enderecos.js");
 const marcas = require("./marcas/marcas.js");
+const destaques = require("./destaques/destaques.js");
 
 const app = express();
 app.use(express.json());
@@ -243,6 +244,65 @@ app.delete("/categorias/delete", (req, res) => {
     });
 });
 
+// Destaques
+app.get("/destaques/findAll", (req, res) => {
+  destaques
+    .findAll()
+    .then((results) => {
+      res.send(results);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
+app.get("/destaques/findById", (req, res) => {
+  destaques
+    .findById(req.query.id)
+    .then((results) => {
+      res.send(results);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
+app.post("/destaques/insert", (req, res) => {
+  destaques
+    .insert(req.body)
+    .then(() => {
+      res.send("Categoria cadastrada com sucesso!");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
+    });
+});
+
+app.put("/destaques/update", (req, res) => {
+  destaques
+    .update(req.body)
+    .then(() => {
+      res.send("Categoria atualizada com sucesso!");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
+    });
+});
+
+app.delete("/destaques/delete", (req, res) => {
+  destaques
+    .deleteById(req.body)
+    .then(() => {
+      res.send("Categoria deletada com sucesso!");
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
+    });
+});
+
 // Cliente
 app.get("/clientes/findAll", (req, res) => {
   clientes
@@ -456,7 +516,7 @@ app.post("/marcas/insert", (req, res) => {
   marcas
     .insert(req.body)
     .then(() => {
-      res.send("Você foi cadastrado com sucesso!");
+      res.send("Marca cadastrado com sucesso!");
     })
     .catch((error) => {
       console.error(error);

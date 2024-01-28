@@ -46,11 +46,14 @@ function Home() {
   );
 
   const menus = categories?.map((category) => {
+  
     return {
       ...category,
       icon: menuCategories[category.Id_Categoria].icon ?? <VscError />,
+      
     };
   });
+  
 
   return (
     <main>
