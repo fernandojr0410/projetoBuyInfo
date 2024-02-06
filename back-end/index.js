@@ -64,13 +64,14 @@ app.get("/produtos/destaques", (req, res) => {
     .then((results) => {
       res.send(
         results.map((produto) => {
+          console.log(produto)
           return {
             ...produto,
             imagens:
               produto.imagens &&
               produto.imagens
                 .split(",")
-                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`),
+                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`).sort(),
           };
         })
       );
@@ -92,7 +93,7 @@ app.get("/produtos/categoria", (req, res) => {
               produto.imagens &&
               produto.imagens
                 .split(",")
-                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`),
+                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`).sort(),
           };
         })
       );
@@ -109,13 +110,14 @@ app.get("/produtos/findAll", (req, res) => {
     .then((results) => {
       res.send(
         results.map((produto) => {
+          console.log(produto)
           return {
             ...produto,
             imagens:
               produto.imagens &&
               produto.imagens
                 .split(",")
-                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`),
+                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`).sort(),
           };
         })
       );
@@ -137,7 +139,7 @@ app.get("/produtos/findById", (req, res) => {
               produto.imagens &&
               produto.imagens
                 .split(",")
-                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`),
+                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`).sort(),
           };
         })
       );
