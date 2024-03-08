@@ -57,7 +57,7 @@ function findByIdClienteEndereco(Id_Cliente) {
   endereco.complemento
 FROM
   cliente
-JOIN
+LEFT JOIN
   endereco ON cliente.Id_Cliente = endereco.id_cliente
 WHERE
   cliente.Id_Cliente = ${Id_Cliente}`;

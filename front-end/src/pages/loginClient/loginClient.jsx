@@ -56,9 +56,9 @@ function LoginClient({ handleUser }) {
           setEmail("");
           setSenha("");
           navigate("/home");
-          setShowModal(true);
+          // setShowModal(true);
         } else {
-          setShowModal(true);
+          //   setShowModal(true);
         }
       })
       .catch((error) => {

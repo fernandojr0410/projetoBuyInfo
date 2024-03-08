@@ -64,7 +64,6 @@ app.get("/produtos/destaques", (req, res) => {
     .then((results) => {
       res.send(
         results.map((produto) => {
-          console.log(produto)
           return {
             ...produto,
             imagens:
@@ -110,7 +109,6 @@ app.get("/produtos/findAll", (req, res) => {
     .then((results) => {
       res.send(
         results.map((produto) => {
-          console.log(produto)
           return {
             ...produto,
             imagens:
@@ -345,9 +343,10 @@ app.get("/clientes/findByEmailSenha", (req, res) => {
 app.post("/clientes/insert", (req, res) => {
   clientes
     .insert(req.body)
-    .then(() => {
+    .then((insertId) => {
       res.status(200).json({
         message: "Cliente cadastrado com sucesso",
+        clientId: insertId
       });
     })
     .catch((error) => console.error(error));
@@ -438,10 +437,11 @@ app.get("/enderecos/findByIdEndereco", (req, res) => {
 
 app.get("/enderecos/findByIdClienteEndereco", (req, res) => {
   const { Id_Cliente } = req.query;
-  console.log("id cliente filtrado:", Id_Cliente);
+  
   enderecos
     .findByIdClienteEndereco(Id_Cliente)
     .then((data) => {
+      console.log("id cliente filtrado:", data);
       res.status(200).json(data);
     })
     .catch((error) => {

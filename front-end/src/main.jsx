@@ -38,7 +38,7 @@ function Main() {
 
   function handleUser(user) {
     setCliente(user);
-
+    console.log("usuario", user);
     if (user) localStorage.setItem("cliente", JSON.stringify(user));
     else localStorage.removeItem("cliente");
   }

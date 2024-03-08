@@ -24,7 +24,7 @@ function RegistrationClient({ handleUser }) {
   const [senhaError, setSenhaError] = useState("");
 
   const [formularioValido, setFormularioValido] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState({ show: false, message: "" });
 
   const navigate = useNavigate();
 
@@ -167,34 +167,26 @@ function RegistrationClient({ handleUser }) {
       };
 
       fetch(`http://localhost:5000/clientes/insert`, dadosClientes)
+        .then((res) => res.json())
         .then((response) => {
-          if (!response.ok) {
-            throw new Error("Erro na solicitação.");
-          }
-
           console.log("response", response);
 
-          if (response.status === 200) {
-            const cliente = {
-              nome,
-              sobrenome,
-              cpf,
-              telefone,
-              email,
-              senha,
-            };
-            handleUser(cliente);
-            console.log("Nome cadastrado:", nome);
-            console.log("Usuário logado:", cliente);
-            setShowModal(true);
-          }
+          setShowModal({ show: true, message: response.message });
+          getClientById(response.clientId);
         })
-
         .catch((error) => console.error("Erro durante a solicitação:", error));
     }
-    // console.log("showModal", showModal);
-    // setShowModal(true)
   };
+
+  function getClientById(clientId) {
+    fetch(`http://localhost:5000/clientes/findById?id=${clientId}`)
+      .then((res) => res.json())
+      .then((response) => {
+        console.log("response", response);
+        handleUser(response[0]);
+      })
+      .catch((error) => console.error("Erro durante a solicitação:", error));
+  }
 
   const handleNomeChange = (evento) => {
     const { value } = evento.target;
@@ -237,7 +229,7 @@ function RegistrationClient({ handleUser }) {
   };
 
   const handleCloseMensagemSucesso = () => {
-    setShowModal(false);
+    setShowModal({ show: false, message: "" });
     navigate("/home");
   };
   return (
@@ -396,12 +388,11 @@ function RegistrationClient({ handleUser }) {
                 )}
               </div>
 
-              {showModal && (
+              {showModal.show && (
                 <Modal
-                  showModal={showModal}
-                  title="Cadastro realizado com sucesso!"
+                  showModal={showModal.show}
+                  title={showModal.message}
                   onClose={handleCloseMensagemSucesso}
-                  // link="/home"
                 />
               )}
 

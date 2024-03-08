@@ -46,16 +46,12 @@ function CustomerData({ cliente }) {
         }
       )
         .then((response) => {
-          if (!response.ok) {
-            throw new Error("Erro ao buscar endereço");
-          }
           return response.json();
         })
         .then((data) => {
           // console.log("dados do endereco:", data);
           setEndereco(data[0]);
-
-          console.log("id cliente front:", cliente.Id_Cliente);
+          console.log("dados", data[0]);
         })
         .catch((error) => console.error("erro no front:", error));
     }
