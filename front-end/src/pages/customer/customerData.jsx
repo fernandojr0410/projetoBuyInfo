@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
-
+import { Navigate, useNavigate } from "react-router-dom";
 import SidebarCustomer from "./components/sideBarCustomer";
+// import ModalRegistration from "../../components/modal/modalRegistration";
 
 function CustomerData({ cliente }) {
   const [dadosCliente, setDadosCliente] = useState(cliente);
   const [endereco, setEndereco] = useState({});
+  // const [showModal, setShowModal] = useState(false);
 
-  console.log("dados cliente", dadosCliente);
-  console.log("cliente", cliente);
-  // function handleChange(value, field) {
-  //   setDadosCliente({ ...dadosCliente, [field]: value });
-  // }
+  // const Navigate = useNavigate();
+
+  
+
+  const salvarDados = (event) => {
+    event.preventDefault();
+    setShowModal(true);
+  };
 
   function handleChangeCliente(value, field) {
-    // setDadosCliente({ ...dadosCliente, [field]: value });
 
     setDadosCliente((prevDadosCliente) => ({
       ...prevDadosCliente,
@@ -22,17 +26,39 @@ function CustomerData({ cliente }) {
     console.log("setando dados", dadosCliente);
   }
 
-  // function handleChangeEndereco(value, field) {
-  //   setEndereco({ ...endereco, [field]: value });
-  // }
-
   function handleChangeEndereco(value, field) {
     setEndereco((prevEndereco) => ({ ...prevEndereco, [field]: value }));
   }
 
-  // const id_cliente = dadosCliente.Id_Cliente;
+  // console.log("Client antes Fetch", cliente)
+  // console.log("Dados Client antes Fetch", dadosCliente)
 
-  // console.log("Estado de dadosCliente antes da solicitação:", dadosCliente);
+  useEffect(() => {
+    if(cliente && cliente.Id_Cliente) {
+      fetch(`http://localhost:5000/clientes/findById?id=${cliente.Id_Cliente}`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json"
+          },
+    })
+.then((response) => {
+  return response.json()
+})
+.then((data) => {
+  if(data.length > 0) {
+    setDadosCliente(data[0])
+    console.log("Return cliente", data[0])
+  }
+})
+.catch((error) => console.error(error))
+    }
+  },[cliente])
+
+  useEffect(() => {
+    console.log("Dados do cliente get:", dadosCliente);
+  }, [dadosCliente]);
+
+  // console.log("Client depois Fetch", cliente)
 
   useEffect(() => {
     if (cliente && cliente.Id_Cliente) {
@@ -65,7 +91,7 @@ function CustomerData({ cliente }) {
 
     if (!cliente || !cliente.Id_Cliente) {
       console.error(
-        "Cliente ou Id_Cliente está indefinido. Não é possível fazer a solicitação PUT."
+        "Id_Cliente está indefinido. Não é possível fazer a solicitação PUT."
       );
       return;
     }
@@ -145,8 +171,8 @@ function CustomerData({ cliente }) {
       );
     }
   };
-  // console.log("Id_Cliente fora:", cliente.Id_Cliente);
-  // console.log("dados do cliente fora:", dadosCliente);
+
+  
 
   return (
     <div className="flex pt-4 bg-gray-200 pb-16">
@@ -169,7 +195,7 @@ function CustomerData({ cliente }) {
                     <input
                       type="text"
                       name="name"
-                      value={dadosCliente.nome}
+                      value={dadosCliente.Nome}
                       className="border-gray-400 border rounded-md p-2"
                       onChange={({ target }) =>
                         handleChangeCliente(target.value, "nome")
@@ -184,7 +210,7 @@ function CustomerData({ cliente }) {
                     <input
                       type="text"
                       name="name"
-                      value={dadosCliente.sobrenome}
+                      value={dadosCliente.Sobrenome}
                       className="border-gray-400 border rounded-md p-2"
                       onChange={({ target }) =>
                         handleChangeCliente(target.value, "sobrenome")
@@ -198,7 +224,7 @@ function CustomerData({ cliente }) {
                     <input
                       type="text"
                       name="name"
-                      value={dadosCliente.cpf}
+                      value={dadosCliente.CPF}
                       className="border-gray-400 border rounded-md p-2 cursor-not-allowed"
                       disabled
                       onChange={({ target }) =>
@@ -213,7 +239,7 @@ function CustomerData({ cliente }) {
                     <input
                       type="text"
                       name="telefone"
-                      value={dadosCliente.telefone}
+                      value={dadosCliente.Telefone}
                       className="border-gray-400 border rounded-md p-2 cursor-pointer"
                       disabled
                       onChange={({ target }) =>
@@ -228,7 +254,7 @@ function CustomerData({ cliente }) {
                   <input
                     type="text"
                     name="email"
-                    value={dadosCliente.email}
+                    value={dadosCliente.Email}
                     className="border-gray-400 border rounded-md p-2"
                     onChange={({ target }) =>
                       handleChangeCliente(target.value, "email")
@@ -240,7 +266,7 @@ function CustomerData({ cliente }) {
                   <input
                     type="text"
                     name="senha"
-                    value={dadosCliente.senha}
+                    value={dadosCliente.Senha}
                     className="border-gray-400 border rounded-md p-2"
                     onChange={({ target }) =>
                       handleChangeCliente(target.value, "senha")
@@ -360,7 +386,7 @@ function CustomerData({ cliente }) {
             >
               SALVAR INFORMAÇÕES
             </button>
-          </div>
+            </div>
         </form>
       </div>
     </div>

@@ -26,7 +26,6 @@ function FinishOrder({ cliente }) {
   const [endereco, setEndereco] = useState([]);
 
   const [showModal, setShowModal] = useState(false);
-  // const [showModalVisible, setShowModalVisible] = useState(false);
 
   const handlePayment = (event) => {
     event.preventDefault();
@@ -56,10 +55,10 @@ function FinishOrder({ cliente }) {
               Cliente: {
                 Id_Cliente: data[0].Id_Cliente,
                 nome: data[0].nome,
-                sobrenome: data[0].sobrenome,
-                cpf: data[0].cpf,
-                telefone: data[0].telefone,
-                email: data[0].email,
+                Sobrenome: data[0].Sobrenome,
+                CPF: data[0].CPF,
+                Telefone: data[0].Telefone,
+                Email: data[0].Email,
 
                 Enderecos: {
                   idEndereco: data[0].idEndereco,
@@ -311,9 +310,9 @@ function FinishOrder({ cliente }) {
                 <div className="flex pr-4 text-center text-gray-500 text-sm">
                   <div className="flex flex-col">
                     <span>
-                      Nome completo: {`${cliente.nome} ${cliente.sobrenome},`}
+                      Nome completo: {`${cliente.Nome} ${cliente.Sobrenome},`}
                     </span>
-                    <span>Telefone para contato: {cliente.telefone}</span>
+                    <span>Telefone para contato: {cliente.Telefone}</span>
                     <div className="flex mt-4 border border-gray-400"></div>
                     <div className="flex flex-col gap-6 pt-4">
                       {endereco &&
