@@ -1,21 +1,18 @@
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
 import SidebarCustomer from "./components/sideBarCustomer";
-// import ModalRegistration from "../../components/modal/modalRegistration";
+import ModalRegistration from "../../components/modal/modalRegistration";
 
 function CustomerData({ cliente }) {
   const [dadosCliente, setDadosCliente] = useState(cliente);
   const [endereco, setEndereco] = useState({});
-  // const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  // const Navigate = useNavigate();
-
-  
-
-  const salvarDados = (event) => {
-    event.preventDefault();
-    setShowModal(true);
-  };
+  // const salvarDados = (event) => {
+  //   event.preventDefault();
+  //   setShowModal(true);
+  //   setEndereco(endereco)
+  //   setDadosCliente(cliente)
+  // };
 
   function handleChangeCliente(value, field) {
 
@@ -23,15 +20,11 @@ function CustomerData({ cliente }) {
       ...prevDadosCliente,
       [field]: value,
     }));
-    console.log("setando dados", dadosCliente);
   }
 
   function handleChangeEndereco(value, field) {
     setEndereco((prevEndereco) => ({ ...prevEndereco, [field]: value }));
   }
-
-  // console.log("Client antes Fetch", cliente)
-  // console.log("Dados Client antes Fetch", dadosCliente)
 
   useEffect(() => {
     if(cliente && cliente.Id_Cliente) {
@@ -47,18 +40,15 @@ function CustomerData({ cliente }) {
 .then((data) => {
   if(data.length > 0) {
     setDadosCliente(data[0])
-    console.log("Return cliente", data[0])
   }
 })
 .catch((error) => console.error(error))
     }
   },[cliente])
 
-  useEffect(() => {
-    console.log("Dados do cliente get:", dadosCliente);
-  }, [dadosCliente]);
-
-  // console.log("Client depois Fetch", cliente)
+  // useEffect(() => {
+  //   console.log("Dados do cliente get:", dadosCliente);
+  // }, [dadosCliente]);
 
   useEffect(() => {
     if (cliente && cliente.Id_Cliente) {
@@ -75,15 +65,13 @@ function CustomerData({ cliente }) {
           return response.json();
         })
         .then((data) => {
-          // console.log("dados do endereco:", data);
           setEndereco(data[0]);
-          console.log("dados", data[0]);
         })
         .catch((error) => console.error("erro no front:", error));
     }
   }, [cliente]);
 
-  const handleCadastrarEndereco = (event) => {
+  const handleDadosCliente = (event) => {
     event.preventDefault();
 
     console.log("Valor de cliente:", cliente);
@@ -124,8 +112,9 @@ function CustomerData({ cliente }) {
       })
         .then((response) => response.json())
         .then((data) => {
-          // console.log("Update endereco / cliente", data);
           setEndereco({ ...endereco, ...enderecoCliente });
+          setEndereco(data)
+          console.log("Endereco", data)
         })
         .catch((error) => console.error("Não foi atualizado cliente:", error));
     } else {
@@ -140,19 +129,14 @@ function CustomerData({ cliente }) {
         .then((data) => {
           setEndereco(data);
           console.log("Endereço cliente:", data);
-
-          // const idEndereco = data.idEndereco;
-
-          // const clienteEndereco = JSON.stringify({
-          //   Id_Cliente: id_cliente,
-          //   idEndereco: idEndereco,
-          // });
         });
     }
+
     console.log("Id_Cliente enviado:", cliente.Id_Cliente);
     if (cliente.Id_Cliente) {
       console.log("Id_Cliente dentro do fetch:", cliente.Id_Cliente);
-      fetch(`http://localhost:5000/clientes/update`, {
+
+      fetch(`http://localhost:5000/clientes/update?Id_Cliente=${cliente.Id_Cliente}`, {
         method: "PUT",
         headers: {
           "Content-type": "application/json",
@@ -170,16 +154,21 @@ function CustomerData({ cliente }) {
         "Id_Cliente está indefinido. Não é possível fazer a solicitação PUT."
       );
     }
-  };
+    setShowModal(true);
 
-  
+    const updatePage = () => {
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    };
+  };
 
   return (
     <div className="flex pt-4 bg-gray-200 pb-16">
       <SidebarCustomer />
 
       <div className="flex flex-col w-[80%]">
-        <form onSubmit={handleCadastrarEndereco}>
+        <form onSubmit={handleDadosCliente}>
           <div className="flex justify-between w-full gap-10 pr-12">
             <div className="flex flex-col gap-6 w-[50%]">
               <span className="font-bold text-primary text-xl">Meus Dados</span>
@@ -198,7 +187,7 @@ function CustomerData({ cliente }) {
                       value={dadosCliente.Nome}
                       className="border-gray-400 border rounded-md p-2"
                       onChange={({ target }) =>
-                        handleChangeCliente(target.value, "nome")
+                        handleChangeCliente(target.value, "Nome")
                       }
                     />
                   </div>
@@ -213,7 +202,7 @@ function CustomerData({ cliente }) {
                       value={dadosCliente.Sobrenome}
                       className="border-gray-400 border rounded-md p-2"
                       onChange={({ target }) =>
-                        handleChangeCliente(target.value, "sobrenome")
+                        handleChangeCliente(target.value, "Sobrenome")
                       }
                     />
                   </div>
@@ -228,7 +217,7 @@ function CustomerData({ cliente }) {
                       className="border-gray-400 border rounded-md p-2 cursor-not-allowed"
                       disabled
                       onChange={({ target }) =>
-                        handleChangeCliente(target.value, "cpf")
+                        handleChangeCliente(target.value, "CPF")
                       }
                     />
                   </div>
@@ -243,7 +232,7 @@ function CustomerData({ cliente }) {
                       className="border-gray-400 border rounded-md p-2 cursor-pointer"
                       disabled
                       onChange={({ target }) =>
-                        handleChangeCliente(target.value, "telefone")
+                        handleChangeCliente(target.value, "Telefone")
                       }
                     />
                   </div>
@@ -257,7 +246,7 @@ function CustomerData({ cliente }) {
                     value={dadosCliente.Email}
                     className="border-gray-400 border rounded-md p-2"
                     onChange={({ target }) =>
-                      handleChangeCliente(target.value, "email")
+                      handleChangeCliente(target.value, "Email")
                     }
                   />
                 </div>
@@ -269,7 +258,7 @@ function CustomerData({ cliente }) {
                     value={dadosCliente.Senha}
                     className="border-gray-400 border rounded-md p-2"
                     onChange={({ target }) =>
-                      handleChangeCliente(target.value, "senha")
+                      handleChangeCliente(target.value, "Senha")
                     }
                   />
                 </div>
@@ -382,10 +371,20 @@ function CustomerData({ cliente }) {
           <div className="flex pt-3">
             <button
               type="submit"
+            
               className="bg-primary p-6 text-white font-bold rounded-md"
             >
               SALVAR INFORMAÇÕES
             </button>
+            {showModal && (
+  <ModalRegistration
+    titulo="Dados atualizados com sucesso!"
+    onClose={() => {
+      setShowModal(false);
+      window.location.reload();
+    }}
+  />
+)}
             </div>
         </form>
       </div>
