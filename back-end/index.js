@@ -383,14 +383,15 @@ app.post("/clientes/insert", (req, res) => {
 //   }
 // });
 
-app.put("/clientes/update", (req, res) => {
-  const {Id_Cliente, ...dadosAtualizados } = req.body
-
-  .then((results) => {
-    req.res(results)
-  })
-  res.send.status(200) ({
-    message: "Cliente Atulizado com sucesso!"
+app.put("/clientes/update/:id", (req, res) => {
+  // app.put("/clientes/update/:id", (req, res) => {
+  const Id_Cliente = req.params.id
+  clientes
+  .update(Id_Cliente, req.body)
+  .then(() => {
+    res.status(200).send({
+      message: "Cliente atualizado com sucesso!"
+    })
   })
   .catch((error) => console.error(error))
 })

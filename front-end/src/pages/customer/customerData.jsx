@@ -7,13 +7,6 @@ function CustomerData({ cliente }) {
   const [endereco, setEndereco] = useState({});
   const [showModal, setShowModal] = useState(false);
 
-  // const salvarDados = (event) => {
-  //   event.preventDefault();
-  //   setShowModal(true);
-  //   setEndereco(endereco)
-  //   setDadosCliente(cliente)
-  // };
-
   function handleChangeCliente(value, field) {
 
     setDadosCliente((prevDadosCliente) => ({
@@ -45,10 +38,6 @@ function CustomerData({ cliente }) {
 .catch((error) => console.error(error))
     }
   },[cliente])
-
-  // useEffect(() => {
-  //   console.log("Dados do cliente get:", dadosCliente);
-  // }, [dadosCliente]);
 
   useEffect(() => {
     if (cliente && cliente.Id_Cliente) {
@@ -133,27 +122,20 @@ function CustomerData({ cliente }) {
     }
 
     console.log("Id_Cliente enviado:", cliente.Id_Cliente);
-    if (cliente.Id_Cliente) {
-      console.log("Id_Cliente dentro do fetch:", cliente.Id_Cliente);
-
-      fetch(`http://localhost:5000/clientes/update?Id_Cliente=${cliente.Id_Cliente}`, {
-        method: "PUT",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(dadosCliente),
+  
+    fetch("http://localhost:5000/clientes/update", {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json",
+      }
+      .then((response) => response.json())
+      .then((cliente) => {
+        setDadosCliente(cliente);
+        console.log("Cliente:", cliente);
       })
-        .then((response) => response.json())
-        .then((data) => {
-          setDadosCliente(data);
-          console.log("Cliente Atualizado:", data);
-        })
-        .catch((error) => console.error("Erro ao atualizar cliente", error));
-    } else {
-      console.error(
-        "Id_Cliente está indefinido. Não é possível fazer a solicitação PUT."
-      );
-    }
+      .catch((error) => console.error(error))
+    })
+  
     setShowModal(true);
 
     const updatePage = () => {
