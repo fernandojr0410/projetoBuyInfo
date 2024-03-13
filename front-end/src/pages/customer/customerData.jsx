@@ -121,22 +121,26 @@ function CustomerData({ cliente }) {
         });
     }
 
-    console.log("Id_Cliente enviado:", cliente.Id_Cliente);
-  
-    fetch("http://localhost:5000/clientes/update", {
-      method: "PUT",
-      headers: {
-        "Content-type": "application/json",
-      }
-      .then((response) => response.json())
-      .then((cliente) => {
-        setDadosCliente(cliente);
-        console.log("Cliente:", cliente);
+ 
+    const clienteId = cliente.Id_Cliente;
+    const dadosClienteAtualizado = { ...dadosCliente, Id_Cliente: clienteId}
+
+      fetch(`http://localhost:5000/clientes/update/${clienteId}`, {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(dadosClienteAtualizado)
       })
-      .catch((error) => console.error(error))
-    })
+        .then((response) => response.json())
+        .then((data) => {
+          setDadosCliente(data);
+          console.log("Cliente:", data);
+        })
+        .catch((error) => console.error(error));
   
     setShowModal(true);
+    console.log("teste", dadosCliente)
 
     const updatePage = () => {
       setTimeout(() => {
@@ -166,7 +170,7 @@ function CustomerData({ cliente }) {
                     <input
                       type="text"
                       name="name"
-                      value={dadosCliente.Nome}
+                      value={cliente.Nome}
                       className="border-gray-400 border rounded-md p-2"
                       onChange={({ target }) =>
                         handleChangeCliente(target.value, "Nome")

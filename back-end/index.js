@@ -384,7 +384,6 @@ app.post("/clientes/insert", (req, res) => {
 // });
 
 app.put("/clientes/update/:id", (req, res) => {
-  // app.put("/clientes/update/:id", (req, res) => {
   const Id_Cliente = req.params.id
   clientes
   .update(Id_Cliente, req.body)

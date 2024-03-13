@@ -11,7 +11,7 @@ function LoginClient({ handleUser }) {
 
   const [senha, setSenha] = useState("");
   const [senhaError, setSenhaError] = useState("");
-  const [showModal, setShowModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   // const [carregamento, setCarregamento] = useState(false);
 
   const navigate = useNavigate();
@@ -37,15 +37,22 @@ function LoginClient({ handleUser }) {
         },
       }
     )
+      // .then((response) => {
+      //   if (response.status === 200) {
+      //     return response.json();
+      //   } else if (response.status === 401) {
+      //     setMostrarModal("Conta não encontrada");
+      //     throw new Error("Falha na autenticação");
+      //   } else {
+      //     console.log("Erro no Servidor");
+      //     throw new Error("Erro no Servidor");
+      //   }
+      // })
       .then((response) => {
         if (response.status === 200) {
           return response.json();
-        } else if (response.status === 401) {
-          setMostrarModal("Conta não encontrada");
-          throw new Error("Falha na autenticação");
         } else {
-          console.log("Erro no Servidor");
-          throw new Error("Erro no Servidor");
+          throw new Error("Conta não encontrada");
         }
       })
       .then((data) => {
@@ -63,12 +70,8 @@ function LoginClient({ handleUser }) {
       })
       .catch((error) => {
         console.error(error);
+        setShowErrorModal(true);
       });
-    // .finally(() => {
-    //   setTimeout(() => {
-    //     // setCarregamento(false);
-    //   }, 2000);
-    // });
     console.log("email", email);
     console.log("senha", senha);
   };
@@ -148,16 +151,11 @@ function LoginClient({ handleUser }) {
         </div>
       </div>
 
-      {showModal && (
-        <Modal
-          showModal={showModal}
-          title={
-            showModal === "Conta encontrada"
-              ? "Conta encontrada!"
-              : "Conta não encontrada!"
-          }
-          onClose={() => setShowModal(false)}
-          // link={showModal === "Conta encontrada" ? "/home" : null}
+      {showErrorModal && ( // Modal de erro
+        <ModalRegistration
+          showModal={showErrorModal}
+          title="Conta não encontrada!"
+          onClose={() => setShowErrorModal(false)}
         />
       )}
     </div>
