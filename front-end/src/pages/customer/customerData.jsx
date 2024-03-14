@@ -8,7 +8,6 @@ function CustomerData({ cliente }) {
   const [showModal, setShowModal] = useState(false);
 
   function handleChangeCliente(value, field) {
-
     setDadosCliente((prevDadosCliente) => ({
       ...prevDadosCliente,
       [field]: value,
@@ -20,24 +19,27 @@ function CustomerData({ cliente }) {
   }
 
   useEffect(() => {
-    if(cliente && cliente.Id_Cliente) {
-      fetch(`http://localhost:5000/clientes/findById?id=${cliente.Id_Cliente}`, {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json"
+    if (cliente && cliente.Id_Cliente) {
+      fetch(
+        `http://localhost:5000/clientes/findById?id=${cliente.Id_Cliente}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json",
           },
-    })
-.then((response) => {
-  return response.json()
-})
-.then((data) => {
-  if(data.length > 0) {
-    setDadosCliente(data[0])
-  }
-})
-.catch((error) => console.error(error))
+        }
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          if (data.length > 0) {
+            setDadosCliente(data[0]);
+          }
+        })
+        .catch((error) => console.error(error));
     }
-  },[cliente])
+  }, [cliente]);
 
   useEffect(() => {
     if (cliente && cliente.Id_Cliente) {
@@ -102,8 +104,8 @@ function CustomerData({ cliente }) {
         .then((response) => response.json())
         .then((data) => {
           setEndereco({ ...endereco, ...enderecoCliente });
-          setEndereco(data)
-          console.log("Endereco", data)
+          setEndereco(data);
+          console.log("Endereco", data);
         })
         .catch((error) => console.error("Não foi atualizado cliente:", error));
     } else {
@@ -121,26 +123,25 @@ function CustomerData({ cliente }) {
         });
     }
 
- 
     const clienteId = cliente.Id_Cliente;
-    const dadosClienteAtualizado = { ...dadosCliente, Id_Cliente: clienteId}
+    const dadosClienteAtualizado = { ...dadosCliente, Id_Cliente: clienteId };
 
-      fetch(`http://localhost:5000/clientes/update/${clienteId}`, {
-        method: "PUT",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(dadosClienteAtualizado)
+    fetch(`http://localhost:5000/clientes/update/${clienteId}`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(dadosClienteAtualizado),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setDadosCliente(data);
+        console.log("Cliente:", data);
       })
-        .then((response) => response.json())
-        .then((data) => {
-          setDadosCliente(data);
-          console.log("Cliente:", data);
-        })
-        .catch((error) => console.error(error));
-  
+      .catch((error) => console.error(error));
+
     setShowModal(true);
-    console.log("teste", dadosCliente)
+    console.log("teste", dadosCliente);
 
     const updatePage = () => {
       setTimeout(() => {
@@ -153,7 +154,7 @@ function CustomerData({ cliente }) {
     <div className="flex pt-4 bg-gray-200 pb-16">
       <SidebarCustomer />
 
-      <div className="flex flex-col w-[80%]">
+      <div className="flex flex-col w-[80%] ">
         <form onSubmit={handleDadosCliente}>
           <div className="flex justify-between w-full gap-10 pr-12">
             <div className="flex flex-col gap-6 w-[50%]">
@@ -357,24 +358,268 @@ function CustomerData({ cliente }) {
           <div className="flex pt-3">
             <button
               type="submit"
-            
               className="bg-primary p-6 text-white font-bold rounded-md"
             >
               SALVAR INFORMAÇÕES
             </button>
             {showModal && (
-  <ModalRegistration
-    titulo="Dados atualizados com sucesso!"
-    onClose={() => {
-      setShowModal(false);
-      window.location.reload();
-    }}
-  />
-)}
-            </div>
+              <ModalRegistration
+                titulo="Dados atualizados com sucesso!"
+                onClose={() => {
+                  setShowModal(false);
+                  window.location.reload();
+                }}
+              />
+            )}
+          </div>
         </form>
       </div>
     </div>
+    // <div className="flex pt-4 bg-gray-200 pb-16">
+    //   <SidebarCustomer />
+
+    //   <div className="flex flex-col w-4/5">
+    //     <form
+    //       onSubmit={handleDadosCliente}
+    //       className="flex flex-col w-full gap-10 pr-12"
+    //     >
+    //       <div className="flex flex-col gap-6">
+    //         <span className="font-bold text-primary text-xl">Meus Dados</span>
+    //         <div className="flex flex-col gap-6 border-gray-400 border rounded-md bg-white">
+    //           <div className="flex flex-col gap-4 md:flex-row md:gap-10">
+    //             <div className="flex flex-col w-full md:w-1/2">
+    //               <label htmlFor="name" className="text-primary font-bold px-2">
+    //                 Nome
+    //               </label>
+    //               <input
+    //                 type="text"
+    //                 id="name"
+    //                 name="name"
+    //                 value={cliente.Nome}
+    //                 className="border-gray-400 border rounded-md p-2"
+    //                 onChange={({ target }) =>
+    //                   handleChangeCliente(target.value, "Nome")
+    //                 }
+    //               />
+    //             </div>
+
+    //             <div className="flex flex-col w-full md:w-1/2">
+    //               <label
+    //                 htmlFor="surname"
+    //                 className="text-primary font-bold px-2"
+    //               >
+    //                 Sobrenome
+    //               </label>
+    //               <input
+    //                 type="text"
+    //                 id="surname"
+    //                 name="surname"
+    //                 value={dadosCliente.Sobrenome}
+    //                 className="border-gray-400 border rounded-md p-2"
+    //                 onChange={({ target }) =>
+    //                   handleChangeCliente(target.value, "Sobrenome")
+    //                 }
+    //               />
+    //             </div>
+    //           </div>
+
+    //           <div className="flex flex-col gap-4 md:flex-row md:gap-10">
+    //             <div className="flex flex-col w-full md:w-1/2">
+    //               <label htmlFor="cpf" className="text-primary font-bold px-2">
+    //                 CPF
+    //               </label>
+    //               <input
+    //                 type="text"
+    //                 id="cpf"
+    //                 name="cpf"
+    //                 value={dadosCliente.CPF}
+    //                 className="border-gray-400 border rounded-md p-2 cursor-not-allowed"
+    //                 disabled
+    //                 onChange={({ target }) =>
+    //                   handleChangeCliente(target.value, "CPF")
+    //                 }
+    //               />
+    //             </div>
+    //             <div className="flex flex-col w-full md:w-1/2">
+    //               <label
+    //                 htmlFor="phone"
+    //                 className="text-primary font-bold px-2"
+    //               >
+    //                 Telefone
+    //               </label>
+    //               <input
+    //                 type="text"
+    //                 id="phone"
+    //                 name="phone"
+    //                 value={dadosCliente.Telefone}
+    //                 className="border-gray-400 border rounded-md p-2 cursor-pointer"
+    //                 disabled
+    //                 onChange={({ target }) =>
+    //                   handleChangeCliente(target.value, "Telefone")
+    //                 }
+    //               />
+    //             </div>
+    //           </div>
+
+    //           <div className="flex flex-col gap-4">
+    //             <label htmlFor="email" className="text-primary font-bold px-2">
+    //               E-mail
+    //             </label>
+    //             <input
+    //               type="text"
+    //               id="email"
+    //               name="email"
+    //               value={dadosCliente.Email}
+    //               className="border-gray-400 border rounded-md p-2"
+    //               onChange={({ target }) =>
+    //                 handleChangeCliente(target.value, "Email")
+    //               }
+    //             />
+    //           </div>
+
+    //           <div className="flex flex-col gap-4">
+    //             <label
+    //               htmlFor="password"
+    //               className="text-primary font-bold px-2"
+    //             >
+    //               Senha
+    //             </label>
+    //             <input
+    //               type="text"
+    //               id="password"
+    //               name="password"
+    //               value={dadosCliente.Senha}
+    //               className="border-gray-400 border rounded-md p-2"
+    //               onChange={({ target }) =>
+    //                 handleChangeCliente(target.value, "Senha")
+    //               }
+    //             />
+    //           </div>
+    //         </div>
+    //       </div>
+
+    //       <div className="flex flex-col gap-6">
+    //         <span className="font-bold text-primary text-xl">Meu Endereço</span>
+    //         <div className="flex flex-col gap-6 bg-white border-gray-400 border rounded-md p-4 h-[fit-content]">
+    //           <div className="flex flex-col gap-1 w-full">
+    //             <label className="text-gray-600">CEP</label>
+    //             <input
+    //               type="text"
+    //               name="cep"
+    //               value={endereco ? endereco.cep || "" : ""}
+    //               placeholder="CEP"
+    //               className="text-sm px-1 border-gray-300 border rounded-md h-8 cursor-pointer"
+    //               onChange={({ target }) =>
+    //                 handleChangeEndereco(target.value, "cep")
+    //               }
+    //             />
+    //           </div>
+    //           <div className="flex gap-4">
+    //             <div className="flex flex-col gap-1 w-full">
+    //               <label className="text-gray-600">Cidade</label>
+    //               <input
+    //                 type="text"
+    //                 name="cidade"
+    //                 value={endereco ? endereco.cidade || "" : ""}
+    //                 placeholder="Cidade"
+    //                 className="text-sm px-1 border-gray-300 border rounded-md h-8 cursor-pointer"
+    //                 onChange={({ target }) =>
+    //                   handleChangeEndereco(target.value, "cidade")
+    //                 }
+    //               />
+    //             </div>
+    //             <div className="flex flex-col gap-1">
+    //               <label className="text-gray-600">Estado</label>
+    //               <input
+    //                 type="text"
+    //                 name="estado"
+    //                 value={endereco ? endereco.estado || "" : ""}
+    //                 placeholder="Estado"
+    //                 className="text-sm px-1 border-gray-300 border rounded-md h-8 cursor-pointer"
+    //                 onChange={({ target }) => {
+    //                   handleChangeEndereco(target.value, "estado");
+    //                 }}
+    //               />
+    //             </div>
+    //           </div>
+    //           <div className="flex flex-col gap-1 w-full">
+    //             <label className="text-gray-600">Rua/Avenida</label>
+    //             <input
+    //               type="text"
+    //               name="rua"
+    //               value={endereco ? endereco.rua || "" : ""}
+    //               placeholder="Rua/Avenida"
+    //               className="text-sm px-1 border-gray-300 border rounded-md h-8 cursor-pointer"
+    //               onChange={({ target }) => {
+    //                 handleChangeEndereco(target.value, "rua");
+    //               }}
+    //             />
+    //           </div>
+    //           <div className="flex gap-4">
+    //             <div className="flex flex-col gap-1 w-full">
+    //               <label className="text-gray-600">Bairro</label>
+    //               <input
+    //                 type="text"
+    //                 name="bairro"
+    //                 value={endereco ? endereco.bairro || "" : ""}
+    //                 placeholder="Bairro"
+    //                 className="text-sm px-1 border-gray-300 border rounded-md h-8 cursor-pointer"
+    //                 onChange={({ target }) => {
+    //                   handleChangeEndereco(target.value, "bairro");
+    //                 }}
+    //               />
+    //             </div>
+    //             <div className="flex flex-col gap-1">
+    //               <label className="text-gray-600">Numero</label>
+    //               <input
+    //                 type="int"
+    //                 name="numero"
+    //                 value={endereco ? endereco.numero || "" : ""}
+    //                 placeholder="Numero"
+    //                 className="text-sm px-1 border-gray-300 border rounded-md h-8 cursor-pointer"
+    //                 onChange={({ target }) => {
+    //                   handleChangeEndereco(target.value, "numero");
+    //                 }}
+    //               />
+    //             </div>
+    //           </div>
+
+    //           <div className="flex flex-col gap-1 w-full">
+    //             <label className="text-gray-600">Complemento</label>
+    //             <textarea
+    //               type="text"
+    //               name="complemento"
+    //               value={endereco ? endereco.complemento || "" : ""}
+    //               className="text-sm px-1 border-gray-300 border rounded-md h-32 pt-2 overflow-y-auto cursor-pointer"
+    //               style={{ textAlign: "top" }}
+    //               onChange={({ target }) => {
+    //                 handleChangeEndereco(target.value, "complemento");
+    //               }}
+    //             ></textarea>
+    //           </div>
+    //         </div>
+    //       </div>
+
+    //       <div className="flex pt-3">
+    //         <button
+    //           type="submit"
+    //           className="bg-primary p-6 text-white font-bold rounded-md"
+    //         >
+    //           SALVAR INFORMAÇÕES
+    //         </button>
+    //         {showModal && (
+    //           <ModalRegistration
+    //             titulo="Dados atualizados com sucesso!"
+    //             onClose={() => {
+    //               setShowModal(false);
+    //               window.location.reload();
+    //             }}
+    //           />
+    //         )}
+    //       </div>
+    //     </form>
+    //   </div>
+    // </div>
   );
 }
 

@@ -2,8 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Logo from "../../assets/images/logo-buy-info.png";
 import ModalRegistration from "../../components/modal/modalRegistration";
-import Loading from "../../layout/loading/loading";
-import Modal from "../../components/modal/modal";
 
 function LoginClient({ handleUser }) {
   const [email, setEmail] = useState("");
@@ -12,7 +10,6 @@ function LoginClient({ handleUser }) {
   const [senha, setSenha] = useState("");
   const [senhaError, setSenhaError] = useState("");
   const [showErrorModal, setShowErrorModal] = useState(false);
-  // const [carregamento, setCarregamento] = useState(false);
 
   const navigate = useNavigate();
 
@@ -26,8 +23,6 @@ function LoginClient({ handleUser }) {
       setSenhaError("Preencha a senha");
     }
 
-    // setCarregamento(true);
-
     fetch(
       `http://localhost:5000/clientes/findByEmailSenha?email=${email}&senha=${senha}`,
       {
@@ -37,17 +32,6 @@ function LoginClient({ handleUser }) {
         },
       }
     )
-      // .then((response) => {
-      //   if (response.status === 200) {
-      //     return response.json();
-      //   } else if (response.status === 401) {
-      //     setMostrarModal("Conta não encontrada");
-      //     throw new Error("Falha na autenticação");
-      //   } else {
-      //     console.log("Erro no Servidor");
-      //     throw new Error("Erro no Servidor");
-      //   }
-      // })
       .then((response) => {
         if (response.status === 200) {
           return response.json();
@@ -58,23 +42,22 @@ function LoginClient({ handleUser }) {
       .then((data) => {
         if (data.length > 0) {
           const cliente = data[0];
-
           handleUser(cliente);
           setEmail("");
           setSenha("");
           navigate("/home");
-          // setShowModal(true);
         } else {
-          //   setShowModal(true);
+          setShowErrorModal(true);
         }
       })
       .catch((error) => {
         console.error(error);
         setShowErrorModal(true);
       });
-    console.log("email", email);
-    console.log("senha", senha);
   };
+
+  console.log("email", email);
+  console.log("senha", senha);
 
   return (
     <div className="flex justify-center bg-primary w-full items-center">
@@ -151,10 +134,10 @@ function LoginClient({ handleUser }) {
         </div>
       </div>
 
-      {showErrorModal && ( // Modal de erro
+      {showErrorModal && (
         <ModalRegistration
           showModal={showErrorModal}
-          title="Conta não encontrada!"
+          titulo="Conta não encontrada!"
           onClose={() => setShowErrorModal(false)}
         />
       )}

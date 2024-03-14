@@ -28,7 +28,7 @@ function ModalRegistration({ titulo, onClose, link }) {
 
           <Link to={link} className="flex justify-center pb-4 pt-10">
             <button
-              onClick={onClose }
+              onClick={onClose}
               className="flex justify-center items-center h-8 w-[20%] bg-green-600 text-white font-bold rounded-md"
             >
               OK
