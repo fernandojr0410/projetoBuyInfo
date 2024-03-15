@@ -144,9 +144,8 @@ function insert(dados) {
 //   return queryPromise(sql, params);
 // }
 
-function update(dados) {
+function update(Id_Cliente, dados) {
   const {
-    Id_Cliente,
     Nome,
     Sobrenome,
     CPF,
@@ -191,11 +190,11 @@ if (Id_Cliente) {
   params.push(Id_Cliente);
 }
 
-params.push(Id_Cliente);
-
 sql = sql.slice(0, -1);
 
 sql += " WHERE Id_Cliente = ?";
+params.push(Id_Cliente);
+
 return queryPromise(sql, params);
 } 
 

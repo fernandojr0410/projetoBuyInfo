@@ -24,6 +24,7 @@ function FinishOrder({ cliente }) {
   const valorTotal = valorProduto + valorFrete;
 
   const [endereco, setEndereco] = useState([]);
+  // const [endereco, setEndereco] = useState(null);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -54,7 +55,7 @@ function FinishOrder({ cliente }) {
             const enderecoData = {
               Cliente: {
                 Id_Cliente: data[0].Id_Cliente,
-                nome: data[0].nome,
+                Nome: data[0].Nome,
                 Sobrenome: data[0].Sobrenome,
                 CPF: data[0].CPF,
                 Telefone: data[0].Telefone,
@@ -312,6 +313,19 @@ function FinishOrder({ cliente }) {
                     <span>
                       Nome completo: {`${cliente.Nome} ${cliente.Sobrenome},`}
                     </span>
+
+                    {/* {endereco &&
+                    endereco.cliente &&
+                    endereco.cliente.Nome &&
+                    endereco.cliente.Sobrenome ? (
+                      <span>
+                        Nome completo:{" "}
+                        {`${endereco.cliente.Nome} ${endereco.cliente.Sobrenome},`}
+                      </span>
+                    ) : (
+                      <span>Dados do cliente não encontrados</span>
+                    )} */}
+
                     <span>Telefone para contato: {cliente.Telefone}</span>
                     <div className="flex mt-4 border border-gray-400"></div>
                     <div className="flex flex-col gap-6 pt-4">

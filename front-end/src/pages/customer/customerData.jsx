@@ -92,7 +92,6 @@ function CustomerData({ cliente }) {
       complemento: event.target.elements.complemento.value,
     };
 
-    // update no banco where idEndereco (tabela de endereco)
     if (enderecoCliente.idEndereco) {
       fetch(`http://localhost:5000/enderecos/update`, {
         method: "PUT",
@@ -103,9 +102,9 @@ function CustomerData({ cliente }) {
       })
         .then((response) => response.json())
         .then((data) => {
+          console.log("Endereco", data);
           setEndereco({ ...endereco, ...enderecoCliente });
           setEndereco(data);
-          console.log("Endereco", data);
         })
         .catch((error) => console.error("Não foi atualizado cliente:", error));
     } else {
@@ -123,9 +122,8 @@ function CustomerData({ cliente }) {
         });
     }
 
-    const clienteId = cliente.Id_Cliente;
+    const clienteId = cliente && cliente.Id_Cliente;
     const dadosClienteAtualizado = { ...dadosCliente, Id_Cliente: clienteId };
-
     fetch(`http://localhost:5000/clientes/update/${clienteId}`, {
       method: "PUT",
       headers: {
@@ -135,19 +133,19 @@ function CustomerData({ cliente }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        setDadosCliente(data);
         console.log("Cliente:", data);
+        setDadosCliente(dadosClienteAtualizado)
       })
       .catch((error) => console.error(error));
 
     setShowModal(true);
     console.log("teste", dadosCliente);
 
-    const updatePage = () => {
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
-    };
+    // // const updatePage = () => {
+    // //   setTimeout(() => {
+    // //     window.location.reload();
+    // //   }, 1000);
+    // };
   };
 
   return (
@@ -171,7 +169,7 @@ function CustomerData({ cliente }) {
                     <input
                       type="text"
                       name="name"
-                      value={cliente.Nome}
+                      value={dadosCliente.Nome}
                       className="border-gray-400 border rounded-md p-2"
                       onChange={({ target }) =>
                         handleChangeCliente(target.value, "Nome")
@@ -325,7 +323,7 @@ function CustomerData({ cliente }) {
                     />
                   </div>
                   <div className="flex flex-col gap-1">
-                    <label className="text-gray-600">Numero</label>
+                    <label className="text-gray-600">Número</label>
                     <input
                       type="int"
                       name="numero"

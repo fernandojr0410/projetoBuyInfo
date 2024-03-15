@@ -385,8 +385,9 @@ app.post("/clientes/insert", (req, res) => {
 
 app.put("/clientes/update/:id", (req, res) => {
   const Id_Cliente = req.params.id
+  const dadosCliente = req.body;
   clientes
-  .update(Id_Cliente, req.body)
+  .update(Id_Cliente, dadosCliente)
   .then(() => {
     res.status(200).send({
       message: "Cliente atualizado com sucesso!"
