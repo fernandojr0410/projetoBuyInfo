@@ -7,6 +7,13 @@ function CustomerData({ cliente }) {
   const [endereco, setEndereco] = useState({});
   const [showModal, setShowModal] = useState(false);
 
+  function handleUser(user) {
+    setDadosCliente(user);
+    console.log("usuario", user);
+    if (user) localStorage.setItem("cliente", JSON.stringify(user));
+    else localStorage.removeItem("cliente");
+  }
+
   function handleChangeCliente(value, field) {
     setDadosCliente((prevDadosCliente) => ({
       ...prevDadosCliente,
@@ -134,7 +141,7 @@ function CustomerData({ cliente }) {
       .then((response) => response.json())
       .then((data) => {
         console.log("Cliente:", data);
-        setDadosCliente(dadosClienteAtualizado)
+        setDadosCliente(dadosClienteAtualizado);
       })
       .catch((error) => console.error(error));
 
@@ -365,6 +372,9 @@ function CustomerData({ cliente }) {
                 titulo="Dados atualizados com sucesso!"
                 onClose={() => {
                   setShowModal(false);
+
+                  handleUser(dadosCliente);
+                  console.log("dadosCliente", dadosCliente);
                   window.location.reload();
                 }}
               />

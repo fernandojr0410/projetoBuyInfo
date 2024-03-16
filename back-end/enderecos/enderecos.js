@@ -58,7 +58,7 @@ function findByIdClienteEndereco(Id_Cliente) {
 FROM
   cliente
 LEFT JOIN
-  endereco ON cliente.Id_Cliente = endereco.id_cliente
+  endereco ON cliente.Id_Cliente = endereco.Id_Cliente
 WHERE
   cliente.Id_Cliente = ${Id_Cliente}`;
   return queryPromise(sql);

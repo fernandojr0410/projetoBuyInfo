@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-// require("dotenv").config();
+require("dotenv").config();
 // const jwt = require("jsonwebtoken");
 
 const cors = require("cors"); // cors
@@ -351,37 +351,6 @@ app.post("/clientes/insert", (req, res) => {
     })
     .catch((error) => console.error(error));
 });
-
-// app.put("/clientes/update", async (req, res) => {
-//   try {
-//     console.log("Dados da solicitação:", req.body);
-
-//     const { Id_Cliente, ...dadosAtualizados } = req.body;
-
-//     console.log("Id_Cliente recebido:", Id_Cliente);
-
-//     if (!Id_Cliente) {
-//       console.error(
-//         "Id_Cliente está indefinido. Não é possível executar a atualização."
-//       );
-//       return res.status(400).json({
-//         message:
-//           "Id_Cliente está indefinido. Não é possível executar a atualização.",
-//       });
-//     }
-
-//     await clientes.update({ Id_Cliente, ...dadosAtualizados });
-
-//     res.status(200).json({
-//       message: "Dados do cliente atualizado com sucesso",
-//     });
-//   } catch (error) {
-//     console.error("Erro ao processar a solicitação:", error);
-//     res.status(500).json({
-//       message: "Erro interno no servidor ao processar a solicitação",
-//     });
-//   }
-// });
 
 app.put("/clientes/update/:id", (req, res) => {
   const Id_Cliente = req.params.id

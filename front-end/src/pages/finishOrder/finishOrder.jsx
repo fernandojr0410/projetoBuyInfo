@@ -24,9 +24,10 @@ function FinishOrder({ cliente }) {
   const valorTotal = valorProduto + valorFrete;
 
   const [endereco, setEndereco] = useState([]);
-  // const [endereco, setEndereco] = useState(null);
 
   const [showModal, setShowModal] = useState(false);
+
+  const [registroCliente, setRegistroCliente] = useState(cliente);
 
   const handlePayment = (event) => {
     event.preventDefault();
@@ -34,15 +35,13 @@ function FinishOrder({ cliente }) {
   };
 
   useEffect(() => {
-    if (cliente && cliente.Id_Cliente) {
+    setRegistroCliente(cliente);
+  }, [cliente]);
+
+  useEffect(() => {
+    if (registroCliente && registroCliente.Id_Cliente) {
       fetch(
-        `http://localhost:5000/enderecos/findByIdClienteEndereco?Id_Cliente=${cliente.Id_Cliente}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-type": "application/json",
-          },
-        }
+        `http://localhost:5000/enderecos/findByIdClienteEndereco?Id_Cliente=${registroCliente.Id_Cliente}`
       )
         .then((response) => {
           if (!response.ok) {
@@ -54,15 +53,15 @@ function FinishOrder({ cliente }) {
           if (data && data.length > 0) {
             const enderecoData = {
               Cliente: {
-                Id_Cliente: data[0].Id_Cliente,
-                Nome: data[0].Nome,
-                Sobrenome: data[0].Sobrenome,
-                CPF: data[0].CPF,
-                Telefone: data[0].Telefone,
-                Email: data[0].Email,
-
+                Id_Cliente: registroCliente.Id_Cliente,
+                Nome: data[0].nome,
+                Sobrenome: data[0].sobrenome,
+                CPF: data[0].cpf,
+                Telefone: data[0].telefone,
+                Email: data[0].email,
                 Enderecos: {
                   idEndereco: data[0].idEndereco,
+                  nome: data[0].nome,
                   cep: data[0].cep,
                   cidade: data[0].cidade,
                   estado: data[0].estado,
@@ -74,12 +73,12 @@ function FinishOrder({ cliente }) {
               },
             };
             setEndereco(enderecoData);
-            console.log("dados endereco", enderecoData);
+            setRegistroCliente(data[0]);
           }
         })
-        .catch((error) => console.error("erro no front:", error));
+        .catch((error) => console.error("Erro ao buscar endereço:", error));
     }
-  }, [cliente]);
+  }, [registroCliente]);
 
   return (
     <div className="flex flex-col justify-center bg-gray-200 p-10 ">
@@ -311,22 +310,13 @@ function FinishOrder({ cliente }) {
                 <div className="flex pr-4 text-center text-gray-500 text-sm">
                   <div className="flex flex-col">
                     <span>
-                      Nome completo: {`${cliente.Nome} ${cliente.Sobrenome},`}
+                      Nome completo:
+                      {`${registroCliente.nome} ${registroCliente.sobrenome},`}
                     </span>
 
-                    {/* {endereco &&
-                    endereco.cliente &&
-                    endereco.cliente.Nome &&
-                    endereco.cliente.Sobrenome ? (
-                      <span>
-                        Nome completo:{" "}
-                        {`${endereco.cliente.Nome} ${endereco.cliente.Sobrenome},`}
-                      </span>
-                    ) : (
-                      <span>Dados do cliente não encontrados</span>
-                    )} */}
-
-                    <span>Telefone para contato: {cliente.Telefone}</span>
+                    <span>
+                      Telefone para contato: {registroCliente.telefone}
+                    </span>
                     <div className="flex mt-4 border border-gray-400"></div>
                     <div className="flex flex-col gap-6 pt-4">
                       {endereco &&
@@ -339,9 +329,9 @@ function FinishOrder({ cliente }) {
                               name="endereco"
                               className="cursor-pointer mb-2"
                             />
-                            {endereco.Cliente && endereco.Cliente.Enderecos
+                            {endereco.Cliente && endereco.Cliente.Enderecos && endereco.Cliente.Enderecos.cep
                               ? `${endereco.Cliente.Enderecos.rua} - CEP ${endereco.Cliente.Enderecos.cep} - ${endereco.Cliente.Enderecos.bairro} - ${endereco.Cliente.Enderecos.cidade} - ${endereco.Cliente.Enderecos.estado}`
-                              : ""}
+                              : "Você não possui endereço cadastrado."}
                           </span>
                           {/* <div className="flex border border-gray-400"></div> */}
                           <div className="flex flex-col items-center gap-4">
@@ -393,6 +383,7 @@ function FinishOrder({ cliente }) {
                     </div>
                   </div>
                 </div>
+                {/* ))} */}
               </div>
             </div>
           </div>
