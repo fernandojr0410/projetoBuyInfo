@@ -3,6 +3,7 @@ import Logo from "../../assets/images/logo-buy-info.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Modal from "../../components/modal/modal";
+import ModalRegistration from "../../components/modal/modalRegistration";
 
 function RegistrationClient({ handleUser }) {
   const [nome, setNome] = useState("");
@@ -25,6 +26,8 @@ function RegistrationClient({ handleUser }) {
 
   const [formularioValido, setFormularioValido] = useState(false);
   const [showModal, setShowModal] = useState({ show: false, message: "" });
+
+  const [emailDuplicado, setEmailDuplicado] = useState(false)
 
   const navigate = useNavigate();
 
@@ -173,6 +176,7 @@ function RegistrationClient({ handleUser }) {
 
           setShowModal({ show: true, message: response.message });
           getClientById(response.clientId);
+          setEmailDuplicado(true);
         })
         .catch((error) => console.error("Erro durante a solicitação:", error));
     }
@@ -232,6 +236,11 @@ function RegistrationClient({ handleUser }) {
     setShowModal({ show: false, message: "" });
     navigate("/home");
   };
+
+  const handleCloseEmailDuplicado = () => {
+    setEmailDuplicado(false);
+  }
+
   return (
     <div className="flex justify-center bg-primary w-full items-center">
       <div className="flex justify-center p-10 h-full w-[50%]">
@@ -394,6 +403,12 @@ function RegistrationClient({ handleUser }) {
                   title={showModal.message}
                   onClose={handleCloseMensagemSucesso}
                 />
+              )}
+
+              {emailDuplicado && (
+                 <ModalRegistration
+                 titulo="O e-mail já está cadastrado. Por favor escolha outro e-mail"
+                 onClose={handleCloseEmailDuplicado}           />
               )}
 
               <div className="flex justify-center pt-4">
