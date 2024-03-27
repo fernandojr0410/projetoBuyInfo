@@ -1,0 +1,36 @@
+version: "3.8"
+
+services: 
+  buy_info_api:
+    container_name: buy_info_api
+    restart: always
+    image: node:18.12.1-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - '5000:5000'
+    command: npm start
+    env_file:
+      - .env
+    depends_on:
+      - postgres_buy_info
+
+  postgres_buy_info:
+    image: postgres:latest
+    container_name: postgres_buy_info
+    restart: always
+    environment:
+      POSTGRES_ROOT_PASSWORD: "root"
+      POSTGRES_DATABASE: "postgres_buy_info"
+      POSTGRES_USER: "fernando"
+      POSTGRES_PASSWORD: "Funcion@2300"
+    ports:
+      - "3308:5432"
+    volumes:
+      - postgres_data:/var/lib/postgres
+
+volumes:
+  postgres_data:
+
+
