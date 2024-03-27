@@ -1,16 +1,16 @@
-const conn = require("../db/mysql.js");
+const conn = require("../db/postgres.js");
 const util = require("util");
 const queryPromise = util.promisify(conn().query).bind(conn());
 
 function findAll() {
   return queryPromise(`
-    SELECT p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome as categoria, m.nome as marca, d.nome as destaque, GROUP_CONCAT(i.nome) AS imagens
+    SELECT p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome as categoria, m.nome as marca, d.nome as destaque, string_agg(i.nome, ', ') AS imagens
     FROM produto p
     LEFT JOIN categoria c ON c.id_categoria = p.categoria_id_categoria
     LEFT JOIN destaque d ON d.id_destaque = p.destaque_id_destaque
     LEFT JOIN marca m ON m.id_marca = p.marca_id_marca
     LEFT JOIN imagem_produto i ON i.produto_id_produto = p.id_produto
-    GROUP BY p.id_produto;
+    GROUP BY p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome, m.nome, d.nome;
   `);
 }
 

@@ -1,4 +1,4 @@
-const conn = require("../db/mysql.js");
+const conn = require("../db/postgres.js");
 const util = require("util");
 const queryPromise = util.promisify(conn().query).bind(conn());
 
@@ -21,6 +21,12 @@ function findAll() {
 function findById(id) {
   console.log("ID Cliente:", id);
   return queryPromise(`SELECT * FROM Cliente WHERE id_cliente = ${id}`);
+}
+
+function findByEmail(email) {
+  return queryPromise(
+    `SELECT * FROM Cliente WHERE email = '${email}'`
+  )
 }
 
 function findByEmailSenha(email, senha) {
@@ -107,8 +113,8 @@ function deleteById(ids) {
 module.exports = {
   findAll,
   findById,
+  findByEmail,
   findByEmailSenha,
-  // findByIdClienteEndereco,
   insert,
   update,
   deleteById,

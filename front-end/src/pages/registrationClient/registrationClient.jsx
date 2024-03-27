@@ -27,7 +27,7 @@ function RegistrationClient({ handleUser }) {
   const [formularioValido, setFormularioValido] = useState(false);
   const [showModal, setShowModal] = useState({ show: false, message: "" });
 
-  const [emailDuplicado, setEmailDuplicado] = useState(false)
+  const [emailDuplicado, setEmailDuplicado] = useState(false);
 
   const navigate = useNavigate();
 
@@ -176,11 +176,26 @@ function RegistrationClient({ handleUser }) {
 
           setShowModal({ show: true, message: response.message });
           getClientById(response.clientId);
-          setEmailDuplicado(true);
+          // setEmailDuplicado(true);
         })
         .catch((error) => console.error("Erro durante a solicitação:", error));
     }
   };
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/clientes/findByEmail/${emailDuplicado}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "Application/json",
+      },
+    })
+      .then((results) => results.json())
+      .then((data) => {
+        setEmailDuplicado(data);
+        console.log("emailDuplicado", data);
+      })
+      .catch((error) => console.error(error));
+  }, [emailDuplicado]);
 
   function getClientById(clientId) {
     fetch(`http://localhost:5000/clientes/findById?id=${clientId}`)
@@ -239,7 +254,7 @@ function RegistrationClient({ handleUser }) {
 
   const handleCloseEmailDuplicado = () => {
     setEmailDuplicado(false);
-  }
+  };
 
   return (
     <div className="flex justify-center bg-primary w-full items-center">
@@ -406,9 +421,10 @@ function RegistrationClient({ handleUser }) {
               )}
 
               {emailDuplicado && (
-                 <ModalRegistration
-                 titulo="O e-mail já está cadastrado. Por favor escolha outro e-mail"
-                 onClose={handleCloseEmailDuplicado}           />
+                <ModalRegistration
+                  titulo="O e-mail já está cadastrado. Por favor escolha outro e-mail"
+                  onClose={handleCloseEmailDuplicado}
+                />
               )}
 
               <div className="flex justify-center pt-4">
