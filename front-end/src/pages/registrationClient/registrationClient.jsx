@@ -182,20 +182,20 @@ function RegistrationClient({ handleUser }) {
     }
   };
 
-  useEffect(() => {
-    fetch(`http://localhost:5000/clientes/findByEmail/${emailDuplicado}`, {
-      method: "GET",
-      headers: {
-        "Content-type": "Application/json",
-      },
-    })
-      .then((results) => results.json())
-      .then((data) => {
-        setEmailDuplicado(data);
-        console.log("emailDuplicado", data);
-      })
-      .catch((error) => console.error(error));
-  }, [emailDuplicado]);
+  // useEffect(() => {
+  //   fetch(`http://localhost:5000/clientes/findByEmail/${emailDuplicado}`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-type": "Application/json",
+  //     },
+  //   })
+  //     .then((results) => results.json())
+  //     .then((data) => {
+  //       setEmailDuplicado(data);
+  //       console.log("emailDuplicado", data);
+  //     })
+  //     .catch((error) => console.error(error));
+  // }, [emailDuplicado]);
 
   function getClientById(clientId) {
     fetch(`http://localhost:5000/clientes/findById?id=${clientId}`)

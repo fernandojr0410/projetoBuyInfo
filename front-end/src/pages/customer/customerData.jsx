@@ -26,9 +26,9 @@ function CustomerData({ cliente }) {
   }
 
   useEffect(() => {
-    if (cliente && cliente.Id_Cliente) {
+    if (cliente && cliente.id_cliente) {
       fetch(
-        `http://localhost:5000/clientes/findById?id=${cliente.Id_Cliente}`,
+        `http://localhost:5000/clientes/findById?id=${cliente.id_cliente}`,
         {
           method: "GET",
           headers: {
@@ -49,9 +49,9 @@ function CustomerData({ cliente }) {
   }, [cliente]);
 
   useEffect(() => {
-    if (cliente && cliente.Id_Cliente) {
+    if (cliente && cliente.id_cliente) {
       fetch(
-        `http://localhost:5000/enderecos/findByIdClienteEndereco?Id_Cliente=${cliente.Id_Cliente}`,
+        `http://localhost:5000/enderecos/findByIdClienteEndereco?id_cliente=${cliente.id_cliente}`,
         {
           method: "GET",
           headers: {
@@ -73,23 +73,23 @@ function CustomerData({ cliente }) {
     event.preventDefault();
 
     console.log("Valor de cliente:", cliente);
-    console.log("Valor de cliente.Id_Cliente:", cliente.Id_Cliente);
+    console.log("Valor de cliente.id_cliente:", cliente.id_cliente);
 
-    if (!cliente || !cliente.Id_Cliente) {
+    if (!cliente || !cliente.id_cliente) {
       console.error(
-        "Id_Cliente está indefinido. Não é possível fazer a solicitação PUT."
+        "id_cliente está indefinido. Não é possível fazer a solicitação PUT."
       );
       return;
     }
 
     setDadosCliente((prevDadosCliente) => ({
       ...prevDadosCliente,
-      Id_Cliente: cliente.Id_Cliente,
+      id_cliente: cliente.id_cliente,
     }));
 
     const enderecoCliente = {
-      idEndereco: endereco.idEndereco ?? null,
-      Id_Cliente: dadosCliente.Id_Cliente,
+      id_endereco: endereco.id_endereco ?? null,
+      id_cliente: dadosCliente.id_cliente,
       cep: event.target.elements.cep.value,
       cidade: event.target.elements.cidade.value,
       estado: event.target.elements.estado.value,
@@ -99,7 +99,7 @@ function CustomerData({ cliente }) {
       complemento: event.target.elements.complemento.value,
     };
 
-    if (enderecoCliente.idEndereco) {
+    if (enderecoCliente.id_endereco) {
       fetch(`http://localhost:5000/enderecos/update`, {
         method: "PUT",
         headers: {
@@ -129,8 +129,8 @@ function CustomerData({ cliente }) {
         });
     }
 
-    const clienteId = cliente && cliente.Id_Cliente;
-    const dadosClienteAtualizado = { ...dadosCliente, Id_Cliente: clienteId };
+    const clienteId = cliente && cliente.id_cliente;
+    const dadosClienteAtualizado = { ...dadosCliente, id_cliente: clienteId };
     fetch(`http://localhost:5000/clientes/update/${clienteId}`, {
       method: "PUT",
       headers: {
@@ -176,10 +176,10 @@ function CustomerData({ cliente }) {
                     <input
                       type="text"
                       name="name"
-                      value={dadosCliente.Nome}
+                      value={dadosCliente.nome}
                       className="border-gray-400 border rounded-md p-2"
                       onChange={({ target }) =>
-                        handleChangeCliente(target.value, "Nome")
+                        handleChangeCliente(target.value, "nome")
                       }
                     />
                   </div>
@@ -191,10 +191,10 @@ function CustomerData({ cliente }) {
                     <input
                       type="text"
                       name="name"
-                      value={dadosCliente.Sobrenome}
+                      value={dadosCliente.sobrenome}
                       className="border-gray-400 border rounded-md p-2"
                       onChange={({ target }) =>
-                        handleChangeCliente(target.value, "Sobrenome")
+                        handleChangeCliente(target.value, "sobrenome")
                       }
                     />
                   </div>
@@ -205,11 +205,11 @@ function CustomerData({ cliente }) {
                     <input
                       type="text"
                       name="name"
-                      value={dadosCliente.CPF}
+                      value={dadosCliente.cpf}
                       className="border-gray-400 border rounded-md p-2 cursor-not-allowed"
                       disabled
                       onChange={({ target }) =>
-                        handleChangeCliente(target.value, "CPF")
+                        handleChangeCliente(target.value, "cpf")
                       }
                     />
                   </div>
@@ -220,11 +220,11 @@ function CustomerData({ cliente }) {
                     <input
                       type="text"
                       name="telefone"
-                      value={dadosCliente.Telefone}
+                      value={dadosCliente.telefone}
                       className="border-gray-400 border rounded-md p-2 cursor-pointer"
                       disabled
                       onChange={({ target }) =>
-                        handleChangeCliente(target.value, "Telefone")
+                        handleChangeCliente(target.value, "telefone")
                       }
                     />
                   </div>
@@ -235,10 +235,10 @@ function CustomerData({ cliente }) {
                   <input
                     type="text"
                     name="email"
-                    value={dadosCliente.Email}
+                    value={dadosCliente.email}
                     className="border-gray-400 border rounded-md p-2"
                     onChange={({ target }) =>
-                      handleChangeCliente(target.value, "Email")
+                      handleChangeCliente(target.value, "email")
                     }
                   />
                 </div>
@@ -247,10 +247,10 @@ function CustomerData({ cliente }) {
                   <input
                     type="text"
                     name="senha"
-                    value={dadosCliente.Senha}
+                    value={dadosCliente.senha}
                     className="border-gray-400 border rounded-md p-2"
                     onChange={({ target }) =>
-                      handleChangeCliente(target.value, "Senha")
+                      handleChangeCliente(target.value, "senha")
                     }
                   />
                 </div>

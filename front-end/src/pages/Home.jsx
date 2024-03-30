@@ -17,6 +17,7 @@ function Home() {
       },
     })
       .then((response) => response.json())
+
       .then((data) => {
         setProdutosDestaque(data);
       })
@@ -46,14 +47,11 @@ function Home() {
   );
 
   const menus = categories?.map((category) => {
-  
     return {
       ...category,
-      icon: menuCategories[category.Id_Categoria].icon ?? <VscError />,
-      
+      icon: menuCategories[category.id_categoria].icon ?? <VscError />,
     };
   });
-  
 
   return (
     <main>
@@ -85,8 +83,8 @@ function Home() {
           {menus.map((menu) => {
             return (
               <Link
-                key={menu.Id_Categoria}
-                to={`/categoria/${menu.Id_Categoria}`}
+                key={menu.id_categoria}
+                to={`/categoria/${menu.id_categoria}`}
                 className="flex flex-col text-center items-center"
               >
                 <div className="flex bg-gray-50 rounded-full p-2 w-14">
@@ -94,7 +92,7 @@ function Home() {
                 </div>
 
                 <span className="flex items-center py-2 text-white text-lg font-bold ">
-                  {menu.Nome}
+                  {menu.nome}
                 </span>
               </Link>
             );

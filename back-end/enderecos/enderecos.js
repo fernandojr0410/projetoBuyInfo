@@ -13,14 +13,14 @@ function findById(idEndereco) {
   );
 }
 
-function updateClienteEndereco(idEndereco, Id_Cliente) {
+function updateClienteEndereco(idEndereco, id_cliente) {
   console.log("update endereço:", idEndereco);
-  console.log("update cliente:", Id_Cliente);
-  const sql = `UPDATE endereco SET idEndereco = ${idEndereco} WHERE id_cliente = ${Id_Cliente}`;
+  console.log("update cliente:", id_cliente);
+  const sql = `UPDATE endereco SET idEndereco = ${idEndereco} WHERE id_cliente = ${id_cliente}`;
   return queryPromise(sql);
 }
 
-function findByIdEndereco(Id_Cliente) {
+function findByIdEndereco(id_cliente) {
   const sql = `SELECT
   endereco.idEndereco,
   endereco.cep,
@@ -33,21 +33,21 @@ function findByIdEndereco(Id_Cliente) {
 FROM
   cliente
 JOIN
-  endereco ON cliente.Id_Cliente = endereco.id_cliente
+  endereco ON cliente.id_cliente = endereco.id_cliente
 WHERE
-  cliente.Id_Cliente = ${Id_Cliente}`;
+  cliente.id_cliente = ${id_cliente}`;
   return queryPromise(sql);
 }
 
-function findByIdClienteEndereco(Id_Cliente) {
+function findByIdClienteEndereco(id_cliente) {
   const sql = `SELECT
-  cliente.Id_Cliente,
+  cliente.id_cliente,
   cliente.nome,
   cliente.sobrenome,
   cliente.cpf,
   cliente.telefone,
   cliente.email,
-  endereco.idEndereco,
+  endereco.id_endereco,
   endereco.cep,
   endereco.cidade,
   endereco.estado,
@@ -58,16 +58,16 @@ function findByIdClienteEndereco(Id_Cliente) {
 FROM
   cliente
 LEFT JOIN
-  endereco ON cliente.Id_Cliente = endereco.Id_Cliente
+  endereco ON cliente.id_cliente = endereco.id_cliente
 WHERE
-  cliente.Id_Cliente = ${Id_Cliente}`;
+  cliente.id_cliente = ${id_cliente}`;
   return queryPromise(sql);
 }
 
 function insert(dados) {
-  const { cep, cidade, estado, bairro, rua, numero, complemento, Id_Cliente } =
+  const { cep, cidade, estado, bairro, rua, numero, complemento, id_cliente } =
     dados;
-  let sql = `INSERT INTO endereco (cep, cidade, estado, bairro, rua, numero, complemento, Id_Cliente) values ('${cep}', '${cidade}', '${estado}', '${bairro}', '${rua}', ${numero}, '${complemento}', ${Id_Cliente})`;
+  let sql = `INSERT INTO endereco (cep, cidade, estado, bairro, rua, numero, complemento, id_cliente) values ('${cep}', '${cidade}', '${estado}', '${bairro}', '${rua}', ${numero}, '${complemento}', ${id_cliente})`;
   return queryPromise(sql);
 }
 
@@ -81,7 +81,7 @@ function update(dados) {
     rua,
     numero,
     complemento,
-    Id_Cliente,
+    id_cliente,
   } = dados;
   const params = [];
   let sql = "UPDATE endereco SET";
@@ -120,9 +120,9 @@ function update(dados) {
     params.push(complemento);
   }
 
-  if (Id_Cliente) {
-    sql += " Id_Cliente = ?,";
-    params.push(Id_Cliente);
+  if (id_cliente) {
+    sql += " id_cliente = ?,";
+    params.push(id_cliente);
   }
 
   params.push(idEndereco);
