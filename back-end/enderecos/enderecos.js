@@ -6,23 +6,23 @@ function findAll() {
   return queryPromise("SELECT * FROM endereco");
 }
 
-function findById(idEndereco) {
-  console.log("id do endereco", idEndereco);
+function findById(id_endereco) {
+  console.log("id do endereco", id_endereco);
   return queryPromise(
-    `SELECT * FROM endereco WHERE idEndereco = ${idEndereco}`
+    `SELECT * FROM endereco WHERE id_endereco = ${id_endereco}`
   );
 }
 
-function updateClienteEndereco(idEndereco, id_cliente) {
-  console.log("update endereço:", idEndereco);
+function updateClienteEndereco(id_endereco, id_cliente) {
+  console.log("update endereço:", id_endereco);
   console.log("update cliente:", id_cliente);
-  const sql = `UPDATE endereco SET idEndereco = ${idEndereco} WHERE id_cliente = ${id_cliente}`;
+  const sql = `UPDATE endereco SET id_endereco = ${id_endereco} WHERE id_cliente = ${id_cliente}`;
   return queryPromise(sql);
 }
 
 function findByIdEndereco(id_cliente) {
   const sql = `SELECT
-  endereco.idEndereco,
+  endereco.id_endereco,
   endereco.cep,
   endereco.cidade,
   endereco.estado,
@@ -41,26 +41,26 @@ WHERE
 
 function findByIdClienteEndereco(id_cliente) {
   const sql = `SELECT
-  cliente.id_cliente,
-  cliente.nome,
-  cliente.sobrenome,
-  cliente.cpf,
-  cliente.telefone,
-  cliente.email,
-  endereco.id_endereco,
-  endereco.cep,
-  endereco.cidade,
-  endereco.estado,
-  endereco.bairro,
-  endereco.rua,
-  endereco.numero,
-  endereco.complemento
-FROM
-  cliente
-LEFT JOIN
-  endereco ON cliente.id_cliente = endereco.id_cliente
-WHERE
-  cliente.id_cliente = ${id_cliente}`;
+    cliente.id_cliente,
+    cliente.nome,
+    cliente.sobrenome,
+    cliente.cpf,
+    cliente.telefone,
+    cliente.email,
+    endereco.id_endereco,
+    endereco.cep,
+    endereco.cidade,
+    endereco.estado,
+    endereco.bairro,
+    endereco.rua,
+    endereco.numero,
+    endereco.complemento
+  FROM
+    cliente
+  LEFT JOIN
+    endereco ON cliente.id_cliente = endereco.id_cliente
+  WHERE
+    cliente.id_cliente = ${id_cliente};`;
   return queryPromise(sql);
 }
 
@@ -73,7 +73,7 @@ function insert(dados) {
 
 function update(dados) {
   const {
-    idEndereco,
+    id_endereco,
     cep,
     cidade,
     estado,
@@ -83,60 +83,52 @@ function update(dados) {
     complemento,
     id_cliente,
   } = dados;
-  const params = [];
+
   let sql = "UPDATE endereco SET";
 
   if (cep) {
-    sql += " cep = ?,";
-    params.push(cep);
+    sql += ` cep = '${cep}',`;
   }
 
   if (cidade) {
-    sql += " cidade = ?,";
-    params.push(cidade);
+    sql += ` cidade = '${cidade}',`;
   }
 
   if (estado) {
-    sql += " estado = ?,";
-    params.push(estado);
+    sql += ` estado = '${estado}',`;
   }
 
   if (bairro) {
-    sql += " bairro = ?,";
-    params.push(bairro);
+    sql += ` bairro = '${bairro}',`;
   }
 
   if (rua) {
-    sql += " rua = ?,";
-    params.push(rua);
+    sql += ` rua = '${rua}',`;
   }
 
   if (numero) {
-    sql += " numero = ?,";
-    params.push(numero);
+    sql += ` numero = ${numero},`;
   }
+
   if (complemento) {
-    sql += " complemento = ?,";
-    params.push(complemento);
+    sql += ` complemento = '${complemento}',`;
   }
 
   if (id_cliente) {
-    sql += " id_cliente = ?,";
-    params.push(id_cliente);
+    sql += ` id_cliente = ${id_cliente},`;
   }
-
-  params.push(idEndereco);
 
   sql = sql.slice(0, -1);
 
-  sql += " WHERE idEndereco = ?";
-  return queryPromise(sql, params);
+  sql += ` WHERE id_endereco = ${id_endereco}`;
+
+  return queryPromise(sql);
 }
 
 function deleteById(ids) {
   const idsDelete = ids.toString();
   return queryPromise(
-    `DELETE FROM endereco WHERE idEndereco IN (${idsDelete})`
+    `DELETE FROM endereco WHERE id_endereco IN (${idsDelete})`
   );
 }
 

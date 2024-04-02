@@ -230,6 +230,7 @@ function Product({ handleAdicionarCarrinho }) {
 
               <div className="flex flex-col">
                 <span className="text-primary text-3xl">
+                  R${" "}
                   {produto[0]?.preco.toLocaleString("pt-BR", {
                     style: "currency",
                     currency: "BRL",
@@ -251,14 +252,6 @@ function Product({ handleAdicionarCarrinho }) {
               >
                 ver mais opções de pagamento
               </div>
-              {/* {abrirModal && (
-                <Modal
-                  titulo="Mais formas de pagamento"
-                  isOpen={abrirModal}
-                  onClose={closeModal}
-                />
-              )} */}
-
               <Link to="/carrinho">
                 <button
                   onClick={() => handleAdicionarCarrinho(produto[0])}

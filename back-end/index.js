@@ -393,7 +393,6 @@ app.get("/enderecos/findByIdEndereco", (req, res) => {
 
 app.get("/enderecos/findByIdClienteEndereco", (req, res) => {
   const { id_cliente } = req.query;
-  
   enderecos
     .findByIdClienteEndereco(id_cliente)
     .then((data) => {
@@ -410,11 +409,11 @@ app.post("/enderecos/insert", (req, res) => {
   enderecos
     .insert(req.body)
     .then((data) => {
-      const idEndereco = data.insertId;
-      console.log(idEndereco);
+      const id_endereco = data.insertId;
+      console.log(id_endereco);
       res
         .status(200)
-        .json({ message: "Endereço cadastrado com sucesso!", idEndereco });
+        .json({ message: "Endereço cadastrado com sucesso!", id_endereco });
     })
     .catch((error) => {
       console.error(error);

@@ -95,13 +95,11 @@ function Cart({ handleItemsCart, cliente, handleUser }) {
   );
 
   const finalizarCompra = () => {
-    // Verifica se o usuário está logado
     if (cliente) {
       if (carrinho.length > 0) {
-        navigate(`/finalizar-pedido`, { state: { carrinho } });
+        navigate(`/finalizar-pedido`, { state: { carrinho, valorTotal } });
       }
     } else {
-      // Redireciona para a página de login se o usuário não estiver logado
       navigate("/login-cliente");
     }
   };

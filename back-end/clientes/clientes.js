@@ -59,52 +59,39 @@ function update(id_cliente, dados) {
     email,
     senha,
   } = dados;
-  const params = [];
-let sql = "UPDATE cliente SET";
 
-if (nome) {
-  sql += " nome = ?,";
-  params.push(nome)
+  let sql = "UPDATE cliente SET";
+
+  if (nome) {
+    sql += ` nome = '${nome}',`;
+  }
+
+  if (sobrenome) {
+    sql += ` sobrenome = '${sobrenome}',`;
+  }
+
+  if (cpf) {
+    sql += ` cpf = '${cpf}',`;
+  }
+
+  if (telefone) {
+    sql += ` telefone = '${telefone}',`;
+  }
+
+  if (email) {
+    sql += ` email = '${email}',`;
+  }
+
+  if (senha) {
+    sql += ` senha = '${senha}',`;
+  }
+
+  sql = sql.slice(0, -1);
+
+  sql += ` WHERE id_cliente = ${id_cliente}`;
+
+  return queryPromiseReturn(sql);
 }
-
-if (sobrenome) {
-  sql += " sobrenome = ?,";
-  params.push(sobrenome)
-}
-
-if (cpf) {
-  sql += " cpf = ?,";
-  params.push(cpf)
-}
-
-if (telefone) {
-  sql += " telefone = ?,"
-  params.push(telefone)
-}
-
-if (email) {
-  sql += " email = ?,"
-  params.push(email)
-}
-
-if (senha) {
-  sql += " senha = ?,"
-  params.push(senha)
-}
-if (id_cliente) {
-  sql += " id_cliente = ?,";
-  params.push(id_cliente);
-}
-
-sql = sql.slice(0, -1);
-
-sql += " WHERE id_cliente = ?";
-params.push(id_cliente);
-
-console.log("camposCliente", id_cliente)
-
-return queryPromise(sql, params);
-} 
 
 function deleteById(ids) {
   const idsDelete = ids.toString();
