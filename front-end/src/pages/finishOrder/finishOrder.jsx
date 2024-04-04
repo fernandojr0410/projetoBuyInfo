@@ -15,7 +15,8 @@ function FinishOrder({ cliente }) {
   const location = useLocation();
   const { carrinho } = location.state;
   const [tipoEntrega, setTipoEntrega] = useState("normal");
-  const [frete, setFrete] = useState(30); // Frete padrão de R$ 30,00
+  const [frete, setFrete] = useState(30);
+
   const valorProduto = carrinho.reduce(
     (total, produto) => total + parseFloat(produto.preco),
     0
@@ -277,7 +278,7 @@ function FinishOrder({ cliente }) {
               <ModalRegistration
                 titulo="Produto comprado com sucesso!"
                 onClose={() => setShowModal(false)}
-                link="home"
+                link="/edicao-cadastro/meus-pedidos/:id"
               />
             )}
           </div>
@@ -378,17 +379,6 @@ function FinishOrder({ cliente }) {
               </div>
             </div>
           </div>
-          {/* {carrinho.map((produto) => (
-            <div key={produto.id_produto}>
-              <p>{produto.valorTotal}</p>
-              <p>
-                {produto.preco.toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                })}
-              </p>
-            </div>
-          ))} */}
           <div className="flex flex-col gap-6 bg-white p-4 justify-between w-full h-full border border-solid border-gray-500 rounded-md">
             <div className="flex items-center gap-3 font-bold text-primary">
               <div className="text-2xl">
