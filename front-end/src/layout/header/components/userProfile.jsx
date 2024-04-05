@@ -18,14 +18,14 @@ function UserProfile({ cliente, handleUser }) {
       onMouseOut={() => setShowDropDownUser(false)}
     >
       <BiUserCircle className="h-6 w-6" />
-      <span>Olá, {cliente.Nome}</span>
+      <span>Olá, {cliente.nome}</span>
 
       {showDropDownUser && (
         <ul className="absolute top-6 right-0 w-48 p-4 bg-white rounded shadow border border-gray-300">
           <>
             <li>
               <Link
-                to={`/edicao-cadastro/meus-pedidos/${cliente.Id_Cliente}`}
+                to={`/edicao-cadastro/meus-pedidos/${cliente.id_cliente}`}
                 className="flex flex-col gap-6 py-1"
               >
                 <div className="flex items-center gap-2">
@@ -35,7 +35,7 @@ function UserProfile({ cliente, handleUser }) {
               </Link>
 
               <Link
-                to={`/edicao-cadastro/meus-dados/${cliente.Id_Cliente}`}
+                to={`/edicao-cadastro/meus-dados/${cliente.id_cliente}`}
                 className="flex flex-col gap-6 py-1"
               >
                 <div className="flex items-center gap-2">

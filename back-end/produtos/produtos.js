@@ -1,29 +1,29 @@
-const conn = require("../db/mysql.js");
+const conn = require("../db/postgres.js");
 const util = require("util");
 const queryPromise = util.promisify(conn().query).bind(conn());
 
 function findAll() {
-  return queryPromise(`
-    SELECT p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome as categoria, m.nome as marca, d.nome as destaque, GROUP_CONCAT(i.nome) AS imagens
+return queryPromise(`
+    SELECT p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome as categoria, m.nome as marca, d.nome as destaque, array_to_string(array_agg(i.nome), ', ') AS imagens
     FROM produto p
     LEFT JOIN categoria c ON c.id_categoria = p.categoria_id_categoria
     LEFT JOIN destaque d ON d.id_destaque = p.destaque_id_destaque
     LEFT JOIN marca m ON m.id_marca = p.marca_id_marca
     LEFT JOIN imagem_produto i ON i.produto_id_produto = p.id_produto
-    GROUP BY p.id_produto;
+    GROUP BY p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome, m.nome, d.nome;
   `);
 }
 
 function findById(id) {
   return queryPromise(`
-    SELECT p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome as categoria, m.nome as marca, d.nome as destaque, GROUP_CONCAT(i.nome) AS imagens
+    SELECT p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome as categoria, m.nome as marca, d.nome as destaque, array_to_string(array_agg(i.nome), ', ') AS imagens
     FROM produto p
     LEFT JOIN categoria c ON c.id_categoria = p.categoria_id_categoria
     LEFT JOIN destaque d ON d.id_destaque = p.destaque_id_destaque
     LEFT JOIN marca m ON m.id_marca = p.marca_id_marca
     LEFT JOIN imagem_produto i ON i.produto_id_produto = p.id_produto
     WHERE p.id_produto = ${id}
-    GROUP BY p.id_produto;
+    GROUP BY p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome, m.nome, d.nome;
     
   `);
 }
@@ -46,7 +46,7 @@ function findAllDestaques() {
     WHEN p.destaque_id_destaque = 3 THEN 'Mais vendidos' 
     ELSE d.nome 
   END AS destaque, 
-  GROUP_CONCAT(i.nome) AS imagens 
+  array_to_string(array_agg(i.nome), ', ') AS imagens 
 FROM 
   produto p 
   LEFT JOIN categoria c ON c.id_categoria = p.categoria_id_categoria 
@@ -56,20 +56,21 @@ FROM
 WHERE 
   p.destaque_id_destaque IN (1, 2, 3) 
 GROUP BY 
-  p.id_produto;
+  p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome, m.nome, p.destaque_id_destaque, destaque;
   `);
 }
 
 function findByCategory(id) {
   return queryPromise(`
-    SELECT p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome as categoria, m.nome as marca, d.nome as destaque, GROUP_CONCAT(i.nome) AS imagens
+    SELECT p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome as categoria, m.nome as marca, d.nome as destaque, array_to_string(array_agg(i.nome), ', ') AS imagens
     FROM produto p
     LEFT JOIN categoria c ON c.id_categoria = p.categoria_id_categoria
     LEFT JOIN destaque d ON d.id_destaque = p.destaque_id_destaque
     LEFT JOIN marca m ON m.id_marca = p.marca_id_marca
     LEFT JOIN imagem_produto i ON i.produto_id_produto = p.id_produto
     WHERE p.categoria_id_categoria = ${id}
-    GROUP BY p.id_produto;
+    GROUP BY
+    p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome, m.nome, p.destaque_id_destaque, destaque;
   `);
 }
 
@@ -90,7 +91,7 @@ function insert(dados) {
   console.log("dados", dados);
   // return "";
 
-  let sql = `INSERT INTO Produto 
+  let sql = `INSERT INTO produto 
   (nome, descricao, preco, ativo, categoria_id_categoria, marca_id_marca, destaque_id_destaque)VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
   const params = [
@@ -119,7 +120,7 @@ function update(dados) {
     destaque_id_destaque,
   } = dados;
   const params = [];
-  let sql = "UPDATE Produto SET";
+  let sql = "UPDATE produto SET";
 
   if (nome) {
     sql += " nome = ?,";
@@ -165,14 +166,14 @@ function update(dados) {
 
   sql = sql.slice(0, -1);
   console.log(sql);
-  sql += " WHERE Id_Produto = ?";
+  sql += " WHERE id_produto = ?";
   params.push(id);
   return queryPromise(sql, params);
 }
 
 function deleteById(ids) {
   const idsDelete = ids.toString();
-  return queryPromise(`DELETE FROM Produto WHERE Id_Produto IN (${idsDelete})`);
+  return queryPromise(`DELETE FROM produto WHERE id_produto IN (${idsDelete})`);
 }
 
 module.exports = {

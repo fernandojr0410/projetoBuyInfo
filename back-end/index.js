@@ -1,11 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 require("dotenv").config();
-// const jwt = require("jsonwebtoken");
 
-const cors = require("cors"); // cors
+const cors = require("cors"); 
 
-const conn = require("./db/mysql.js");
+const conn = require("./db/postgres.js");
 const produtos = require("./produtos/produtos.js");
 const categorias = require("./categorias/categorias.js");
 const clientes = require("./clientes/clientes.js");
@@ -23,54 +22,19 @@ app.use(cors());
 const PORT = 5000;
 const HOST = "http://localhost";
 
-// function verificarToken(req, res, next) {
-//   const token = req.headers["x-access-token"];
-
-//   if (!token) {
-//     return res
-//       .status(401)
-//       .json({ auth: false, mensagem: "Token não fornecido." });
-//   }
-
-//   jwt.verify(token, process.env.SECRET, function (err, decoded) {
-//     if (err) {
-//       console.error("Erro na verificação do token:", err);
-//       return res
-//         .status(500)
-//         .json({ auth: false, mensagem: "Falha ao autenticar token." });
-//     }
-
-//     console.log("Token verificado com sucesso:", decoded);
-
-//     req.userID = decoded.id;
-//     next();
-//   });
-// }
-
-// app.post("/login", (req, res, next) => {
-//   if (req.body.user === "fernando" && req.body.pwd === "300") {
-//     const id = 1;
-//     const token = jwt.sign({ id }, process.env.SECRET, {
-//       expiresIn: 1200,
-//     });
-//     return res.json({ auth: true, token: token });
-//   }
-//   res.status(500).json({ mensagem: "Login Inválido!" });
-// });
-
 app.get("/produtos/destaques", (req, res) => {
   produtos
     .findAllDestaques()
     .then((results) => {
       res.send(
-        results.map((produto) => {
+        results.rows.map((produto) => {
           return {
             ...produto,
             imagens:
               produto.imagens &&
               produto.imagens
                 .split(",")
-                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`).sort(),
+                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(' ','')).sort(),
           };
         })
       );
@@ -84,15 +48,16 @@ app.get("/produtos/categoria", (req, res) => {
   produtos
     .findByCategory(req.query.id)
     .then((results) => {
+      console.log(results)
       res.send(
-        results.map((produto) => {
+        results.rows.map((produto) => {
           return {
             ...produto,
             imagens:
               produto.imagens &&
               produto.imagens
                 .split(",")
-                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`).sort(),
+                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(' ','')).sort(),
           };
         })
       );
@@ -108,14 +73,14 @@ app.get("/produtos/findAll", (req, res) => {
     .findAll()
     .then((results) => {
       res.send(
-        results.map((produto) => {
+        results.rows.map((produto) => {
           return {
             ...produto,
             imagens:
               produto.imagens &&
               produto.imagens
                 .split(",")
-                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`).sort(),
+                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(' ','')).sort(),
           };
         })
       );
@@ -130,14 +95,14 @@ app.get("/produtos/findById", (req, res) => {
     .findById(req.query.id)
     .then((results) => {
       res.send(
-        results.map((produto) => {
+        results.rows.map((produto) => {
           return {
             ...produto,
             imagens:
               produto.imagens &&
               produto.imagens
                 .split(",")
-                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`).sort(),
+                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(' ','')).sort(),
           };
         })
       );
@@ -190,7 +155,7 @@ app.get("/categorias/findAll", (req, res) => {
   categorias
     .findAll()
     .then((results) => {
-      res.send(results);
+      res.send(results.rows);
     })
     .catch((error) => {
       console.error(error);
@@ -201,7 +166,7 @@ app.get("/categorias/findById", (req, res) => {
   categorias
     .findById(req.query.id)
     .then((results) => {
-      res.send(results);
+      res.send(results.rows);
     })
     .catch((error) => {
       console.error(error);
@@ -249,7 +214,7 @@ app.get("/destaques/findAll", (req, res) => {
   destaques
     .findAll()
     .then((results) => {
-      res.send(results);
+      res.send(results.rows);
     })
     .catch((error) => {
       console.error(error);
@@ -260,7 +225,7 @@ app.get("/destaques/findById", (req, res) => {
   destaques
     .findById(req.query.id)
     .then((results) => {
-      res.send(results);
+      res.send(results.rows);
     })
     .catch((error) => {
       console.error(error);
@@ -308,7 +273,7 @@ app.get("/clientes/findAll", (req, res) => {
   clientes
     .findAll()
     .then((results) => {
-      res.send(results);
+      res.send(results.rows);
     })
     .catch((error) => {
       console.error(error);
@@ -321,19 +286,28 @@ app.get("/clientes/findById", (req, res) => {
   clientes
     .findById(id)
     .then((results) => {
-      res.send(results);
+      res.send(results.rows);
     })
     .catch((error) => {
       console.error(error);
     });
 });
 
+app.get("/clientes/findByEmail", (req, res) => {
+  clientes
+  .findByEmail(req.query.email)
+  .then((results) => {
+    res.send(results.rows)
+  })
+  .catch((error) => console.error(error))
+})
+
 app.get("/clientes/findByEmailSenha", (req, res) => {
   clientes
     .findByEmailSenha(req.query.email, req.query.senha)
     .then((results) => {
       res.setHeader("Cache-Control", "no-store");
-      res.send(results);
+      res.send(results.rows);
     })
     .catch((error) => {
       console.error(error);
@@ -353,10 +327,10 @@ app.post("/clientes/insert", (req, res) => {
 });
 
 app.put("/clientes/update/:id", (req, res) => {
-  const Id_Cliente = req.params.id
+  const id_cliente = req.params.id
   const dadosCliente = req.body;
   clientes
-  .update(Id_Cliente, dadosCliente)
+  .update(id_cliente, dadosCliente)
   .then(() => {
     res.status(200).send({
       message: "Cliente atualizado com sucesso!"
@@ -382,7 +356,7 @@ app.get("/enderecos/findAll", (req, res) => {
   enderecos
     .findAll()
     .then((results) => {
-      res.send(results);
+      res.send(results.rows);
     })
     .catch((error) => {
       console.error(error);
@@ -404,12 +378,12 @@ app.get("/enderecos/findById", (req, res) => {
 });
 
 app.get("/enderecos/findByIdEndereco", (req, res) => {
-  const { Id_Cliente } = req.query;
-  console.log("id cliente filtrado:", Id_Cliente);
+  const { id_cliente } = req.query;
+  console.log("id cliente filtrado:", id_cliente);
   enderecos
-    .findByIdClienteEndereco(Id_Cliente)
+    .findByIdClienteEndereco(id_cliente)
     .then((data) => {
-      res.status(200).json(data);
+      res.status(200).json(data.rows);
     })
     .catch((error) => {
       console.error("erro no back:", error);
@@ -418,13 +392,12 @@ app.get("/enderecos/findByIdEndereco", (req, res) => {
 });
 
 app.get("/enderecos/findByIdClienteEndereco", (req, res) => {
-  const { Id_Cliente } = req.query;
-  
+  const { id_cliente } = req.query;
   enderecos
-    .findByIdClienteEndereco(Id_Cliente)
+    .findByIdClienteEndereco(id_cliente)
     .then((data) => {
       console.log("id cliente filtrado:", data);
-      res.status(200).json(data);
+      res.status(200).json(data.rows);
     })
     .catch((error) => {
       console.error("erro no back:", error);
@@ -436,11 +409,11 @@ app.post("/enderecos/insert", (req, res) => {
   enderecos
     .insert(req.body)
     .then((data) => {
-      const idEndereco = data.insertId;
-      console.log(idEndereco);
+      const id_endereco = data.insertId;
+      console.log(id_endereco);
       res
         .status(200)
-        .json({ message: "Endereço cadastrado com sucesso!", idEndereco });
+        .json({ message: "Endereço cadastrado com sucesso!", id_endereco });
     })
     .catch((error) => {
       console.error(error);
@@ -477,7 +450,7 @@ app.get("/marcas/findAll", (req, res) => {
   marcas
     .findAll()
     .then((results) => {
-      res.send(results);
+      res.send(results.rows);
     })
     .catch((error) => {
       console.error(error);
@@ -488,7 +461,7 @@ app.get("/marcas/findById", (req, res) => {
   marcas
     .findById(req.query.id)
     .then((results) => {
-      res.send(results);
+      res.send(results.rows);
     })
     .catch((error) => {
       console.error(error);

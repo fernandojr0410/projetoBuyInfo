@@ -1,25 +1,25 @@
-const conn = require("../db/mysql.js");
+const conn = require("../db/postgres.js");
 const util = require("util");
 const queryPromise = util.promisify(conn().query).bind(conn());
 
 function findAll() {
-  return queryPromise("SELECT * FROM Categoria");
+  return queryPromise("SELECT * FROM categoria")
 }
 
 function findById(id) {
-  return queryPromise(`SELECT * FROM Categoria WHERE Id_Categoria = ${id}`);
+  return queryPromise(`SELECT * FROM categoria WHERE id_categoria = ${id}`);
 }
 
 function insert(dados) {
   const { nome, ativo, imagem } = dados;
-  let sql = `INSERT INTO Categoria (Nome, Ativo, Imagem) values ('${nome}', ${ativo}, '${imagem}')`;
+  let sql = `INSERT INTO categoria (nome, ativo, imagem) values ('${nome}', ${ativo}, '${imagem}')`;
   return queryPromise(sql);
 }
 
 function update(dados) {
   const { id, nome, ativo, imagem } = dados;
   const params = [];
-  let sql = "UPDATE Categoria SET";
+  let sql = "UPDATE categoria SET";
 
   if (nome) {
     sql += " nome = ?,";
@@ -32,7 +32,7 @@ function update(dados) {
   }
 
   if (imagem) {
-    sql += " Imagem = ?,";
+    sql += " imagem = ?,";
     params.push(imagem);
   }
 
@@ -40,14 +40,14 @@ function update(dados) {
 
   sql = sql.slice(0, -1);
 
-  sql += " WHERE Id_Categoria = ?";
+  sql += " WHERE id_categoria = ?";
   return queryPromise(sql, params);
 }
 
 function deleteById(ids) {
   const idsDelete = ids.toString();
   return queryPromise(
-    `DELETE FROM Categoria WHERE Id_Categoria IN (${idsDelete})`
+    `DELETE FROM categoria WHERE id_categoria IN (${idsDelete})`
   );
 }
 

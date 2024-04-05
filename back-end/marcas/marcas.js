@@ -1,4 +1,4 @@
-const conn = require("../db/mysql.js");
+const conn = require("../db/postgres.js");
 const util = require("util");
 const queryPromise = util.promisify(conn().query).bind(conn());
 

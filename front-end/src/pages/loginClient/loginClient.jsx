@@ -56,9 +56,6 @@ function LoginClient({ handleUser }) {
       });
   };
 
-  console.log("email", email);
-  console.log("senha", senha);
-
   return (
     <div className="flex justify-center bg-primary w-full items-center">
       <div className="flex justify-center p-10 w-full">

@@ -29,7 +29,7 @@ export const menuCategories = {
   8: {
     icon: <BsFillProjectorFill />,
   },
-  18: {
+  9: {
     icon: <GiProcessor />,
   },
 };

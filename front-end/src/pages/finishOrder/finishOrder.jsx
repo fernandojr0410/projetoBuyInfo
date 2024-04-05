@@ -15,13 +15,21 @@ function FinishOrder({ cliente }) {
   const location = useLocation();
   const { carrinho } = location.state;
   const [tipoEntrega, setTipoEntrega] = useState("normal");
+  const [frete, setFrete] = useState(30);
+
   const valorProduto = carrinho.reduce(
-    (total, produto) => total + produto.preco,
+    (total, produto) => total + parseFloat(produto.preco),
     0
   );
-  const valorFrete = tipoEntrega === "expressa" ? 30.0 : 0;
 
-  const valorTotal = valorProduto + valorFrete;
+  let valorTotal = parseFloat(location.state.valorTotal);
+  if (tipoEntrega === "expressa") {
+    valorTotal += frete;
+  }
+  // const valorTotalFrete =
+  //   tipoEntrega === "normal" ? valorProduto : valorProduto + frete;
+
+  // const { valorTotal } = location.state;
 
   const [endereco, setEndereco] = useState([]);
 
@@ -39,9 +47,9 @@ function FinishOrder({ cliente }) {
   }, [cliente]);
 
   useEffect(() => {
-    if (registroCliente && registroCliente.Id_Cliente) {
+    if (registroCliente && registroCliente.id_cliente) {
       fetch(
-        `http://localhost:5000/enderecos/findByIdClienteEndereco?Id_Cliente=${registroCliente.Id_Cliente}`
+        `http://localhost:5000/enderecos/findByIdClienteEndereco?id_cliente=${registroCliente.id_cliente}`
       )
         .then((response) => {
           if (!response.ok) {
@@ -53,7 +61,7 @@ function FinishOrder({ cliente }) {
           if (data && data.length > 0) {
             const enderecoData = {
               Cliente: {
-                Id_Cliente: registroCliente.Id_Cliente,
+                id_cliente: registroCliente.id_cliente,
                 Nome: data[0].nome,
                 Sobrenome: data[0].sobrenome,
                 CPF: data[0].cpf,
@@ -152,7 +160,7 @@ function FinishOrder({ cliente }) {
                 <span className="text-green-400">Grátis</span>
               </div>
               <div>
-                <span>{`R$ ${valorFrete.toFixed(2)}`}</span>
+                <span>{`R$ 30,00`}</span>
               </div>
             </div>
 
@@ -167,7 +175,6 @@ function FinishOrder({ cliente }) {
           </div>
 
           <div className="flex flex-col p-4 bg-white rounded-md border border-solid border-gray-500">
-            {/* {pagamento ? ( */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
                 <div className="text-2xl">
@@ -185,8 +192,6 @@ function FinishOrder({ cliente }) {
                       name="numeroCartao"
                       placeholder="Número do Cartão"
                       className="border border-solid border-gray-500 px-2 text-sm h-10 w-[40%] rounded-md"
-                      // onChange={handleInputChange}
-                      // value={pagamento.numeroCartao}
                     />
                   </div>
                   <div className="flex w-full">
@@ -195,8 +200,6 @@ function FinishOrder({ cliente }) {
                       name="nomeTitular"
                       placeholder="Nome do titular (como gravado no Cartão)"
                       className="border border-solid border-gray-500 px-2 text-sm h-10 w-[40%] rounded-md"
-                      // onChange={handleInputChange}
-                      // value={pagamento.nomeTitular}
                     />
                   </div>
                   <div className="flex flex-col gap-2">
@@ -210,8 +213,6 @@ function FinishOrder({ cliente }) {
                           name="mesValidade"
                           placeholder="Mês"
                           className="border border-solid border-gray-500 px-2 text-sm h-10 w-36 rounded-md"
-                          // onChange={handleInputChange}
-                          // value={pagamento.mesValidade}
                         />
                       </div>
                       <div>
@@ -220,8 +221,6 @@ function FinishOrder({ cliente }) {
                           name="anoValidade"
                           placeholder="Ano"
                           className="border border-solid border-gray-500 px-2 text-sm h-10 w-36 rounded-md"
-                          // onChange={handleInputChange}
-                          // value={pagamento.anoValidade}
                         />
                       </div>
                     </div>
@@ -237,8 +236,6 @@ function FinishOrder({ cliente }) {
                       name="codigoCartao"
                       placeholder="cvv"
                       className="border border-solid border-gray-500 px-2 text-sm h-10 w-[40%] rounded-md"
-                      // onChange={handleInputChange}
-                      // value={pagamento.codigoCartao}
                     />
                   </div>
 
@@ -246,7 +243,6 @@ function FinishOrder({ cliente }) {
                     <select
                       name="parcelamento"
                       className="border border-solid border-gray-500 px-2 text-sm h-10 w-[40%] rounded-md"
-                      // onChange={handleInputChange}
                       defaultValue={"DEFAULT"}
                     >
                       <option value="DEFAULT" disabled>
@@ -277,13 +273,12 @@ function FinishOrder({ cliente }) {
                   </span>
                 </button>
               </div>
-              {/* {erro && <div className="text-red-500 mt-2">{erro}</div>} */}
             </div>
             {showModal && (
               <ModalRegistration
                 titulo="Produto comprado com sucesso!"
                 onClose={() => setShowModal(false)}
-                link="home"
+                link="/edicao-cadastro/meus-pedidos/:id"
               />
             )}
           </div>
@@ -329,11 +324,12 @@ function FinishOrder({ cliente }) {
                               name="endereco"
                               className="cursor-pointer mb-2"
                             />
-                            {endereco.Cliente && endereco.Cliente.Enderecos && endereco.Cliente.Enderecos.cep
+                            {endereco.Cliente &&
+                            endereco.Cliente.Enderecos &&
+                            endereco.Cliente.Enderecos.cep
                               ? `${endereco.Cliente.Enderecos.rua} - CEP ${endereco.Cliente.Enderecos.cep} - ${endereco.Cliente.Enderecos.bairro} - ${endereco.Cliente.Enderecos.cidade} - ${endereco.Cliente.Enderecos.estado}`
                               : "Você não possui endereço cadastrado."}
                           </span>
-                          {/* <div className="flex border border-gray-400"></div> */}
                           <div className="flex flex-col items-center gap-4">
                             <div>
                               <span className="text-gray-400 text-sm">
@@ -347,7 +343,7 @@ function FinishOrder({ cliente }) {
                               >
                                 <Link
                                   to={{
-                                    pathname: `/edicao-cadastro/meus-dados/${cliente.Id_Cliente}`,
+                                    pathname: `/edicao-cadastro/meus-dados/${cliente.id_cliente}`,
                                     state: { cliente: cliente },
                                   }}
                                   className="text-white"
@@ -364,13 +360,10 @@ function FinishOrder({ cliente }) {
                           <button
                             type="button"
                             className="flex items-center justify-center bg-primary w-full h-10 rounded-md"
-                            // onClick={() => {
-                            //   // Adicione a lógica de redirecionamento para a página de cadastro de endereço
-                            // }}
                           >
                             <Link
                               to={{
-                                pathname: `/edicao-cadastro/meus-dados/${cliente.Id_Cliente}`,
+                                pathname: `/edicao-cadastro/meus-dados/${cliente.id_cliente}`,
                                 state: { cliente: cliente },
                               }}
                               className="text-white"
@@ -383,7 +376,6 @@ function FinishOrder({ cliente }) {
                     </div>
                   </div>
                 </div>
-                {/* ))} */}
               </div>
             </div>
           </div>
@@ -395,13 +387,6 @@ function FinishOrder({ cliente }) {
               <div>
                 <span>Resumo do pedido</span>
               </div>
-
-              {/* <div className="flex flex-col gap-4 text-xs">
-                 <div className="flex justify-between">
-                   <span className="text-gray-500">Frete</span>
-                  <span className="text-green-400">Frete Grátis</span>
-                </div> 
-              </div> */}
             </div>
             <div className="flex gap-2 text-primary font-bold">
               <span>Valor total:</span>

@@ -1,4 +1,4 @@
-const conn = require("../db/mysql.js");
+const conn = require("../db/postgres.js");
 const util = require("util");
 const queryPromise = util.promisify(conn().query).bind(conn());
 
@@ -15,27 +15,34 @@ function queryPromiseReturn(sql) {
 }
 
 function findAll() {
-  return queryPromise("SELECT * FROM Cliente");
+  return queryPromise("SELECT * FROM cliente");
 }
 
 function findById(id) {
-  console.log("ID Cliente:", id);
-  return queryPromise(`SELECT * FROM Cliente WHERE id_cliente = ${id}`);
+  console.log("ID cliente:", id);
+  return queryPromise(`SELECT * FROM cliente WHERE id_cliente = ${id}`);
+}
+
+function findByEmail(email) {
+  return queryPromise(
+    `SELECT * FROM cliente WHERE email = '${email}'`
+  )
 }
 
 function findByEmailSenha(email, senha) {
   return queryPromise(
-    `SELECT * FROM Cliente WHERE email = '${email}' AND senha = '${senha}'`
+    `SELECT * FROM cliente WHERE email = '${email}' AND senha = '${senha}'`
   );
 }
 
 function insert(dados) {
   const { nome, sobrenome, cpf, telefone, email, senha } = dados;
-  let sql = `INSERT INTO cliente (nome, sobrenome, cpf, telefone, email, senha) values ('${nome}', '${sobrenome}', '${cpf}', '${telefone}', '${email}', '${senha}')`;
+  let sql = `INSERT INTO cliente (nome, sobrenome, cpf, telefone, email, senha) values ('${nome}', '${sobrenome}', '${cpf}', '${telefone}', '${email}', '${senha}') RETURNING id_cliente`;
   return queryPromiseReturn(sql)
     .then((result) => {
-      console.log("Registro inserido com sucesso. ID:", result.insertId);
-      return result.insertId;
+      console.log("result", JSON.stringify(result))
+      console.log("Registro inserido com sucesso. ID:", result.rows[0].id_cliente);
+      return result.rows[0].id_cliente;
     })
     .catch((error) => {
       console.error("Erro ao inserir registro:", error);
@@ -43,72 +50,59 @@ function insert(dados) {
     });
 }
 
-function update(Id_Cliente, dados) {
+function update(id_cliente, dados) {
   const {
-    Nome,
-    Sobrenome,
-    CPF,
-    Telefone,
-    Email,
-    Senha,
+    nome,
+    sobrenome,
+    cpf,
+    telefone,
+    email,
+    senha,
   } = dados;
-  const params = [];
-let sql = "UPDATE Cliente SET";
 
-if (Nome) {
-  sql += " Nome = ?,";
-  params.push(Nome)
+  let sql = "UPDATE cliente SET";
+
+  if (nome) {
+    sql += ` nome = '${nome}',`;
+  }
+
+  if (sobrenome) {
+    sql += ` sobrenome = '${sobrenome}',`;
+  }
+
+  if (cpf) {
+    sql += ` cpf = '${cpf}',`;
+  }
+
+  if (telefone) {
+    sql += ` telefone = '${telefone}',`;
+  }
+
+  if (email) {
+    sql += ` email = '${email}',`;
+  }
+
+  if (senha) {
+    sql += ` senha = '${senha}',`;
+  }
+
+  sql = sql.slice(0, -1);
+
+  sql += ` WHERE id_cliente = ${id_cliente}`;
+
+  return queryPromiseReturn(sql);
 }
-
-if (Sobrenome) {
-  sql += " Sobrenome = ?,";
-  params.push(Sobrenome)
-}
-
-if (CPF) {
-  sql += " CPF = ?,";
-  params.push(CPF)
-}
-
-if (Telefone) {
-  sql += " Telefone = ?,"
-  params.push(Telefone)
-}
-
-if (Email) {
-  sql += " Email = ?,"
-  params.push(Email)
-}
-
-if (Senha) {
-  sql += " Senha = ?,"
-  params.push(Senha)
-}
-if (Id_Cliente) {
-  sql += " Id_Cliente = ?,";
-  params.push(Id_Cliente);
-}
-
-sql = sql.slice(0, -1);
-
-sql += " WHERE Id_Cliente = ?";
-params.push(Id_Cliente);
-
-console.log("camposCliete", Id_Cliente)
-
-return queryPromise(sql, params);
-} 
 
 function deleteById(ids) {
   const idsDelete = ids.toString();
-  return queryPromise(`DELETE FROM Cliente WHERE Id_Cliente IN (${idsDelete})`);
+  return queryPromise(`DELETE FROM cliente WHERE id_cliente IN (${idsDelete})`);
 }
 
 module.exports = {
   findAll,
   findById,
+  findByEmail,
   findByEmailSenha,
-  // findByIdClienteEndereco,
   insert,
   update,
   deleteById,
