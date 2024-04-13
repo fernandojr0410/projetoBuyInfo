@@ -6,6 +6,8 @@ const cors = require("cors");
 
 const conn = require("./db/postgres.js");
 const produtos = require("./produtos/produtos.js");
+const pedido = require("./pedido/pedido.js")
+const vendedor = require("./vendedor/vendedor.js")
 const categorias = require("./categorias/categorias.js");
 const clientes = require("./clientes/clientes.js");
 const enderecos = require("./enderecos/enderecos.js");
@@ -44,6 +46,55 @@ app.get("/produtos/destaques", (req, res) => {
     });
 });
 
+// Pedido
+app.get("/pedido/findAllPedido", (req, res) => {
+  pedido
+  .findAllPedido()
+  .then((results) => {
+    res.send(results)
+  })
+  .catch((error) => console.error(error))
+})
+
+app.get("/pedido/findByIdPedido", (req, res) => {
+  const idpedido = req.query.idpedido
+  pedido
+  .findAllPedido(idpedido)
+  .then((results) => {
+    res.send(results.rows)
+  })
+  .catch((error) => console.error("Erro ao filtrar pedido",error))
+})
+
+app.get("/pedido/findAllPedidoByClientId", (req, res) => {
+  const id_cliente = req.query.id_cliente
+  const idpedido = req.query.idpedido
+  pedido
+    .findAllPedidoByClientId(idpedido, id_cliente)
+    .then((results) => {
+      res.send(results.rows);
+    })
+    .catch((error) => console.error(error));
+});
+
+app.post("/pedido/insertOrderProductClient", (req, res) => {
+  pedido
+    .insertOrderProductClient(req.body)
+    .then(() => {
+      res.send("Pedido inserido com sucesso!")
+    })
+    .catch((error) => console.error(error));
+});
+
+app.delete("/pedido/deleteOrderById", (req, res) => {
+  pedido
+  .deleteOrderById(req.body)
+  .then(() => {
+    res.send("Pedido deletado com sucesso!")
+  })
+  .catch((error) => console.error("Erro ao deletar pedido",error))
+})
+
 app.get("/produtos/categoria", (req, res) => {
   produtos
     .findByCategory(req.query.id)
@@ -66,6 +117,28 @@ app.get("/produtos/categoria", (req, res) => {
       console.error(error);
     });
 });
+
+// Vendedor
+app.get("/vendedor/findAllVendedor", (req, res) => {
+  vendedor
+  .findAllSeller()
+  .then((results) => {
+    res.send(results)
+  })
+  .catch((error) => console.error(error))
+})
+
+app.get("/vendedor/findByIdVendedor", (req, res) => {
+  const id_vendedor = req.body.id_vendedor
+  vendedor
+  .findAllSeller(id_vendedor)
+  .then((results) => {
+    res.send(results)
+  })
+  .catch((error) => console.error(error))
+})
+
+app.post("/vendedor/insertSeller", (req, res) => {})
 
 // Produtos
 app.get("/produtos/findAll", (req, res) => {
