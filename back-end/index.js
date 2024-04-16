@@ -47,7 +47,7 @@ app.get("/produtos/destaques", (req, res) => {
 });
 
 // Pedido
-app.get("/pedido/findAllPedido", (req, res) => {
+app.get("/pedido/findAllOrder", (req, res) => {
   pedido
   .findAllPedido()
   .then((results) => {
@@ -56,7 +56,7 @@ app.get("/pedido/findAllPedido", (req, res) => {
   .catch((error) => console.error(error))
 })
 
-app.get("/pedido/findByIdPedido", (req, res) => {
+app.get("/pedido/findByIdOrder", (req, res) => {
   const idpedido = req.query.idpedido
   pedido
   .findAllPedido(idpedido)
@@ -66,7 +66,7 @@ app.get("/pedido/findByIdPedido", (req, res) => {
   .catch((error) => console.error("Erro ao filtrar pedido",error))
 })
 
-app.get("/pedido/findAllPedidoByClientId", (req, res) => {
+app.get("/pedido/findAllOrderByClientId", (req, res) => {
   const id_cliente = req.query.id_cliente
   const idpedido = req.query.idpedido
   pedido
@@ -119,7 +119,7 @@ app.get("/produtos/categoria", (req, res) => {
 });
 
 // Vendedor
-app.get("/vendedor/findAllVendedor", (req, res) => {
+app.get("/vendedor/findAllSeller", (req, res) => {
   vendedor
   .findAllSeller()
   .then((results) => {
@@ -128,7 +128,7 @@ app.get("/vendedor/findAllVendedor", (req, res) => {
   .catch((error) => console.error(error))
 })
 
-app.get("/vendedor/findByIdVendedor", (req, res) => {
+app.get("/vendedor/findByIdSeller", (req, res) => {
   const id_vendedor = req.body.id_vendedor
   vendedor
   .findAllSeller(id_vendedor)
@@ -139,6 +139,25 @@ app.get("/vendedor/findByIdVendedor", (req, res) => {
 })
 
 app.post("/vendedor/insertSeller", (req, res) => {})
+
+app.put("/vendedor/updateSeller/:id_vendedor", (req, res) => {
+  const id_vendedor = req.params.id_vendedor
+  vendedor
+  .updateSeller(id_vendedor, req.body)
+  .then(() => {
+    res.send("Vendedor atualizado com sucesso!")
+  })
+  .catch((error) => console.error(error))
+})
+
+app.delete("/vendedor/deleteSeller/", (req, res) => {
+  vendedor
+  .deleteById(req.body)
+  .then(() => {
+    res.send("Registro deletado com sucesso!")
+  })
+  .catch((error) => console.error(error))
+})
 
 // Produtos
 app.get("/produtos/findAll", (req, res) => {
