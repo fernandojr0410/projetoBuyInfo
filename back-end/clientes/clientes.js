@@ -63,7 +63,7 @@ function update(id_cliente, dados) {
   let sql = "UPDATE cliente SET";
 
   if (nome) {
-    sql += ` nome = '${nome}',`;
+    sql += ` nome = '${nome}',`;X
   }
 
   if (sobrenome) {
