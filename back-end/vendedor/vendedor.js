@@ -1,7 +1,6 @@
 const { query } = require("express")
 const conn = require("../db/postgres.js")
 const util = require("util")
-const queryPromise = util.promisify(conn().query).bind(conn())
 
 function queryPromiseReturn(sql) {
     return new Promise((resolve, reject) => {
@@ -16,11 +15,11 @@ function queryPromiseReturn(sql) {
   }
 
 function findAllSeller() {
-    return queryPromise(`SELECT * FROM vendedor`)
+    return queryPromiseReturn(`SELECT * FROM vendedor`)
 }
 
 function findByIdSeller(id_vendedor) {
-    return queryPromise(`SELECT * FROM vendedor WHERE id_vendedor = ${id_vendedor}`)
+    return queryPromiseReturn(`SELECT * FROM vendedor WHERE id_vendedor = ${id_vendedor}`)
 }
 
 function insertSeller(dados) {
@@ -32,8 +31,8 @@ function insertSeller(dados) {
         email,
         id_endereco
     } = dados
-    let sql = `INSERT INTO vendedor (id_vendedor, nome, cnpj_cpf, telefone, email, id_endereco) VALEUS (${id_vendedor}, "${nome}", "${cnpj_cpf}", "${telefone}", "${email}", ${id_endereco})`
-    return queryPromise(sql)
+    let sql = `INSERT INTO vendedor (id_vendedor, nome, cnpj_cpf, telefone, email, id_endereco) VALUES (${id_vendedor}, '${nome}', '${cnpj_cpf}', '${telefone}', '${email}', ${id_endereco})`
+    return queryPromiseReturn(sql)
 }
 
 function updateSeller(id_vendedor, dados) {
@@ -69,7 +68,7 @@ function updateSeller(id_vendedor, dados) {
 
 function deleteById(ids) {
     const idsDelete = ids.toString()
-    return queryPromise(`DELETE FROM vendedor WHERE id_vendedor = IN (${idsDelete})`)
+    return queryPromiseReturn(`DELETE FROM vendedor WHERE id_vendedor IN (${idsDelete})`)
 }
 
 module.exports = {
