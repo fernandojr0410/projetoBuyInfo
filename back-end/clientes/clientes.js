@@ -15,39 +15,51 @@ function queryPromiseReturn(sql) {
 }
 
 function findAll() {
-  return queryPromise("SELECT * FROM cliente");
+  return queryPromiseReturn("SELECT * FROM cliente");
 }
 
-function findById(id) {
-  console.log("ID cliente:", id);
-  return queryPromise(`SELECT * FROM cliente WHERE id_cliente = ${id}`);
+function findById(id_cliente) {
+  return queryPromiseReturn(`SELECT * FROM cliente WHERE id_cliente = ${id_cliente}`);
 }
 
 function findByEmail(email) {
-  return queryPromise(
+  return queryPromiseReturn(
     `SELECT * FROM cliente WHERE email = '${email}'`
   )
 }
 
 function findByEmailSenha(email, senha) {
-  return queryPromise(
+  return queryPromiseReturn(
     `SELECT * FROM cliente WHERE email = '${email}' AND senha = '${senha}'`
   );
 }
 
-function insert(dados) {
-  const { nome, sobrenome, cpf, telefone, email, senha } = dados;
-  let sql = `INSERT INTO cliente (nome, sobrenome, cpf, telefone, email, senha) values ('${nome}', '${sobrenome}', '${cpf}', '${telefone}', '${email}', '${senha}') RETURNING id_cliente`;
+// function insertCliente(dados) {
+//   const { nome, sobrenome, cpf, telefone, email, senha } = dados;
+//   let sql = `insertCliente INTO cliente (nome, sobrenome, cpf, telefone, email, senha) values ('${nome}', '${sobrenome}', '${cpf}', '${telefone}', '${email}', '${senha}') RETURNING id_cliente`;
+//   return queryPromiseReturnReturn(sql)
+//     .then((result) => {
+//       console.log("result", JSON.stringify(result))
+//       console.log("Registro inserido com sucesso. ID:", result.rows[0].id_cliente);
+//       return result.rows[0].id_cliente;
+//     })
+//     .catch((error) => {
+//       console.error("Erro ao inserir registro:", error);
+//       throw error;
+//     });
+// }
+
+function insertCliente(dados) {
+  const {
+    nome,
+    sobrenome,
+    cpf,
+    telefone,
+    email,
+    senha
+  } = dados
+  let sql = `INSERT INTO cliente (nome, sobrenome, cpf, telefone, email, senha) VALUES ('${nome}', '${sobrenome}', '${cpf}', '${telefone}', '${email}', '${senha}') RETURNING id_cliente`
   return queryPromiseReturn(sql)
-    .then((result) => {
-      console.log("result", JSON.stringify(result))
-      console.log("Registro inserido com sucesso. ID:", result.rows[0].id_cliente);
-      return result.rows[0].id_cliente;
-    })
-    .catch((error) => {
-      console.error("Erro ao inserir registro:", error);
-      throw error;
-    });
 }
 
 function update(id_cliente, dados) {
@@ -95,7 +107,7 @@ function update(id_cliente, dados) {
 
 function deleteById(ids) {
   const idsDelete = ids.toString();
-  return queryPromise(`DELETE FROM cliente WHERE id_cliente IN (${idsDelete})`);
+  return queryPromiseReturn(`DELETE FROM cliente WHERE id_cliente IN (${idsDelete})`);
 }
 
 module.exports = {
@@ -103,7 +115,7 @@ module.exports = {
   findById,
   findByEmail,
   findByEmailSenha,
-  insert,
+  insertCliente,
   update,
   deleteById,
 };

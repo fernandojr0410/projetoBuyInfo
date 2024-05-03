@@ -16,6 +16,9 @@ function FinishOrder({ cliente }) {
   const { carrinho } = location.state;
   const [tipoEntrega, setTipoEntrega] = useState("normal");
   const [frete, setFrete] = useState(30);
+  const [pedidoCliente, setPedidoCliente] = useState({});
+  const [idPedido, setIdPedido] = useState({});
+  const [status, setStatus] = useState("pendente de pagamento");
 
   const valorProduto = carrinho.reduce(
     (total, produto) => total + parseFloat(produto.preco),
@@ -38,9 +41,56 @@ function FinishOrder({ cliente }) {
   const [registroCliente, setRegistroCliente] = useState(cliente);
 
   const handlePayment = (event) => {
+    const statusPedido = {
+      status: status,
+    };
+
+    fetch(`http://localhost:5000/order/insertOrder`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(statusPedido),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // setIdPedido(data);
+        console.log("data", data);
+        console.log("idPedido useState", idPedido.idpedido);
+        console.log("idPedido result", data.result.idpedido);
+      });
+
+    const carrinhoData = JSON.parse(localStorage.getItem("carrinho"));
+    carrinhoData.forEach((produto) => {
+      console.log(produto.id_produto);
+
+      const dadosPedidos = {
+        idproduto: produto.id_produto,
+        id_cliente: cliente.id_cliente,
+        idpedido: idPedido.idpedido,
+      };
+      console.log("cliente", cliente.id_cliente);
+      console.log("pedido", idPedido.idPedido);
+
+      fetch(`http://localhost:5000/orderProductClient/insert`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+
+        body: JSON.stringify(dadosPedidos),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Pedido Produto Cliente:", data);
+        });
+    });
+
     event.preventDefault();
     setShowModal(true);
   };
+
+  // useEffect(() => {}, [valor]);
 
   useEffect(() => {
     setRegistroCliente(cliente);

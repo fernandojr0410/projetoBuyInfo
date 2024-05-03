@@ -2,14 +2,11 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { AiOutlineCreditCard, AiOutlineBarcode } from "react-icons/ai";
 import { MdPix } from "react-icons/md";
-// import Modal from "../../components/modal/modal";
-// import ModalJuca from "../../components/modal/modal";
 import Modal from "../../components/modal/modal";
 
 function Product({ handleAdicionarCarrinho }) {
   const [imagem, setImagem] = useState("");
   const [produto, setProduto] = useState([]);
-  // const [abrirModal, setAbrirModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const { id } = useParams();
 
@@ -66,12 +63,10 @@ function Product({ handleAdicionarCarrinho }) {
   }, []);
 
   const openModal = () => {
-    // setAbrirModal(true);
     setShowModal(true);
   };
 
   const closeModal = () => {
-    // setAbrirModal(false);
     setShowModal(false);
   };
 

@@ -8,7 +8,6 @@ import { FaCcMastercard, FaBarcode } from "react-icons/fa";
 import { SiNubank } from "react-icons/si";
 import { MdPix } from "react-icons/md";
 import { AiOutlineShoppingCart } from "react-icons/ai";
-import ModalRegistration from "../../components/modal/modalRegistration";
 
 function Cart({ handleItemsCart, cliente, handleUser }) {
   const [produtosDestaque, setProdutosDestaque] = useState([]);

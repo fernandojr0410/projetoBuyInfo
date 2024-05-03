@@ -169,13 +169,11 @@ function RegistrationClient({ handleUser }) {
         }),
       };
 
-      fetch(`http://localhost:5000/clientes/insert`, dadosClientes)
+      fetch(`http://localhost:5000/clientes/insertCliente`, dadosClientes)
         .then((res) => res.json())
         .then((response) => {
-          console.log("response", response);
-
           setShowModal({ show: true, message: response.message });
-          getClientById(response.clientId);
+          getClientById(response.result.id_cliente);
           // setEmailDuplicado(true);
         })
         .catch((error) => console.error("Erro durante a solicitação:", error));
@@ -197,11 +195,16 @@ function RegistrationClient({ handleUser }) {
   //     .catch((error) => console.error(error));
   // }, [emailDuplicado]);
 
-  function getClientById(clientId) {
-    fetch(`http://localhost:5000/clientes/findById?id=${clientId}`)
+  function getClientById(id_cliente) {
+    console.log("joaozin do grau", id_cliente)
+    fetch(`http://localhost:5000/clientes/findById?id=${id_cliente}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
       .then((res) => res.json())
       .then((response) => {
-        console.log("response", response);
         handleUser(response[0]);
       })
       .catch((error) => console.error("Erro durante a solicitação:", error));
