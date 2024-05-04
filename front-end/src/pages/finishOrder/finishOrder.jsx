@@ -38,6 +38,50 @@ function FinishOrder({ cliente }) {
   const [registroCliente, setRegistroCliente] = useState(cliente);
 
   const handlePayment = (event) => {
+    const statusPedido = {
+      status: status,
+    };
+
+    fetch(`http://localhost:5000/order/insertOrder`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(statusPedido),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("data", data);
+
+        const idPedido = data.result.idpedido;
+
+        console.log("idPedido result", idPedido);
+
+        const carrinhoData = JSON.parse(localStorage.getItem("carrinho"));
+        carrinhoData.forEach((produto) => {
+          console.log(produto.id_produto);
+
+          const dadosPedidos = {
+            idproduto: produto.id_produto,
+            id_cliente: cliente.id_cliente,
+            idpedido: idPedido,
+          };
+          console.log("cliente", cliente.id_cliente);
+          console.log("pedido", idPedido);
+
+          fetch(`http://localhost:5000/orderProductClient/insert`, {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify(dadosPedidos),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Pedido Produto Cliente:", data);
+            });
+        });
+      });
     event.preventDefault();
     setShowModal(true);
   };
