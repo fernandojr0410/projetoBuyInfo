@@ -73,7 +73,10 @@ app.get("/order/findAllOrderByClientId", (req, res) => {
   pedido
     .findAllPedidoByClientId(idpedido, id_cliente)
     .then((results) => {
-      res.send({ message: "Cliente e Pedido filtrado!", result:results.rows[0]})
+      res.send({
+        message: "Pedido inserido com sucesso!",
+        result: results.rows[0],
+      });
     })
     .catch((error) => console.error(error));
 });
