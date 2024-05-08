@@ -14,11 +14,11 @@ function queryPromiseReturn(sql) {
 }
 
 function findAll() {
-  returnQueryPromise("SELECT * FROM pedidoProdutoCliente");
+ return queryPromiseReturn("SELECT * FROM pedidoProdutoCliente");
 }
 
 function findById(id) {
-  returnQueryPromise(`SELECT * FROM pedidoProdutoCliente WHERE id = ${id}`);
+ return queryPromiseReturn(`SELECT * FROM pedidoProdutoCliente WHERE id = ${id}`);
 }
 
 function insert(dados) {
@@ -38,12 +38,12 @@ function update(dados) {
     sql += ` idpedido = ${idpedido},`;
   }
   if (id_cliente) {
-    sql += ` id_cliente = ${id_cliente}`;
+    sql += ` id_cliente = ${id_cliente},`;
   }
 
-  sql = sql.slice(0, -1);
-  sql += ` WHERE id = ${id}`;
-  returnQueryPromise(sql);
+  sql = sql.slice(0, -1)
+  sql += ` WHERE id = ${id}`
+  return queryPromiseReturn(sql)
 }
 
 function deleteById(ids) {

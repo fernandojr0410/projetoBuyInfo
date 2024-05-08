@@ -7,7 +7,7 @@ const cors = require("cors");
 const conn = require("./db/postgres.js");
 const produtos = require("./produtos/produtos.js");
 const pedido = require("./pedido/pedido.js")
-const statusPedido = require("./statusPedido/statusPedido.js")
+const pedidoProdutoCliente = require("./pedidoProdutoCliente/pedidoProdutoCliente.js")
 const vendedor = require("./vendedor/vendedor.js")
 const categorias = require("./categorias/categorias.js");
 const clientes = require("./clientes/clientes.js");
@@ -50,62 +50,95 @@ app.get("/produtos/destaques", (req, res) => {
 // Pedido
 app.get("/order/findAllOrder", (req, res) => {
   pedido
-  .findAllPedido()
+  .findAllOrder()
   .then((results) => {
-    res.send({ message: "Pedidos filtrado!", reult:results.rows[0]})
+    res.send({ message: "Pedidos filtrados!", result:results.rows})
   })
   .catch((error) => console.error(error))
 })
 
 app.get("/order/findByIdOrder", (req, res) => {
-  const idpedido = req.query.idpedido
+  const idpedido = req.body.idpedido
   pedido
-  .findAllPedido(idpedido)
+  .findByIdOrder(idpedido)
   .then((results) => {
-    res.send({ message: "Pedido filtrado", result:results.rows[0]})
+    res.send({ message: "Pedido Filtrado!", result:results.rows[0]})
   })
-  .catch((error) => console.error("Erro ao filtrar pedido",error))
+  .catch((error) => console.error(error))
 })
 
-app.get("/order/findAllOrderByClientId", (req, res) => {
-  const id_cliente = req.query.id_cliente
-  const idpedido = req.query.idpedido
+app.post("/order/insertOrder", (req, res) => {
   pedido
-    .findAllPedidoByClientId(idpedido, id_cliente)
-    .then((results) => {
-      res.send({
-        message: "Pedido inserido com sucesso!",
-        result: results.rows[0],
-      });
-    })
-    .catch((error) => console.error(error));
-});
-
-app.post("/order/insertOrderProductClient", (req, res) => {
-  pedido
-    .insertOrderProductClient(req.body)
-    .then(() => {
-      res.send({ message: "Pedido inserido com sucesso!", resutl:results.rows[0]})
-    })
-    .catch((error) => console.error(error));
-});
+  .insertOrder(req.body)
+  .then((results) => {
+    res.send({ message: "Pedido Inserido!", result:results.rows[0]})
+  })
+  .catch((error) => console.error(error))
+})
 
 app.put("/order/updateOrder", (req, res) => {
-  const idpedido = req.query.idpedido
   pedido
-  .updateOrder(idpedido)
-  .then((results) => {
-    res.send({ message: "Pedido atualizado com sucesso!", result:results.rows[0]})
+  .updateOrder(req.body)
+  .then(() => {
+    res.send({ message: "Pedido Atualizado!"})
   })
+  .catch((error) => console.error(error))
 })
 
-app.delete("/order/deleteOrderById", (req, res) => {
+app.delete("/order/deleteOrder", (req, res) => {
   pedido
-  .deleteOrderById(req.body)
+  .deleteOrder(req.body)
   .then(() => {
-    res.send("Pedido deletado com sucesso!")
+    res.send({ message: "Pedido Deletado!"})
   })
-  .catch((error) => console.error("Erro ao deletar pedido",error))
+  .catch((error) => console.error(error))
+})
+
+//
+app.get("/orderProductClient/findAll", (req, res) => {
+  pedidoProdutoCliente
+  .findAll()
+  .then((results) => {
+    res.send({ message: "Pedido/Produto/Cliente Filtrados!", result:results.rows})
+  })
+  .catch((error) => console.error(error))
+})
+
+app.get("/orderProductClient/findById", (req, res) => {
+  const id = req.body.id
+  pedidoProdutoCliente
+  .findById(id) 
+  .then((results) => {
+    res.send({ message: "Pedido/Produto/Cliente Filtrado!", result:results.rows[0]})
+  })
+  .catch((error) => console.error(error))
+})
+
+app.post("/orderProductClient/insert", (req, res) => {
+  pedidoProdutoCliente
+  .insert(req.body)
+  .then((results) => {
+    res.send({ message: "Pedido/Produto/Cliente Cadastrados!", result:results.rows[0]})
+  })
+  .catch((error) => console.error(error))
+})
+
+app.put("/orderProductClient/update", (req, res) => {
+  pedidoProdutoCliente
+  .update(req.body)
+  .then(() => {
+    res.send({ message: "Pedido/Produto/Cliente Atualizados!"})
+  })
+  .catch((error) => console.error(error))
+})
+
+app.delete("/orderProductClient/delete", (req, res) => {
+  pedidoProdutoCliente
+  .deleteById(req.body)
+  .then(() => {
+    res.send({ message: "Pedido/Produto/Cliente Deletados!"})
+  })
+  .catch((error) => console.error(error))
 })
 
 app.get("/produtos/categoria", (req, res) => {
@@ -179,53 +212,6 @@ app.delete("/seller/deleteSeller", (req, res) => {
   .catch((error) => console.error(error))
 })
 
-// Status Pedido
-app.get("/statusOrder/findAllStatusOrder", (req, res) => {
-  statusPedido
-  .findAllStatusOrder(req.body)
-  .then((results) => {
-    res.send({ message: "Status do Pedido filtrado!", result:results.rows[0]})
-  })
-  .catch((error) => console.error(error))
-})
-
-app.get("/statusOrder/findStatusOrderById", (req, res) => {
-  const id = req.query.id
-  statusPedido
-  .findStatusOrderById(id)
-  .then((results) => {
-    res.send({ message: "Status Pedido filtrado!", result:results.rows[0]})
-  })
-  .catch((error) => console.error(error))
-})
-
-app.post("/statusOrder/insertStatusOrder", (req, res) => {
-  statusPedido
-  .insertStatusOrder(req.body)
-  .then((results) => {
-    res.send({ message: "Status pedido inserido com sucesso!", result:results.rows[0]})
-  })
-  .catch((error) => console.error(error))
-})
-
-app.put("/statusOrder/updateStatusOrder/:id", (req, res) => {
-  const id = req.params.id
-  statusPedido
-  .updateStatusOrder(id, req.body)
-  .then(() => {
-    res.send("Status Pedido Atualizado")
-  })
-  .catch((error) => console.error(error))
-})
-
-app.delete("/statusOrder/deleteStatusOrder", (req, res) => {
-  statusPedido
-  .deleteStatusOrder(req.body)
-  .then(() => {
-    res.send("Status Pedido deletado!")
-  })
-  .catch((error) => console.error(error))
-})
 // Produtos
 app.get("/produtos/findAll", (req, res) => {
   produtos
