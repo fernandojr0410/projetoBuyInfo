@@ -94,7 +94,7 @@ app.delete("/order/deleteOrder", (req, res) => {
   .catch((error) => console.error(error))
 })
 
-//
+// Pedido Produto Cliente
 app.get("/orderProductClient/findAll", (req, res) => {
   pedidoProdutoCliente
   .findAll()
@@ -257,17 +257,28 @@ app.get("/produtos/findById", (req, res) => {
     });
 });
 
+// app.post("/produtos/insert", (req, res) => {
+//   produtos
+//     .insert(req.body)
+//     .then(() => {
+//       res.send("Produto cadastrado com sucesso!");
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//       res.send(error);
+//     });
+// });
+
 app.post("/produtos/insert", (req, res) => {
+  console.log("body", req.body)
   produtos
-    .insert(req.body)
-    .then(() => {
-      res.send("Produto cadastrado com sucesso!");
-    })
-    .catch((error) => {
-      console.error(error);
-      res.send(error);
-    });
-});
+  .insert(req.body)
+  .then((results) => {
+    console.log("results", results)
+    res.send({ message: "Produto Cadastrado!", result:results.rows[0]})
+  })
+  .catch((error) => console.error(error))
+})
 
 app.put("/produtos/update", (req, res) => {
   const dadosAtualizados = req.body;
@@ -284,10 +295,12 @@ app.put("/produtos/update", (req, res) => {
 });
 
 app.delete("/produtos/delete", (req, res) => {
+  console.log("IDs dos produtos a serem deletados:", req.body.ids);
+  const ids = req.body.ids;
   produtos
-    .deleteById(req.body)
+    .deleteById(ids)
     .then(() => {
-      res.send("Produto deletado com sucesso!");
+      res.send({ message: "Produto deletado com sucesso!"});
     })
     .catch((error) => {
       console.error(error);
@@ -346,7 +359,7 @@ app.delete("/categorias/delete", (req, res) => {
   categorias
     .deleteById(req.body)
     .then(() => {
-      res.send("Categoria deletada com sucesso!");
+      res.send({ message: "Categoria deletada com sucesso!"});
     })
     .catch((error) => {
       console.error(error);

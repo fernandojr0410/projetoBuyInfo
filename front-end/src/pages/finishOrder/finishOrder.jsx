@@ -16,12 +16,10 @@ function FinishOrder({ cliente }) {
   const { carrinho } = location.state;
   const [tipoEntrega, setTipoEntrega] = useState("normal");
   const [frete, setFrete] = useState(30);
-
   const valorProduto = carrinho.reduce(
     (total, produto) => total + parseFloat(produto.preco),
     0
   );
-
   let valorTotal = parseFloat(location.state.valorTotal);
   if (tipoEntrega === "expressa") {
     valorTotal += frete;
@@ -30,18 +28,19 @@ function FinishOrder({ cliente }) {
   //   tipoEntrega === "normal" ? valorProduto : valorProduto + frete;
 
   // const { valorTotal } = location.state;
-
   const [endereco, setEndereco] = useState([]);
-
+  // const [pedidoCliente, setPedidoCliente] = useState({});
+  // const [idPedido, setIdPedido] = useState({});
+  const [status, setStatus] = useState("pendente de pagamento");
   const [showModal, setShowModal] = useState(false);
-
   const [registroCliente, setRegistroCliente] = useState(cliente);
 
   const handlePayment = (event) => {
+   
     const statusPedido = {
       status: status,
     };
-
+  
     fetch(`http://localhost:5000/order/insertOrder`, {
       method: "POST",
       headers: {
@@ -51,44 +50,39 @@ function FinishOrder({ cliente }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("data", data);
-
-        const idPedido = data.result.idpedido;
-
-        console.log("idPedido result", idPedido);
-
-        const carrinhoData = JSON.parse(localStorage.getItem("carrinho"));
-        carrinhoData.forEach((produto) => {
-          console.log(produto.id_produto);
-
-          const dadosPedidos = {
-            idproduto: produto.id_produto,
-            id_cliente: cliente.id_cliente,
-            idpedido: idPedido,
-          };
-          console.log("cliente", cliente.id_cliente);
-          console.log("pedido", idPedido);
-
-          fetch(`http://localhost:5000/orderProductClient/insert`, {
-            method: "POST",
-            headers: {
-              "Content-type": "application/json",
-            },
-            body: JSON.stringify(dadosPedidos),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log("Pedido Produto Cliente:", data);
-            });
-        });
-      });
+        if (data && data.result && data.result.idpedido) {
+          const idPedido = data.result.idpedido;
+  
+          const carrinhoData = JSON.parse(localStorage.getItem("carrinho"));
+          carrinhoData.forEach((produto) => {
+            const dadosPedidos = {
+              idproduto: produto.id_produto,
+              id_cliente: cliente.id_cliente,
+              idpedido: idPedido,
+            };
+  
+            fetch(`http://localhost:5000/orderProductClient/insert`, {
+              method: "POST",
+              headers: {
+                "Content-type": "application/json",
+              },
+              body: JSON.stringify(dadosPedidos),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log("Pedido Produto Cliente:", data);
+              });
+          });
+  
+          setShowModal(true);
+        } else {
+          console.error("Erro ao inserir pedido:", data);
+        }
+      })
+      .catch((error) => console.error("Erro ao inserir pedido:", error));
     event.preventDefault();
     setShowModal(true);
   };
-
-  useEffect(() => {
-    setRegistroCliente(cliente);
-  }, [cliente]);
 
   useEffect(() => {
     if (registroCliente && registroCliente.id_cliente) {
@@ -125,12 +119,17 @@ function FinishOrder({ cliente }) {
               },
             };
             setEndereco(enderecoData);
-            setRegistroCliente(data[0]);
+  
+            // Verifica se o id_cliente mudou antes de atualizar o registroCliente
+            if (registroCliente.id_cliente !== data[0].id_cliente) {
+              setRegistroCliente(data[0]);
+            }
           }
         })
         .catch((error) => console.error("Erro ao buscar endereço:", error));
     }
   }, [registroCliente]);
+  
 
   return (
     <div className="flex flex-col justify-center bg-gray-200 p-10 ">

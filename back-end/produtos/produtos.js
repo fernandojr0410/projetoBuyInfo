@@ -2,6 +2,19 @@ const conn = require("../db/postgres.js");
 const util = require("util");
 const queryPromise = util.promisify(conn().query).bind(conn());
 
+function queryPromiseReturn(sql) {
+  return new Promise((resolve, reject) => {
+    console.log({sql})
+    conn().query(sql, (error, results) => {
+      if(error) {
+        reject(error)
+      } else {
+        resolve(results)
+      }
+    })
+  })
+}
+
 function findAll() {
 return queryPromise(`
     SELECT p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome as categoria, m.nome as marca, d.nome as destaque, array_to_string(array_agg(i.nome), ', ') AS imagens
@@ -10,7 +23,8 @@ return queryPromise(`
     LEFT JOIN destaque d ON d.id_destaque = p.destaque_id_destaque
     LEFT JOIN marca m ON m.id_marca = p.marca_id_marca
     LEFT JOIN imagem_produto i ON i.produto_id_produto = p.id_produto
-    GROUP BY p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome, m.nome, d.nome;
+    GROUP BY p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome, m.nome, d.nome
+    order by id_produto DESC;
   `);
 }
 
@@ -74,7 +88,13 @@ function findByCategory(id) {
   `);
 }
 
-function insert(dados) {
+function getMaxId() {
+  let sqlGetMaxId = `SELECT MAX(id_produto) FROM produto`
+  return queryPromiseReturn(sqlGetMaxId)
+}
+
+
+const insert = async (dados) => {
   const {
     nome,
     descricao,
@@ -83,29 +103,17 @@ function insert(dados) {
     categoria_id_categoria,
     marca_id_marca,
     destaque_id_destaque,
-    // imagens,
-  } = dados;
+    id_vendedor
+  } = dados
 
-  let destaqueValue = destaque_id_destaque ? destaque_id_destaque : null;
-
-  console.log("dados", dados);
-  // return "";
-
-  let sql = `INSERT INTO produto 
-  (nome, descricao, preco, ativo, categoria_id_categoria, marca_id_marca, destaque_id_destaque)VALUES (?, ?, ?, ?, ?, ?, ?)`;
-
-  const params = [
-    nome,
-    descricao,
-    preco,
-    ativo,
-    categoria_id_categoria,
-    marca_id_marca,
-    destaqueValue,
-  ];
-
-  return queryPromise(sql, params);
+  const lastId = await getMaxId()
+  console.log("Valor Max", lastId.rows[0].max+1)
+  let sql = `INSERT INTO produto (id_produto, nome, descricao, preco, ativo, data_criacao, categoria_id_categoria, marca_id_marca, destaque_id_destaque, id_vendedor) VALUES (${lastId.rows[0].max+1}, '${nome}', '${descricao}', ${preco}, ${ativo}, '${new Date(Date.now()).toUTCString()}', ${categoria_id_categoria}, ${marca_id_marca}, ${destaque_id_destaque}, ${id_vendedor}) RETURNING id_produto`
+  return queryPromiseReturn(sql)
 }
+
+
+
 
 function update(dados) {
   const {
@@ -171,10 +179,15 @@ function update(dados) {
   return queryPromise(sql, params);
 }
 
-function deleteById(ids) {
-  const idsDelete = ids.toString();
-  return queryPromise(`DELETE FROM produto WHERE id_produto IN (${idsDelete})`);
+// function deleteById(ids) {
+//   const idsDelete = ids.toString();
+//   return queryPromise(`DELETE FROM produto WHERE id_produto IN (${idsDelete})`);
+// }
+
+function deleteById(id) {
+  return queryPromise(`DELETE FROM produto WHERE id_produto = ${id}`);
 }
+
 
 module.exports = {
   findAll,
