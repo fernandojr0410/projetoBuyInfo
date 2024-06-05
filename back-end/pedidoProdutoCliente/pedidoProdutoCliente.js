@@ -14,11 +14,40 @@ function queryPromiseReturn(sql) {
 }
 
 function findAll() {
- return queryPromiseReturn("SELECT * FROM pedidoProdutoCliente");
+  return queryPromiseReturn("SELECT * FROM pedidoProdutoCliente");
 }
 
-function findById(id) {
- return queryPromiseReturn(`SELECT * FROM pedidoProdutoCliente WHERE id = ${id}`);
+// function findById(id) {
+//  return queryPromiseReturn(`SELECT * FROM pedidoProdutoCliente WHERE id = ${id}`);
+// }
+
+function findById(clientId, idpedido, idproduto) {
+  const sql = `
+  SELECT
+    ppc.idpedido,
+    ppc.idproduto,
+    p.status AS status_pedido,
+    c.nome AS nome_cliente,
+    pr.nome AS nome_produto,
+    pr.descricao AS descricao_produto,
+    pr.preco AS preco_produto
+  FROM
+    pedidoprodutocliente ppc
+  JOIN
+    cliente c ON ppc.id_cliente = c.id_cliente
+  JOIN
+    pedido p ON ppc.idpedido = p.idpedido
+  JOIN
+    produto pr ON ppc.idproduto = pr.id_produto
+  WHERE
+    ppc.id_cliente = ${clientId}
+    AND ppc.idpedido = ${idpedido}
+    AND ppc.idproduto = ${idproduto};
+  `;
+
+  const params = [clientId, idpedido, idproduto];
+
+  return queryPromiseReturn(sql, params);
 }
 
 function insert(dados) {
@@ -41,9 +70,9 @@ function update(dados) {
     sql += ` id_cliente = ${id_cliente},`;
   }
 
-  sql = sql.slice(0, -1)
-  sql += ` WHERE id = ${id}`
-  return queryPromiseReturn(sql)
+  sql = sql.slice(0, -1);
+  sql += ` WHERE id = ${id}`;
+  return queryPromiseReturn(sql);
 }
 
 function deleteById(ids) {

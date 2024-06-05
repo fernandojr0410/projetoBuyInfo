@@ -28,10 +28,10 @@ function CardProduct(produto) {
         </span>
 
         <span className="font-bold text-primary text-xl">
-          {produto.preco.toLocaleString("pt-BR", {
+          {(Number(produto.preco).toLocaleString("pt-BR", {
             style: "currency",
             currency: "BRL",
-          })}
+          }))}
         </span>
       </div>
     </Link>

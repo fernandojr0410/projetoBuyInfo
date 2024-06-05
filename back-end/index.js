@@ -2,13 +2,13 @@ const express = require("express");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
-const cors = require("cors"); 
+const cors = require("cors");
 
 const conn = require("./db/postgres.js");
 const produtos = require("./produtos/produtos.js");
-const pedido = require("./pedido/pedido.js")
-const pedidoProdutoCliente = require("./pedidoProdutoCliente/pedidoProdutoCliente.js")
-const vendedor = require("./vendedor/vendedor.js")
+const pedido = require("./pedido/pedido.js");
+const pedidoProdutoCliente = require("./pedidoProdutoCliente/pedidoProdutoCliente.js");
+const vendedor = require("./vendedor/vendedor.js");
 const categorias = require("./categorias/categorias.js");
 const clientes = require("./clientes/clientes.js");
 const enderecos = require("./enderecos/enderecos.js");
@@ -37,7 +37,10 @@ app.get("/produtos/destaques", (req, res) => {
               produto.imagens &&
               produto.imagens
                 .split(",")
-                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(' ','')).sort(),
+                .map((img) =>
+                  `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(" ", "")
+                )
+                .sort(),
           };
         })
       );
@@ -50,102 +53,132 @@ app.get("/produtos/destaques", (req, res) => {
 // Pedido
 app.get("/order/findAllOrder", (req, res) => {
   pedido
-  .findAllOrder()
-  .then((results) => {
-    res.send({ message: "Pedidos filtrados!", result:results.rows})
-  })
-  .catch((error) => console.error(error))
-})
+    .findAllOrder()
+    .then((results) => {
+      res.send({ message: "Pedidos filtrados!", result: results.rows });
+    })
+    .catch((error) => console.error(error));
+});
 
 app.get("/order/findByIdOrder", (req, res) => {
-  const idpedido = req.body.idpedido
+  const idpedido = req.body.idpedido;
   pedido
-  .findByIdOrder(idpedido)
-  .then((results) => {
-    res.send({ message: "Pedido Filtrado!", result:results.rows[0]})
-  })
-  .catch((error) => console.error(error))
-})
+    .findByIdOrder(idpedido)
+    .then((results) => {
+      res.send({ message: "Pedido Filtrado!", result: results.rows[0] });
+    })
+    .catch((error) => console.error(error));
+});
 
 app.post("/order/insertOrder", (req, res) => {
   pedido
-  .insertOrder(req.body)
-  .then((results) => {
-    res.send({ message: "Pedido Inserido!", result:results.rows[0]})
-  })
-  .catch((error) => console.error(error))
-})
+    .insertOrder(req.body)
+    .then((results) => {
+      res.send({ message: "Pedido Inserido!", result: results.rows[0] });
+    })
+    .catch((error) => console.error(error));
+});
 
 app.put("/order/updateOrder", (req, res) => {
   pedido
-  .updateOrder(req.body)
-  .then(() => {
-    res.send({ message: "Pedido Atualizado!"})
-  })
-  .catch((error) => console.error(error))
-})
+    .updateOrder(req.body)
+    .then(() => {
+      res.send({ message: "Pedido Atualizado!" });
+    })
+    .catch((error) => console.error(error));
+});
 
 app.delete("/order/deleteOrder", (req, res) => {
   pedido
-  .deleteOrder(req.body)
-  .then(() => {
-    res.send({ message: "Pedido Deletado!"})
-  })
-  .catch((error) => console.error(error))
-})
+    .deleteOrder(req.body)
+    .then(() => {
+      res.send({ message: "Pedido Deletado!" });
+    })
+    .catch((error) => console.error(error));
+});
 
 // Pedido Produto Cliente
 app.get("/orderProductClient/findAll", (req, res) => {
   pedidoProdutoCliente
-  .findAll()
-  .then((results) => {
-    res.send({ message: "Pedido/Produto/Cliente Filtrados!", result:results.rows})
-  })
-  .catch((error) => console.error(error))
-})
+    .findAll()
+    .then((results) => {
+      res.send({
+        message: "Pedido/Produto/Cliente Filtrados!",
+        result: results.rows,
+      });
+    })
+    .catch((error) => console.error(error));
+});
+
+// app.get("/orderProductClient/findById", (req, res) => {
+//   const id = req.body.id
+//   pedidoProdutoCliente
+//   .findById(id)
+//   .then((results) => {
+//     res.send({ message: "Pedido/Produto/Cliente Filtrado!", result:results.rows[0]})
+//   })
+//   .catch((error) => console.error(error))
+// })
 
 app.get("/orderProductClient/findById", (req, res) => {
-  const id = req.body.id
+  const clientId = req.query.clientId;
+  const idpedido = req.query.idpedido;
+  const idproduto = req.query.idproduto;
+
+  if (!clientId || !idpedido || !idproduto) {
+    res.status(400).send("Cliente ID, Pedido ID e Produto ID são necessários");
+    return;
+  }
+
   pedidoProdutoCliente
-  .findById(id) 
-  .then((results) => {
-    res.send({ message: "Pedido/Produto/Cliente Filtrado!", result:results.rows[0]})
-  })
-  .catch((error) => console.error(error))
-})
+    .findById(clientId, idpedido, idproduto)
+    .then((results) => {
+      res.send({
+        message: "Pedido/Produto/Cliente Filtrado!",
+        result: results.rows,
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Erro ao buscar os pedidos do cliente");
+    });
+});
 
 app.post("/orderProductClient/insert", (req, res) => {
   pedidoProdutoCliente
-  .insert(req.body)
-  .then((results) => {
-    res.send({ message: "Pedido/Produto/Cliente Cadastrados!", result:results.rows[0]})
-  })
-  .catch((error) => console.error(error))
-})
+    .insert(req.body)
+    .then((results) => {
+      res.send({
+        message: "Pedido/Produto/Cliente Cadastrados!",
+        result: results.rows[0],
+      });
+    })
+    .catch((error) => console.error(error));
+});
 
 app.put("/orderProductClient/update", (req, res) => {
   pedidoProdutoCliente
-  .update(req.body)
-  .then(() => {
-    res.send({ message: "Pedido/Produto/Cliente Atualizados!"})
-  })
-  .catch((error) => console.error(error))
-})
+    .update(req.body)
+    .then(() => {
+      res.send({ message: "Pedido/Produto/Cliente Atualizados!" });
+    })
+    .catch((error) => console.error(error));
+});
 
 app.delete("/orderProductClient/delete", (req, res) => {
   pedidoProdutoCliente
-  .deleteById(req.body)
-  .then(() => {
-    res.send({ message: "Pedido/Produto/Cliente Deletados!"})
-  })
-  .catch((error) => console.error(error))
-})
+    .deleteById(req.body)
+    .then(() => {
+      res.send({ message: "Pedido/Produto/Cliente Deletados!" });
+    })
+    .catch((error) => console.error(error));
+});
 
 app.get("/produtos/categoria", (req, res) => {
   produtos
     .findByCategory(req.query.id)
     .then((results) => {
-      console.log(results)
+      console.log(results);
       res.send(
         results.rows.map((produto) => {
           return {
@@ -154,7 +187,10 @@ app.get("/produtos/categoria", (req, res) => {
               produto.imagens &&
               produto.imagens
                 .split(",")
-                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(' ','')).sort(),
+                .map((img) =>
+                  `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(" ", "")
+                )
+                .sort(),
           };
         })
       );
@@ -167,50 +203,53 @@ app.get("/produtos/categoria", (req, res) => {
 // Vendedor
 app.get("/seller/findAllSeller", (req, res) => {
   vendedor
-  .findAllSeller()
-  .then((results) => {
-    res.send({ message: "Vendedores filtrados!", result:results.rows[0]})
-  })
-  .catch((error) => console.error(error))
-})
+    .findAllSeller()
+    .then((results) => {
+      res.send({ message: "Vendedores filtrados!", result: results.rows[0] });
+    })
+    .catch((error) => console.error(error));
+});
 
 app.get("/seller/findByIdSeller", (req, res) => {
-  const id_vendedor = req.body.id_vendedor
+  const id_vendedor = req.body.id_vendedor;
   vendedor
-  .findAllSeller(id_vendedor)
-  .then((results) => {
-    res.send({ message: "Vendedor filtrado!", result:results.rows[0]})
-  })
-  .catch((error) => console.error(error))
-})
+    .findAllSeller(id_vendedor)
+    .then((results) => {
+      res.send({ message: "Vendedor filtrado!", result: results.rows[0] });
+    })
+    .catch((error) => console.error(error));
+});
 
 app.post("/seller/insertSeller", (req, res) => {
-vendedor
-.insertSeller(req.body)
-.then((results) => {
-  res.send({ message: "Vendedor cadastrado com sucesso!", result:results.rows[0]})
-})
-.catch((error) => console.error(error))
-})
+  vendedor
+    .insertSeller(req.body)
+    .then((results) => {
+      res.send({
+        message: "Vendedor cadastrado com sucesso!",
+        result: results.rows[0],
+      });
+    })
+    .catch((error) => console.error(error));
+});
 
 app.put("/seller/updateSeller/:id_vendedor", (req, res) => {
-  const id_vendedor = req.params.id_vendedor
+  const id_vendedor = req.params.id_vendedor;
   vendedor
-  .updateSeller(id_vendedor, req.body)
-  .then(() => { 
-    res.send("Vendedor atualizado com sucesso!")
-  })
-  .catch((error) => console.error(error))
-})
+    .updateSeller(id_vendedor, req.body)
+    .then(() => {
+      res.send("Vendedor atualizado com sucesso!");
+    })
+    .catch((error) => console.error(error));
+});
 
 app.delete("/seller/deleteSeller", (req, res) => {
   vendedor
-  .deleteById(req.body)
-  .then(() => {
-    res.send("Registro deletado com sucesso!")
-  })
-  .catch((error) => console.error(error))
-})
+    .deleteById(req.body)
+    .then(() => {
+      res.send("Registro deletado com sucesso!");
+    })
+    .catch((error) => console.error(error));
+});
 
 // Produtos
 app.get("/produtos/findAll", (req, res) => {
@@ -225,7 +264,10 @@ app.get("/produtos/findAll", (req, res) => {
               produto.imagens &&
               produto.imagens
                 .split(",")
-                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(' ','')).sort(),
+                .map((img) =>
+                  `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(" ", "")
+                )
+                .sort(),
           };
         })
       );
@@ -247,7 +289,10 @@ app.get("/produtos/findById", (req, res) => {
               produto.imagens &&
               produto.imagens
                 .split(",")
-                .map((img) => `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(' ','')).sort(),
+                .map((img) =>
+                  `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(" ", "")
+                )
+                .sort(),
           };
         })
       );
@@ -270,15 +315,15 @@ app.get("/produtos/findById", (req, res) => {
 // });
 
 app.post("/produtos/insert", (req, res) => {
-  console.log("body", req.body)
+  console.log("body", req.body);
   produtos
-  .insert(req.body)
-  .then((results) => {
-    console.log("results", results)
-    res.send({ message: "Produto Cadastrado!", result:results.rows[0]})
-  })
-  .catch((error) => console.error(error))
-})
+    .insert(req.body)
+    .then((results) => {
+      console.log("results", results);
+      res.send({ message: "Produto Cadastrado!", result: results.rows[0] });
+    })
+    .catch((error) => console.error(error));
+});
 
 app.put("/produtos/update", (req, res) => {
   const dadosAtualizados = req.body;
@@ -300,7 +345,7 @@ app.delete("/produtos/delete", (req, res) => {
   produtos
     .deleteById(ids)
     .then(() => {
-      res.send({ message: "Produto deletado com sucesso!"});
+      res.send({ message: "Produto deletado com sucesso!" });
     })
     .catch((error) => {
       console.error(error);
@@ -359,7 +404,7 @@ app.delete("/categorias/delete", (req, res) => {
   categorias
     .deleteById(req.body)
     .then(() => {
-      res.send({ message: "Categoria deletada com sucesso!"});
+      res.send({ message: "Categoria deletada com sucesso!" });
     })
     .catch((error) => {
       console.error(error);
@@ -453,12 +498,12 @@ app.get("/clientes/findById", (req, res) => {
 
 app.get("/clientes/findByEmail", (req, res) => {
   clientes
-  .findByEmail(req.query.email)
-  .then((results) => {
-    res.send(results.rows)
-  })
-  .catch((error) => console.error(error))
-})
+    .findByEmail(req.query.email)
+    .then((results) => {
+      res.send(results.rows);
+    })
+    .catch((error) => console.error(error));
+});
 
 app.get("/clientes/findByEmailSenha", (req, res) => {
   clientes
@@ -478,24 +523,24 @@ app.post("/clientes/insert", (req, res) => {
     .then((insertId) => {
       res.status(200).json({
         message: "Cliente cadastrado com sucesso",
-        clientId: insertId
+        clientId: insertId,
       });
     })
     .catch((error) => console.error(error));
 });
 
 app.put("/clientes/update/:id", (req, res) => {
-  const id_cliente = req.params.id
+  const id_cliente = req.params.id;
   const dadosCliente = req.body;
   clientes
-  .update(id_cliente, dadosCliente)
-  .then(() => {
-    res.status(200).send({
-      message: "Cliente atualizado com sucesso!"
+    .update(id_cliente, dadosCliente)
+    .then(() => {
+      res.status(200).send({
+        message: "Cliente atualizado com sucesso!",
+      });
     })
-  })
-  .catch((error) => console.error(error))
-})
+    .catch((error) => console.error(error));
+});
 
 app.delete("/clientes/delete", (req, res) => {
   clientes

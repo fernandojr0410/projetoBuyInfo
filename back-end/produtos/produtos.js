@@ -4,19 +4,19 @@ const queryPromise = util.promisify(conn().query).bind(conn());
 
 function queryPromiseReturn(sql) {
   return new Promise((resolve, reject) => {
-    console.log({sql})
+    console.log({ sql });
     conn().query(sql, (error, results) => {
-      if(error) {
-        reject(error)
+      if (error) {
+        reject(error);
       } else {
-        resolve(results)
+        resolve(results);
       }
-    })
-  })
+    });
+  });
 }
 
 function findAll() {
-return queryPromise(`
+  return queryPromise(`
     SELECT p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome as categoria, m.nome as marca, d.nome as destaque, array_to_string(array_agg(i.nome), ', ') AS imagens
     FROM produto p
     LEFT JOIN categoria c ON c.id_categoria = p.categoria_id_categoria
@@ -89,10 +89,9 @@ function findByCategory(id) {
 }
 
 function getMaxId() {
-  let sqlGetMaxId = `SELECT MAX(id_produto) FROM produto`
-  return queryPromiseReturn(sqlGetMaxId)
+  let sqlGetMaxId = `SELECT MAX(id_produto) FROM produto`;
+  return queryPromiseReturn(sqlGetMaxId);
 }
-
 
 const insert = async (dados) => {
   const {
@@ -103,17 +102,18 @@ const insert = async (dados) => {
     categoria_id_categoria,
     marca_id_marca,
     destaque_id_destaque,
-    id_vendedor
-  } = dados
+    id_vendedor,
+  } = dados;
 
-  const lastId = await getMaxId()
-  console.log("Valor Max", lastId.rows[0].max+1)
-  let sql = `INSERT INTO produto (id_produto, nome, descricao, preco, ativo, data_criacao, categoria_id_categoria, marca_id_marca, destaque_id_destaque, id_vendedor) VALUES (${lastId.rows[0].max+1}, '${nome}', '${descricao}', ${preco}, ${ativo}, '${new Date(Date.now()).toUTCString()}', ${categoria_id_categoria}, ${marca_id_marca}, ${destaque_id_destaque}, ${id_vendedor}) RETURNING id_produto`
-  return queryPromiseReturn(sql)
-}
-
-
-
+  const lastId = await getMaxId();
+  console.log("Valor Max", lastId.rows[0].max + 1);
+  let sql = `INSERT INTO produto (id_produto, nome, descricao, preco, ativo, data_criacao, categoria_id_categoria, marca_id_marca, destaque_id_destaque, id_vendedor) VALUES (${
+    lastId.rows[0].max + 1
+  }, '${nome}', '${descricao}', ${preco}, ${ativo}, '${new Date(
+    Date.now()
+  ).toUTCString()}', ${categoria_id_categoria}, ${marca_id_marca}, ${destaque_id_destaque}, ${id_vendedor}) RETURNING id_produto`;
+  return queryPromiseReturn(sql);
+};
 
 function update(dados) {
   const {
@@ -170,12 +170,23 @@ function update(dados) {
     params.push(destaque_id_destaque);
   }
 
+  // Verificar se há campos para atualizar
+  if (params.length === 0) {
+    throw new Error("Nenhum campo para atualizar");
+  }
+
   console.log("id do produto aqui:", id);
 
-  sql = sql.slice(0, -1);
-  console.log(sql);
+  // Remover a última vírgula e espaço
+  sql = sql.trim().slice(0, -1);
+
+  // Adicionar a cláusula WHERE
   sql += " WHERE id_produto = ?";
   params.push(id);
+
+  console.log("SQL final:", sql);
+  console.log("Parâmetros:", params);
+
   return queryPromise(sql, params);
 }
 
@@ -187,7 +198,6 @@ function update(dados) {
 function deleteById(id) {
   return queryPromise(`DELETE FROM produto WHERE id_produto = ${id}`);
 }
-
 
 module.exports = {
   findAll,
