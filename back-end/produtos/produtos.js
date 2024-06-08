@@ -1,18 +1,18 @@
-const conn = require("../db/postgres.js");
-const util = require("util");
-const queryPromise = util.promisify(conn().query).bind(conn());
+const conn = require('../db/postgres.js')
+const util = require('util')
+const queryPromise = util.promisify(conn().query).bind(conn())
 
 function queryPromiseReturn(sql) {
   return new Promise((resolve, reject) => {
-    console.log({ sql });
+    console.log({ sql })
     conn().query(sql, (error, results) => {
       if (error) {
-        reject(error);
+        reject(error)
       } else {
-        resolve(results);
+        resolve(results)
       }
-    });
-  });
+    })
+  })
 }
 
 function findAll() {
@@ -25,7 +25,7 @@ function findAll() {
     LEFT JOIN imagem_produto i ON i.produto_id_produto = p.id_produto
     GROUP BY p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome, m.nome, d.nome
     order by id_produto DESC;
-  `);
+  `)
 }
 
 function findById(id) {
@@ -39,7 +39,7 @@ function findById(id) {
     WHERE p.id_produto = ${id}
     GROUP BY p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome, m.nome, d.nome;
     
-  `);
+  `)
 }
 
 function findAllDestaques() {
@@ -71,7 +71,15 @@ WHERE
   p.destaque_id_destaque IN (1, 2, 3) 
 GROUP BY 
   p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome, m.nome, p.destaque_id_destaque, destaque;
-  `);
+  `)
+}
+
+function findByNameProduct(nome) {
+  // Usando query parameter para evitar SQL Injection e fazendo busca case-insensitive
+  return queryPromise(
+    'SELECT * FROM produto WHERE nome ILIKE $1 OR descricao ILIKE $1',
+    [`%${nome}%`]
+  )
 }
 
 function findByCategory(id) {
@@ -85,12 +93,12 @@ function findByCategory(id) {
     WHERE p.categoria_id_categoria = ${id}
     GROUP BY
     p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome, m.nome, p.destaque_id_destaque, destaque;
-  `);
+  `)
 }
 
 function getMaxId() {
-  let sqlGetMaxId = `SELECT MAX(id_produto) FROM produto`;
-  return queryPromiseReturn(sqlGetMaxId);
+  let sqlGetMaxId = `SELECT MAX(id_produto) FROM produto`
+  return queryPromiseReturn(sqlGetMaxId)
 }
 
 const insert = async (dados) => {
@@ -103,17 +111,17 @@ const insert = async (dados) => {
     marca_id_marca,
     destaque_id_destaque,
     id_vendedor,
-  } = dados;
+  } = dados
 
-  const lastId = await getMaxId();
-  console.log("Valor Max", lastId.rows[0].max + 1);
+  const lastId = await getMaxId()
+  console.log('Valor Max', lastId.rows[0].max + 1)
   let sql = `INSERT INTO produto (id_produto, nome, descricao, preco, ativo, data_criacao, categoria_id_categoria, marca_id_marca, destaque_id_destaque, id_vendedor) VALUES (${
     lastId.rows[0].max + 1
   }, '${nome}', '${descricao}', ${preco}, ${ativo}, '${new Date(
     Date.now()
-  ).toUTCString()}', ${categoria_id_categoria}, ${marca_id_marca}, ${destaque_id_destaque}, ${id_vendedor}) RETURNING id_produto`;
-  return queryPromiseReturn(sql);
-};
+  ).toUTCString()}', ${categoria_id_categoria}, ${marca_id_marca}, ${destaque_id_destaque}, ${id_vendedor}) RETURNING id_produto`
+  return queryPromiseReturn(sql)
+}
 
 function update(dados) {
   const {
@@ -126,68 +134,65 @@ function update(dados) {
     categoria_id_categoria,
     marca_id_marca,
     destaque_id_destaque,
-  } = dados;
-  const params = [];
-  let sql = "UPDATE produto SET";
+  } = dados
+  const params = []
+  let sql = 'UPDATE produto SET'
 
   if (nome) {
-    sql += " nome = ?,";
-    params.push(nome);
+    sql += ' nome = ?,'
+    params.push(nome)
   }
 
   if (descricao) {
-    sql += " descricao = ?,";
-    params.push(descricao);
+    sql += ' descricao = ?,'
+    params.push(descricao)
   }
 
   if (preco) {
-    sql += " preco = ?,";
-    params.push(preco);
+    sql += ' preco = ?,'
+    params.push(preco)
   }
 
   if (ativo) {
-    sql += " ativo = ?,";
-    params.push(ativo);
+    sql += ' ativo = ?,'
+    params.push(ativo)
   }
 
   if (data_criacao) {
-    sql += " data_criacao = ?,";
-    params.push(data_criacao);
+    sql += ' data_criacao = ?,'
+    params.push(data_criacao)
   }
 
   if (categoria_id_categoria) {
-    sql += " categoria_id_categoria = ?,";
-    params.push(categoria_id_categoria);
+    sql += ' categoria_id_categoria = ?,'
+    params.push(categoria_id_categoria)
   }
 
   if (marca_id_marca) {
-    sql += " marca_id_marca = ?,";
-    params.push(marca_id_marca);
+    sql += ' marca_id_marca = ?,'
+    params.push(marca_id_marca)
   }
 
   if (destaque_id_destaque != null) {
-    sql += " destaque_id_destaque = ?,";
-    params.push(destaque_id_destaque);
+    sql += ' destaque_id_destaque = ?,'
+    params.push(destaque_id_destaque)
   }
 
-  // Verificar se há campos para atualizar
   if (params.length === 0) {
-    throw new Error("Nenhum campo para atualizar");
+    throw new Error('Nenhum campo para atualizar')
   }
 
-  console.log("id do produto aqui:", id);
+  console.log('id do produto aqui:', id)
 
-  // Remover a última vírgula e espaço
-  sql = sql.trim().slice(0, -1);
+  sql = sql.trim().slice(0, -1)
 
-  // Adicionar a cláusula WHERE
-  sql += " WHERE id_produto = ?";
-  params.push(id);
+  sql += ' WHERE id_produto = ?'
+  params.push(id)
 
-  console.log("SQL final:", sql);
-  console.log("Parâmetros:", params);
+  console.log('SQL final:', sql)
+  console.log('Parâmetros:', params)
 
-  return queryPromise(sql, params);
+  return queryPromise(sql, params)
 }
 
 // function deleteById(ids) {
@@ -196,15 +201,16 @@ function update(dados) {
 // }
 
 function deleteById(id) {
-  return queryPromise(`DELETE FROM produto WHERE id_produto = ${id}`);
+  return queryPromise(`DELETE FROM produto WHERE id_produto = ${id}`)
 }
 
 module.exports = {
   findAll,
   findById,
   findAllDestaques,
+  findByNameProduct,
   findByCategory,
   insert,
   update,
   deleteById,
-};
+}

@@ -8,6 +8,8 @@ import { VscError } from "react-icons/vsc";
 function Home() {
   const [produtosDestaque, setProdutosDestaque] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [nameProduct, setNameProduct] = useState([])
+  const [termoDeBusca, setTermoDeBusca] = useState('');
 
   useEffect(() => {
     fetch(`http://localhost:5000/produtos/destaques`, {
@@ -38,6 +40,28 @@ function Home() {
       .catch((error) => console.error(error));
   }, []);
 
+  const handleSearch = () => {
+    const encodedSearchTerm = encodeURIComponent(termoDeBusca);
+    fetch(`http://localhost:5000/product/findByName?nome=${encodedSearchTerm}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Erro ao buscar produtos');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setNameProduct(data);
+        console.log("produto", data)
+      })
+      .catch((error) => console.error('Erro ao buscar produtos:', error));
+  };
+
+
   const maisPesquisados = produtosDestaque.filter(
     (produto) => produto.destaque_id_destaque === 1
   );
@@ -61,6 +85,8 @@ function Home() {
             type="text"
             placeholder="Estou buscando por..."
             className="flex w-full bg-white py-1 px-4"
+            value={termoDeBusca}
+            onChange={(e) => setTermoDeBusca(e.target.value)}
           />
           <div
             className="flex 
@@ -73,7 +99,7 @@ function Home() {
               p-2
                bg-white"
           >
-            <button>
+            <button onClick={handleSearch}>
               <FaMagnifyingGlass />
             </button>
           </div>
