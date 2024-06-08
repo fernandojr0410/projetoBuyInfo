@@ -4,12 +4,14 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import ListProduct from "../components/listProduct/listProduct";
 import { menuCategories } from "../layout/menus/menusCategories";
 import { VscError } from "react-icons/vsc";
+import LineProduct from "../components/lineProduct/lineProduct";
 
 function Home() {
   const [produtosDestaque, setProdutosDestaque] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [nameProduct, setNameProduct] = useState([])
   const [termoDeBusca, setTermoDeBusca] = useState('');
+  const [resultadoBusca, setResultadoBusca] = useState([])
+  const [buscaRapida, setBuscaRapida] = useState([])
 
   useEffect(() => {
     fetch(`http://localhost:5000/produtos/destaques`, {
@@ -55,12 +57,31 @@ function Home() {
         return response.json();
       })
       .then((data) => {
-        setNameProduct(data);
-        console.log("produto", data)
+        setResultadoBusca(data)
       })
       .catch((error) => console.error('Erro ao buscar produtos:', error));
   };
 
+  const handlefastSearch = () => {
+    const encodedSearchTerm = encodeURIComponent(termoDeBusca);
+    fetch(`http://localhost:5000/product/fastSearch?nome=${encodedSearchTerm}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Erro ao buscar produtos');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setBuscaRapida(data)
+        console.log("data", data)
+      })
+      .catch((error) => console.error('Erro ao buscar produtos:', error));
+  };
 
   const maisPesquisados = produtosDestaque.filter(
     (produto) => produto.destaque_id_destaque === 1
@@ -80,13 +101,19 @@ function Home() {
   return (
     <main>
       <div className="flex flex-col bg-primary pt-10 px-10">
-        <div className="flex">
+        <div className="flex relative">
           <input
             type="text"
             placeholder="Estou buscando por..."
-            className="flex w-full bg-white py-1 px-4"
+            className="flex w-full bg-white py-1 px-4 outline-none focus:outline-none"
             value={termoDeBusca}
-            onChange={(e) => setTermoDeBusca(e.target.value)}
+            onChange={(e) => {
+              setTermoDeBusca(e.target.value)
+              if (e.target.value.length >= 3) {
+                handlefastSearch()
+              }
+              if (e.target.value.length < 3) setBuscaRapida([])
+            }}
           />
           <div
             className="flex 
@@ -103,6 +130,21 @@ function Home() {
               <FaMagnifyingGlass />
             </button>
           </div>
+          {
+            buscaRapida.length > 0
+              ? (
+                <div className="absolute top-full left-0 w-full bg-white border mt-1">
+                  {
+                    buscaRapida.map((produto, index) => {
+                      return (<div key={index} className="bg-red-300">
+                        <LineProduct produto={produto} />
+                      </div>)
+                    })
+                  }
+                </div>
+              )
+              : null
+          }
         </div>
 
         <div className="flex justify-between pt-6">
@@ -126,25 +168,41 @@ function Home() {
         </div>
       </div>
 
-      <section className="flex flex-col gap-4 bg-gray-100 px-10 py-6">
-        <div>
-          <h3 className="flex text-gray-600 font-bold text-2xl">
-            Mais pesquisados
-          </h3>
-        </div>
+      {
+        resultadoBusca.length > 0
+          ? (<section className="flex flex-col gap-4 bg-gray-100 px-10 py-6">
+            <div>
+              <h3 className="flex text-gray-600 font-bold text-2xl">
+                Resultado da busca
+              </h3>
+            </div>
 
-        <ListProduct produtos={maisPesquisados} />
-      </section>
+            <ListProduct produtos={resultadoBusca} />
+          </section>)
+          : (<section>
+            <section className="flex flex-col gap-4 bg-gray-100 px-10 py-6">
+              <div>
+                <h3 className="flex text-gray-600 font-bold text-2xl">
+                  Mais pesquisados
+                </h3>
+              </div>
 
-      <section className="flex flex-col gap-4  px-10 py-6">
-        <div>
-          <h3 className="flex text-gray-600 font-bold text-2xl">
-            Ultimos anuncios
-          </h3>
-        </div>
+              <ListProduct produtos={maisPesquisados} />
+            </section>
 
-        <ListProduct produtos={ultimosAnuncios} />
-      </section>
+            <section className="flex flex-col gap-4  px-10 py-6">
+              <div>
+                <h3 className="flex text-gray-600 font-bold text-2xl">
+                  Ultimos anuncios
+                </h3>
+              </div>
+
+              <ListProduct produtos={ultimosAnuncios} />
+            </section>
+          </section>)
+      }
+
+
     </main>
   );
 }
