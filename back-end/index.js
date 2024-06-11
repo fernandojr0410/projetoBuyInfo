@@ -314,6 +314,40 @@ app.get('/product/findByName', (req, res) => {
     .then((results) => {
       res.send(
         results.rows.map((produto) => {
+          console.log('produto', produto)
+          return {
+            ...produto,
+            imagens:
+              produto.imagens &&
+              produto.imagens
+                .split(',')
+                .map((img) =>
+                  `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(' ', '')
+                )
+                .sort(),
+          }
+        })
+      )
+    })
+    .catch((error) => {
+      console.error('Erro ao buscar produtos:', error)
+      res.status(500).send({ error: 'Erro ao buscar produtos' })
+    })
+})
+
+app.get('/product/fastSearch', (req, res) => {
+  const nome = req.query.nome
+
+  if (!nome) {
+    return res.status(400).send({ error: 'Nome do produto é necessário' })
+  }
+
+  produtos
+    .fastSearch(nome)
+    .then((results) => {
+      res.send(
+        results.rows.map((produto) => {
+          console.log('produto', produto)
           return {
             ...produto,
             imagens:

@@ -117,34 +117,33 @@ function Home() {
           />
           <div
             className="flex 
-        justify-center 
-          items-center 
-            border-l 
-             border-solid
-            border-gray
-                rounded-sm
+              justify-center 
+              items-center 
+              border-l 
+              border-solid
+              border-gray
+              rounded-sm
               p-2
-               bg-white"
+              bg-white"
           >
-            <button onClick={handleSearch}>
+            <button
+              onClick={() => {
+                handleSearch();
+                setBuscaRapida([]);
+              }}
+            >
               <FaMagnifyingGlass />
             </button>
           </div>
-          {
-            buscaRapida.length > 0
-              ? (
-                <div className="absolute top-full left-0 w-full bg-white border mt-1">
-                  {
-                    buscaRapida.map((produto, index) => {
-                      return (<div key={index} className="bg-red-300">
-                        <LineProduct produto={produto} />
-                      </div>)
-                    })
-                  }
+          {buscaRapida.length > 0 && (
+            <div className="absolute top-full left-0 w-full bg-bege border mt-1 z-50 bg-white">
+              {buscaRapida.map((produto, index) => (
+                <div key={index} className="bg-bege">
+                  <LineProduct produto={produto} />
                 </div>
-              )
-              : null
-          }
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="flex justify-between pt-6">
@@ -168,43 +167,40 @@ function Home() {
         </div>
       </div>
 
-      {
-        resultadoBusca.length > 0
-          ? (<section className="flex flex-col gap-4 bg-gray-100 px-10 py-6">
+      {resultadoBusca.length > 0 ? (
+        <section className="flex flex-col gap-4 bg-gray-100 px-10 py-6">
+          <div>
+            <h3 className="flex text-gray-600 font-bold text-2xl">
+              Resultado da busca
+            </h3>
+          </div>
+
+          <ListProduct produtos={resultadoBusca} />
+        </section>
+      ) : (
+        <section>
+          <section className="flex flex-col gap-4 bg-gray-100 px-10 py-6">
             <div>
               <h3 className="flex text-gray-600 font-bold text-2xl">
-                Resultado da busca
+                Mais pesquisados
               </h3>
             </div>
 
-            <ListProduct produtos={resultadoBusca} />
-          </section>)
-          : (<section>
-            <section className="flex flex-col gap-4 bg-gray-100 px-10 py-6">
-              <div>
-                <h3 className="flex text-gray-600 font-bold text-2xl">
-                  Mais pesquisados
-                </h3>
-              </div>
+            <ListProduct produtos={maisPesquisados} />
+          </section>
 
-              <ListProduct produtos={maisPesquisados} />
-            </section>
+          <section className="flex flex-col gap-4  px-10 py-6">
+            <div>
+              <h3 className="flex text-gray-600 font-bold text-2xl">
+                Últimos anúncios
+              </h3>
+            </div>
 
-            <section className="flex flex-col gap-4  px-10 py-6">
-              <div>
-                <h3 className="flex text-gray-600 font-bold text-2xl">
-                  Ultimos anuncios
-                </h3>
-              </div>
-
-              <ListProduct produtos={ultimosAnuncios} />
-            </section>
-          </section>)
-      }
-
-
+            <ListProduct produtos={ultimosAnuncios} />
+          </section>
+        </section>
+      )}
     </main>
   );
 }
-
 export default Home;

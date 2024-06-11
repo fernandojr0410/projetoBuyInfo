@@ -75,11 +75,68 @@ GROUP BY
 }
 
 function findByNameProduct(nome) {
-  // Usando query parameter para evitar SQL Injection e fazendo busca case-insensitive
-  return queryPromise(
-    'SELECT * FROM produto WHERE nome ILIKE $1 OR descricao ILIKE $1',
-    [`%${nome}%`]
-  )
+  return queryPromise(`
+    SELECT 
+    p.id_produto, 
+    p.nome, 
+    p.descricao, 
+    p.preco, 
+    p.ativo, 
+    p.data_criacao, 
+    c.nome as categoria, 
+    m.nome as marca, 
+    p.destaque_id_destaque, 
+    CASE 
+      WHEN p.destaque_id_destaque = 1 THEN 'Mais Pesquisados' 
+      WHEN p.destaque_id_destaque = 2 THEN 'Últimos Anúncios' 
+      WHEN p.destaque_id_destaque = 3 THEN 'Mais vendidos' 
+      ELSE d.nome 
+    END AS destaque, 
+    array_to_string(array_agg(i.nome), ', ') AS imagens 
+  FROM 
+    produto p 
+    LEFT JOIN categoria c ON c.id_categoria = p.categoria_id_categoria 
+    LEFT JOIN destaque d ON d.id_destaque = p.destaque_id_destaque 
+    LEFT JOIN marca m ON m.id_marca = p.marca_id_marca 
+    LEFT JOIN imagem_produto i ON i.produto_id_produto = p.id_produto 
+  WHERE 
+    p.descricao ILIKE '%${nome}%' OR p.nome ILIKE '%${nome}%'
+  GROUP BY 
+    p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome, m.nome, p.destaque_id_destaque, destaque;
+    `)
+}
+
+function fastSearch(nome) {
+  return queryPromise(`
+    SELECT 
+    p.id_produto, 
+    p.nome, 
+    p.descricao, 
+    p.preco, 
+    p.ativo, 
+    p.data_criacao, 
+    c.nome as categoria, 
+    m.nome as marca, 
+    p.destaque_id_destaque, 
+    CASE 
+      WHEN p.destaque_id_destaque = 1 THEN 'Mais Pesquisados' 
+      WHEN p.destaque_id_destaque = 2 THEN 'Últimos Anúncios' 
+      WHEN p.destaque_id_destaque = 3 THEN 'Mais vendidos' 
+      ELSE d.nome 
+    END AS destaque, 
+    array_to_string(array_agg(i.nome), ', ') AS imagens 
+  FROM 
+    produto p 
+    LEFT JOIN categoria c ON c.id_categoria = p.categoria_id_categoria 
+    LEFT JOIN destaque d ON d.id_destaque = p.destaque_id_destaque 
+    LEFT JOIN marca m ON m.id_marca = p.marca_id_marca 
+    LEFT JOIN imagem_produto i ON i.produto_id_produto = p.id_produto 
+  WHERE 
+    p.descricao ILIKE '%${nome}%' OR p.nome ILIKE '%${nome}%'
+  GROUP BY 
+    p.id_produto, p.nome, p.descricao, p.preco, p.ativo, p.data_criacao, c.nome, m.nome, p.destaque_id_destaque, destaque
+    LIMIT 5;
+    `)
 }
 
 function findByCategory(id) {
@@ -195,11 +252,6 @@ function update(dados) {
   return queryPromise(sql, params)
 }
 
-// function deleteById(ids) {
-//   const idsDelete = ids.toString();
-//   return queryPromise(`DELETE FROM produto WHERE id_produto IN (${idsDelete})`);
-// }
-
 function deleteById(id) {
   return queryPromise(`DELETE FROM produto WHERE id_produto = ${id}`)
 }
@@ -209,6 +261,7 @@ module.exports = {
   findById,
   findAllDestaques,
   findByNameProduct,
+  fastSearch,
   findByCategory,
   insert,
   update,
