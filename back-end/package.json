@@ -21,7 +21,8 @@
     "multer": "^1.4.5-lts.1",
     "pg": "^8.11.3",
     "postgres": "^3.4.4",
-    "require": "^2.4.20"
+    "require": "^2.4.20",
+    "stripe": "^15.11.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

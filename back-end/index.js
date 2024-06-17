@@ -1,4 +1,7 @@
 const express = require('express')
+const stripe = require('stripe')(
+  'sk_test_51PRzenISma1JVODeEmahI7V2rllsU6Vex1cTD7sikaiq0k9Tpk0l5B343iCFo6aHGmHbo57IXEtJQ9fFFUucCgQo00hFfwPXog'
+)
 const bodyParser = require('body-parser')
 require('dotenv').config()
 
@@ -24,6 +27,21 @@ app.use(cors())
 
 const PORT = 5000
 const HOST = 'http://localhost'
+
+app.post('/create-payment-intent', async (req, res) => {
+  const { amount } = req.body
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount,
+    currency: 'BRL',
+    automatic_payment_methods: {
+      enabled: true,
+    },
+  })
+  console.log('amount', amount)
+  res.send({
+    clientSecret: paymentIntent.client_secret,
+  })
+})
 
 app.get('/produtos/destaques', (req, res) => {
   produtos

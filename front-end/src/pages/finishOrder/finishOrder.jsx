@@ -10,6 +10,10 @@ import { SiNubank } from "react-icons/si";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ModalRegistration from "../../components/modal/modalRegistration";
+import CheckoutForm from "../../components/checkoutForm/checkoutForm";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+const stripePromise = loadStripe('pk_test_51PRzenISma1JVODe4EXNZZkqWh9eIrthZXASg7397vudybTCcEHSGmp25iOLs57ZhqTrmymnOV9uDcJlgbduzMrD00iRGgN5vX')
 
 function FinishOrder({ cliente }) {
   const location = useLocation();
@@ -34,13 +38,34 @@ function FinishOrder({ cliente }) {
   const [status, setStatus] = useState("pendente de pagamento");
   const [showModal, setShowModal] = useState(false);
   const [registroCliente, setRegistroCliente] = useState(cliente);
+  const [clientSecret, setClientSecret] = useState('')
+  useEffect(() => {
+    const valor = valorTotal.toFixed(2).replace('.', '')
+    // Create PaymentIntent as soon as the page loads
+    fetch("http://localhost:5000/create-payment-intent", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: Number(valor) }),
+    })
+      .then((res) => res.json())
+      .then((data) => setClientSecret(data.clientSecret));
+  }, []);
+
+  const appearance = {
+    theme: 'stripe',
+  };
+  const options = {
+    clientSecret,
+    appearance,
+  };
+
 
   const handlePayment = (event) => {
-   
+
     const statusPedido = {
       status: status,
     };
-  
+
     fetch(`http://localhost:5000/order/insertOrder`, {
       method: "POST",
       headers: {
@@ -52,7 +77,7 @@ function FinishOrder({ cliente }) {
       .then((data) => {
         if (data && data.result && data.result.idpedido) {
           const idPedido = data.result.idpedido;
-  
+
           const carrinhoData = JSON.parse(localStorage.getItem("carrinho"));
           carrinhoData.forEach((produto) => {
             const dadosPedidos = {
@@ -60,7 +85,7 @@ function FinishOrder({ cliente }) {
               id_cliente: cliente.id_cliente,
               idpedido: idPedido,
             };
-  
+
             fetch(`http://localhost:5000/orderProductClient/insert`, {
               method: "POST",
               headers: {
@@ -73,7 +98,7 @@ function FinishOrder({ cliente }) {
                 console.log("Pedido Produto Cliente:", data);
               });
           });
-  
+
           setShowModal(true);
         } else {
           console.error("Erro ao inserir pedido:", data);
@@ -119,7 +144,7 @@ function FinishOrder({ cliente }) {
               },
             };
             setEndereco(enderecoData);
-  
+
             // Verifica se o id_cliente mudou antes de atualizar o registroCliente
             if (registroCliente.id_cliente !== data[0].id_cliente) {
               setRegistroCliente(data[0]);
@@ -129,7 +154,7 @@ function FinishOrder({ cliente }) {
         .catch((error) => console.error("Erro ao buscar endereço:", error));
     }
   }, [registroCliente]);
-  
+
 
   return (
     <div className="flex flex-col justify-center bg-gray-200 p-10 ">
@@ -230,92 +255,21 @@ function FinishOrder({ cliente }) {
               <div className="flex flex-col pt-4">
                 <div className="flex flex-col gap-4">
                   <div className="flex w-full">
-                    <input
-                      type="number"
-                      name="numeroCartao"
-                      placeholder="Número do Cartão"
-                      className="border border-solid border-gray-500 px-2 text-sm h-10 w-[40%] rounded-md"
-                    />
-                  </div>
-                  <div className="flex w-full">
-                    <input
-                      type="text"
-                      name="nomeTitular"
-                      placeholder="Nome do titular (como gravado no Cartão)"
-                      className="border border-solid border-gray-500 px-2 text-sm h-10 w-[40%] rounded-md"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <span className="text-xs font-bold pt-5">
-                      DATA DE VALIDADE DO CARTÃO
-                    </span>
-                    <div className="flex gap-4">
-                      <div>
-                        <input
-                          type="number"
-                          name="mesValidade"
-                          placeholder="Mês"
-                          className="border border-solid border-gray-500 px-2 text-sm h-10 w-36 rounded-md"
-                        />
-                      </div>
-                      <div>
-                        <input
-                          type="number"
-                          name="anoValidade"
-                          placeholder="Ano"
-                          className="border border-solid border-gray-500 px-2 text-sm h-10 w-36 rounded-md"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold pt-5">
-                      CÓDIGO DE SEGURANÇA
-                    </span>
-                  </div>
-                  <div className="flex w-[50%]">
-                    <input
-                      type="number"
-                      name="codigoCartao"
-                      placeholder="cvv"
-                      className="border border-solid border-gray-500 px-2 text-sm h-10 w-[40%] rounded-md"
-                    />
-                  </div>
 
-                  <div className="flex items-center">
-                    <select
-                      name="parcelamento"
-                      className="border border-solid border-gray-500 px-2 text-sm h-10 w-[40%] rounded-md"
-                      defaultValue={"DEFAULT"}
-                    >
-                      <option value="DEFAULT" disabled>
-                        Opções de Parcelamento
-                      </option>
-                      <option value="1">1x sem juros</option>
-                      <option value="2">2x sem juros</option>
-                      <option value="3">3x sem juros</option>
-                      <option value="4">4x sem juros</option>
-                      <option value="5">5x sem juros</option>
-                      <option value="6">6x sem juros</option>
-                      <option value="7">7x sem juros</option>
-                      <option value="8">8x sem juros</option>
-                      <option value="9">9x sem juros</option>
-                      <option value="10">10x sem juros</option>
-                    </select>
+                    {/* Stripe Pagamento */}
+                    {
+                      clientSecret && (
+                        <Elements options={options} stripe={stripePromise}>
+                          <CheckoutForm onSubmit={() => handlePayment} />
+
+                        </Elements>
+                      )
+                    }
+                    {/* Stripe Pagamento */}
                   </div>
                 </div>
               </div>
-              <div className="flex w-[50%] ml-auto">
-                <button
-                  type="submit"
-                  onClick={handlePayment}
-                  className="flex items-center justify-center bg-primary w-full h-10 rounded-md"
-                >
-                  <span className="text-white">
-                    FINALIZAR PEDIDO COM CARTÃO DE CRÉDITO
-                  </span>
-                </button>
-              </div>
+
             </div>
             {showModal && (
               <ModalRegistration
@@ -326,6 +280,7 @@ function FinishOrder({ cliente }) {
             )}
           </div>
         </div>
+
 
         <div className="flex flex-col gap-4 h-[40%] w-[30%] justify-end">
           <div className="flex">
@@ -358,8 +313,8 @@ function FinishOrder({ cliente }) {
                     <div className="flex mt-4 border border-gray-400"></div>
                     <div className="flex flex-col gap-6 pt-4">
                       {endereco &&
-                      endereco.Cliente &&
-                      endereco.Cliente.Enderecos ? (
+                        endereco.Cliente &&
+                        endereco.Cliente.Enderecos ? (
                         <>
                           <span>
                             <input
@@ -368,8 +323,8 @@ function FinishOrder({ cliente }) {
                               className="cursor-pointer mb-2"
                             />
                             {endereco.Cliente &&
-                            endereco.Cliente.Enderecos &&
-                            endereco.Cliente.Enderecos.cep
+                              endereco.Cliente.Enderecos &&
+                              endereco.Cliente.Enderecos.cep
                               ? `${endereco.Cliente.Enderecos.rua} - CEP ${endereco.Cliente.Enderecos.cep} - ${endereco.Cliente.Enderecos.bairro} - ${endereco.Cliente.Enderecos.cidade} - ${endereco.Cliente.Enderecos.estado}`
                               : "Você não possui endereço cadastrado."}
                           </span>
@@ -381,7 +336,7 @@ function FinishOrder({ cliente }) {
                             </div>
                             <div className="flex w-full">
                               <button
-                                type="onclick"
+                                type="onSubmit"
                                 className="flex items-center justify-center bg-primary w-full h-10 rounded-md"
                               >
                                 <Link
