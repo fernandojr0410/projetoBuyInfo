@@ -1,94 +1,63 @@
-import { useLocation } from "react-router-dom";
-import SidebarCustomer from "./components/sideBarCustomer";
 import { useEffect, useState } from "react";
+import SidebarCustomer from "./components/sideBarCustomer";
 
 function CustomerOrders() {
-  const [produtosDestaque, setProdutosDestaque] = useState([]);
   const [carrinho, setCarrinho] = useState([]);
-  const [quantidades, setQuantidades] = useState({});
-  const location = useLocation();
+  const [cliente, setCliente] = useState({});
+  const [endereco, setEndereco] = useState({});
+  const [tipoEntrega, setTipoEntrega] = useState("normal");
+  const [frete, setFrete] = useState(30);
+  const [valorTotal, setValorTotal] = useState(0);
 
   useEffect(() => {
     const carrinhoData = JSON.parse(localStorage.getItem("carrinho")) || [];
-    let quantidadePorProduto = {};
-    carrinhoData.forEach((produto) => {
-      quantidadePorProduto[produto.id_produto] = produto.quantidade;
-    });
     setCarrinho(carrinhoData);
-    setQuantidades(quantidadePorProduto);
-  }, []);
 
-  let valorTotal = 0;
-  carrinho.forEach((produto) => {
-    valorTotal +=
-      produto.preco * (quantidades[produto.id_produto] || produto.quantidade);
-  });
+    const clienteData = JSON.parse(localStorage.getItem("cliente")) || {};
+    setCliente(clienteData);
 
-  const numeroParcelas = 10;
-  const valorParcela = valorTotal / numeroParcelas;
+    const enderecoData = JSON.parse(localStorage.getItem("endereco")) || {};
+    setEndereco(enderecoData);
 
-  const maisVendidos = produtosDestaque.filter(
-    (produto) => produto.destaque_id_destaque === 3
-  );
-
-  useEffect(() => {
-    fetch(`http://localhost:5000/produtos/destaques`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setProdutosDestaque(data);
-      })
-      .catch((error) => console.error(error));
+    const valorTotalData = JSON.parse(localStorage.getItem("valorTotal")) || 0;
+    setValorTotal(valorTotalData);
   }, []);
 
   return (
-    <div className="flex bg-gray-200 py-5">
+    <div className="flex bg-gray-200 p-10">
       <SidebarCustomer />
+      <div className="flex flex-col w-full">
+        <div className="flex flex-col gap-2">
+          <span className="font-bold text-primary text-xl">Meus Pedidos</span>
 
-      <div className="flex flex-col">
-        <span className="font-bold text-primary text-xl pb-4">
-          Meus Pedidos
-        </span>
-
-        <div className="flex flex-col bg-white p-4 rounded-md w-[70%]">
-          <div>
+          <div className="flex flex-col gap-4 border border-solid border-gray-400 bg-white rounded-md w-[50%] p-4">
             {carrinho.map((produto, index) => (
               <div key={index}>
-                <div className="flex">
-                  <div className="flex w-48 h-32">
+                <div>
+                  <div>
                     {produto.imagens.length > 0 && (
-                      <img src={produto.imagens[0]} alt="" className="" />
+                      <img src={produto.imagens[0]} alt="" className="h-44" />
                     )}
                   </div>
-                  <div className="flex flex-col gap-4 p-2">
-                    <div className="font-bold">
-                      <span>{produto.nome}</span>
-                    </div>
-                    <div>
-                      <span className="text-primary">
-                        Marca:
-                        {produto.marca}
-                      </span>
-                    </div>
+                  <div className="product-info">
+                    <h3>{produto.nome}</h3>
+                    <p>Marca: {produto.marca}</p>
+                  </div>
+                  <div>
+                    <span className="font-bold text-primary text-xl">
+                      {(Number(produto.preco).toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      }))}
+                    </span>
                   </div>
                 </div>
-                <div className="flex flex-col pt-6 font-bold text-primary">
-                  <span>Valor Unitário: {produto.preco}</span>
-                </div>
-                <div className="flex border-solid border border-primary"></div>
               </div>
             ))}
           </div>
-          <div className="flex flex-col pt-6 font-bold text-primary">
-            <span>Valor Total: {valorTotal}</span>
-          </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

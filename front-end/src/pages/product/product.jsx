@@ -85,9 +85,8 @@ function Product({ handleAdicionarCarrinho }) {
         <div className="flex justify-between pb-4 pt-10">
           <div className="flex items-center flex-col text-base gap-1 cursor-pointer hover:text-primary">
             <div
-              className={`flex items-center flex-col text-base gap-1 cursor-pointer ${
-                metodoPagamento === "cartaoCredito" ? "text-primary" : ""
-              }`}
+              className={`flex items-center flex-col text-base gap-1 cursor-pointer ${metodoPagamento === "cartaoCredito" ? "text-primary" : ""
+                }`}
               onClick={() => handlePagamentoChange("cartaoCredito")}
             >
               <AiOutlineCreditCard style={{ width: "40px", height: "40px" }} />
@@ -96,9 +95,8 @@ function Product({ handleAdicionarCarrinho }) {
           </div>
 
           <div
-            className={`flex items-center flex-col text-base gap-1 cursor-pointer w-[400px] ${
-              metodoPagamento === "boleto" ? "text-primary" : ""
-            }`}
+            className={`flex items-center flex-col text-base gap-1 cursor-pointer w-[400px] ${metodoPagamento === "boleto" ? "text-primary" : ""
+              }`}
             onClick={() => handlePagamentoChange("boleto")}
           >
             <div className="flex items-center flex-col text-base gap-1 cursor-pointer hover:text-primary">
@@ -108,9 +106,8 @@ function Product({ handleAdicionarCarrinho }) {
           </div>
 
           <div
-            className={`flex items-center flex-col text-base gap-1 cursor-pointer ${
-              metodoPagamento === "pix" ? "text-primary" : ""
-            }`}
+            className={`flex items-center flex-col text-base gap-1 cursor-pointer ${metodoPagamento === "pix" ? "text-primary" : ""
+              }`}
             onClick={() => handlePagamentoChange("pix")}
           >
             <div className="flex items-center flex-col text-base gap-1 cursor-pointer hover:text-primary">
@@ -230,11 +227,11 @@ function Product({ handleAdicionarCarrinho }) {
 
               <div className="flex flex-col">
                 <span className="text-primary text-3xl">
-                  R${" "}
-                  {produto[0]?.preco.toLocaleString("pt-BR", {
+
+                  {(Number(produto[0]?.preco).toLocaleString("pt-BR", {
                     style: "currency",
                     currency: "BRL",
-                  })}
+                  }))}
                 </span>
                 <span className="text-lg">
                   ou em até 10x de{" "}
