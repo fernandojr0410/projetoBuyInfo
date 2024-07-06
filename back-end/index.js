@@ -353,6 +353,43 @@ app.get('/product/findByName', (req, res) => {
     })
 })
 
+app.get('/product/findByProductGroup', (req, res) => {
+  const grupos = req.query.grupo
+  const nome = req.query.nome
+
+  if (!grupos) {
+    return res.status(400).send({ error: 'Grupo do produto é necessário' })
+  }
+
+  if (!nome) {
+    return res.status(400).send({ error: 'Nome do produto é necessário' })
+  }
+
+  produtos
+    .findByProductGroup(grupos, nome)
+    .then((results) => {
+      res.send(
+        results.rows.map((produto) => {
+          return {
+            ...produto,
+            imagens:
+              produto.imagens &&
+              produto.imagens
+                .split(',')
+                .map((img) =>
+                  `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(' ', '')
+                )
+                .sort(),
+          }
+        })
+      )
+    })
+    .catch((error) => {
+      console.error('Erro ao buscar produtos:', error)
+      res.status(500).send({ error: 'Erro ao buscar produtos' })
+    })
+})
+
 app.get('/product/fastSearch', (req, res) => {
   const nome = req.query.nome
 
