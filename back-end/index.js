@@ -354,9 +354,9 @@ app.get('/product/findByName', (req, res) => {
 })
 
 app.get('/product/findByProductGroup', (req, res) => {
-  const grupos = req.query.grupo
+  const grupos = req.query.grupos
   const nome = req.query.nome
-
+  console.log('reqQuery', req.query.grupos)
   if (!grupos) {
     return res.status(400).send({ error: 'Grupo do produto é necessário' })
   }
@@ -365,8 +365,14 @@ app.get('/product/findByProductGroup', (req, res) => {
     return res.status(400).send({ error: 'Nome do produto é necessário' })
   }
 
+  let grupoBusca = ''
+  for (let grupo of grupos.split(',')) {
+    if (grupoBusca.length > 1) grupoBusca += ','
+    grupoBusca += `'${grupo}'`
+  }
+
   produtos
-    .findByProductGroup(grupos, nome)
+    .findByProductGroup(grupoBusca, nome)
     .then((results) => {
       res.send(
         results.rows.map((produto) => {

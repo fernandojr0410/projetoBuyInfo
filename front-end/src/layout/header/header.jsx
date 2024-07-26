@@ -5,7 +5,6 @@ import UserProfile from "./components/userProfile";
 import ItemsCart from "./components/itemsCart";
 import { BiUserCircle } from "react-icons/bi";
 import { AiOutlineShoppingCart } from "react-icons/ai";
-import { IoIosInformationCircleOutline } from "react-icons/io";
 import { useState } from "react";
 import PopupDicas from "../../components/modal/popupDicas";
 
