@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Logo from "../../assets/images/logo-buy-info.png";
 import { Link, useLocation } from "react-router-dom";
 import UserProfile from "./components/userProfile";
@@ -7,6 +7,8 @@ import { BiUserCircle } from "react-icons/bi";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useState } from "react";
 import PopupDicas from "../../components/modal/popupDicas";
+import { IoIosInformationCircleOutline } from "react-icons/io";
+
 
 function Header({ cliente, handleUser, itemsCart }) {
   const location = useLocation();
@@ -22,7 +24,7 @@ function Header({ cliente, handleUser, itemsCart }) {
     console.log("mostrarDicas", mostrarDicas)
   }
   const [buscaRapida, setBuscaRapida] = useState([])
-  const [grupos, setGrupos] = useState("gamer")
+  const [grupos, setGrupos] = useState("")
   const [termoDeBusca, setTermoDeBusca] = useState('');
 
   const handlefastSearch = () => {
@@ -46,6 +48,11 @@ function Header({ cliente, handleUser, itemsCart }) {
       })
       .catch((error) => console.error('Erro ao buscar produtos:', error));
   };
+  useEffect(() => {
+    if (grupos.startsWith(',')) setGrupos(grupos.slice(1))
+    if (grupos.includes(',,')) setGrupos(grupos.replace(',,', ','))
+    if (grupos.endsWith(',')) setGrupos(grupos.slice(0, -1))
+  }, [grupos])
   return (
     <header className="flex items-center justify-between bg-white w-screen h-24 p-8">
       <Link to="/home">
@@ -61,7 +68,11 @@ function Header({ cliente, handleUser, itemsCart }) {
             <span className="text-lg">Dicas</span>
           </div>
         </button> */}
-        <button onClick={handleMostrarDicas}>Dicas</button>
+        <div>
+          <button onClick={handleMostrarDicas} className="text-lg flex items-center gap-1">
+            <IoIosInformationCircleOutline className="h-6 w-6" />
+            <span>Dicas</span></button>
+        </div>
         {!hideCartIcon && (
           <Link to="/carrinho" className="relative flex items-center gap-2">
             <AiOutlineShoppingCart className="h-6 w-6" />
@@ -87,28 +98,28 @@ function Header({ cliente, handleUser, itemsCart }) {
       <PopupDicas show={mostrarDicas} handleClose={handleMostrarDicas} handleViewProducts={() => { console.log('navegar para outra tela') }}>
         <div className='flex flex-col gap-10 items-center'>
           <div className='flex'>
-            <p>Selecione o tipo de produto que você deseja buscar</p>
+            <p className='font-bold text-gray-600'>Selecione o tipo de produto que você deseja buscar</p>
           </div>
 
           <div className='flex'>
             <div className='flex gap-5'>
-              <button onClick={() => setGrupos(grupos.concat(',', 'gamer'))} className={grupos.includes('gamer') ? 'bg-green-400' : 'bg-slate-400'}>Gamer</button>
-              <button onClick={() => setGrupos(grupos.concat(',', 'servidor'))} className={grupos.includes('servidor') ? 'bg-green-400' : 'bg-slate-400'}>Servidor</button>
-              <button onClick={() => setGrupos(grupos.concat(',', 'trabalho'))} className={grupos.includes('trabalho') ? 'bg-green-400' : 'bg-slate-400'}>Trabalho</button>
-              <button onClick={() => setGrupos(grupos.concat(',', 'estudos'))} className={grupos.includes('estudos') ? 'bg-green-400' : 'bg-slate-400'}>Estudos</button>
-              <button onClick={() => setGrupos(grupos.concat(',', 'desenvolvimento'))} className={grupos.includes('desenvolvimento') ? 'bg-green-400' : 'bg-slate-400'}>Desenvolvimento</button>
-              <button onClick={() => setGrupos(grupos.concat(',', 'alta performace'))} className={grupos.includes('alta performace') ? 'bg-green-400' : 'bg-slate-400'}>Alta Performance</button>
+              <button onClick={() => setGrupos(grupos.includes('gamer') ? grupos.replace('gamer', '') : grupos.concat(grupos.length > 1 ? ',' : '', 'gamer'))} className={grupos.includes('gamer') ? 'bg-green-400' : 'bg-slate-400'}>Gamer</button>
+              <button onClick={() => setGrupos(grupos.includes('servidor') ? grupos.replace('servidor', '') : grupos.concat(grupos.length > 1 ? ',' : '', 'servidor'))} className={grupos.includes('servidor') ? 'bg-green-400' : 'bg-slate-400'}>Servidor</button>
+              <button onClick={() => setGrupos(grupos.includes('trabalho') ? grupos.replace('trabalho', '') : grupos.concat(grupos.length > 1 ? ',' : '', 'trabalho'))} className={grupos.includes('trabalho') ? 'bg-green-400' : 'bg-slate-400'}>Trabalho</button>
+              <button onClick={() => setGrupos(grupos.includes('estudos') ? grupos.replace('estudos', '') : grupos.concat(grupos.length > 1 ? ',' : '', 'estudos'))} className={grupos.includes('estudos') ? 'bg-green-400' : 'bg-slate-400'}>Estudos</button>
+              <button onClick={() => setGrupos(grupos.includes('desenvolvimento') ? grupos.replace('desenvolvimento', '') : grupos.concat(grupos.length > 1 ? ',' : '', 'desenvolvimento'))} className={grupos.includes('desenvolvimento') ? 'bg-green-400' : 'bg-slate-400'}>Desenvolvimento</button>
+              <button onClick={() => setGrupos(grupos.includes('alta performace') ? grupos.replace('alta performace', '') : grupos.concat(grupos.length > 1 ? ',' : '', 'alta performace'))} className={grupos.includes('alta performace') ? 'bg-green-400' : 'bg-slate-400'}>Alta Performance</button>
             </div>
           </div>
           <div className='flex'>
-            <p>{grupos}</p>
+            <p className='font-bold'>{grupos}</p>
           </div>
         </div>
 
         <input
           type="text"
-          placeholder="Estou buscando por..."
-          className="flex w-full bg-white py-1 px-4 outline-none focus:outline-none"
+          placeholder="Preciso de ajuda com..."
+          className="flex w-full border border-gray-300 border-solid p-2 mt-6 outline-none focus:outline-none"
           value={termoDeBusca}
           onChange={(e) => {
             setTermoDeBusca(e.target.value)
@@ -118,7 +129,9 @@ function Header({ cliente, handleUser, itemsCart }) {
             if (e.target.value.length < 3) setBuscaRapida([])
           }}
         />
-        <p>Resultados {buscaRapida.length}!</p>
+        <div className='flex justify-center p-3 font-bold'>
+          <p>Resultados {buscaRapida.length}!</p>
+        </div>
 
 
         {/* {buscaRapida.length > 0 && (
