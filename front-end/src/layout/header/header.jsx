@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Logo from "../../assets/images/logo-buy-info.png";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import UserProfile from "./components/userProfile";
 import ItemsCart from "./components/itemsCart";
 import { BiUserCircle } from "react-icons/bi";
@@ -8,6 +8,9 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useState } from "react";
 import PopupDicas from "../../components/modal/popupDicas";
 import { IoIosInformationCircleOutline } from "react-icons/io";
+
+
+
 
 
 function Header({ cliente, handleUser, itemsCart }) {
@@ -26,6 +29,7 @@ function Header({ cliente, handleUser, itemsCart }) {
   const [buscaRapida, setBuscaRapida] = useState([])
   const [grupos, setGrupos] = useState("")
   const [termoDeBusca, setTermoDeBusca] = useState('');
+  const navigate = useNavigate()
 
   const handlefastSearch = () => {
     const encodedSearchTerm = encodeURIComponent(termoDeBusca);
@@ -60,14 +64,6 @@ function Header({ cliente, handleUser, itemsCart }) {
       </Link>
 
       <div className="flex items-center gap-4">
-        {/* <button className="flex items-center gap-2" onClick={() => handleMostrarDicas}>
-          <div className="flex">
-            <IoIosInformationCircleOutline className="h-6 w-6" />
-          </div>
-          <div className="flex">
-            <span className="text-lg">Dicas</span>
-          </div>
-        </button> */}
         <div>
           <button onClick={handleMostrarDicas} className="text-lg flex items-center gap-1">
             <IoIosInformationCircleOutline className="h-6 w-6" />
@@ -95,7 +91,7 @@ function Header({ cliente, handleUser, itemsCart }) {
         )}
       </div>
 
-      <PopupDicas show={mostrarDicas} handleClose={handleMostrarDicas} handleViewProducts={() => { console.log('navegar para outra tela') }}>
+      <PopupDicas show={mostrarDicas} handleClose={handleMostrarDicas} handleViewProducts={() => { navigate("/dicas", { state: { grupos, result: buscaRapida } }) }}>
         <div className='flex flex-col gap-10 items-center'>
           <div className='flex'>
             <p className='font-bold text-gray-600'>Selecione o tipo de produto que você deseja buscar</p>
@@ -132,17 +128,6 @@ function Header({ cliente, handleUser, itemsCart }) {
         <div className='flex justify-center p-3 font-bold'>
           <p>Resultados {buscaRapida.length}!</p>
         </div>
-
-
-        {/* {buscaRapida.length > 0 && (
-          <div className="absolute top-full left-0 w-full bg-bege border mt-1 z-50 bg-white">
-            {buscaRapida.map((produto, index) => (
-              <div key={index} className="bg-bege">
-                <LineProduct produto={produto} />
-              </div>
-            ))}
-          </div>
-        )} */}
       </PopupDicas>
     </header >
   );
