@@ -454,7 +454,7 @@ app.get('/product/maisVendidosPorPeriodo', (req, res) => {
     if (grupoBusca.length > 1) grupoBusca += ','
     grupoBusca += `'${grupo}'`
   }
-  
+
   vendas
     .findAllByPeriodo(grupoBusca, inicioPeriodo, fimPeriodo)
     .then((results) => {
@@ -479,6 +479,16 @@ app.get('/product/maisVendidosPorPeriodo', (req, res) => {
       console.error('Erro ao buscar produtos:', error)
       res.status(500).send({ error: 'Erro ao buscar produtos' })
     })
+})
+
+app.post('/vendas/insert', (req, res) => {
+  const produtos = req.body.produtos
+  produtos.forEach((produto) => {
+    vendas.insert(produto).catch((error) => {
+      console.error(error)
+    })
+  })
+  res.send('Vendas cadastradas com sucesso!')
 })
 
 // app.post("/produtos/insert", (req, res) => {
