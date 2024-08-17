@@ -21,7 +21,7 @@ function UserProfile({ cliente, handleUser }) {
       <span>Olá, {cliente.nome}</span>
 
       {showDropDownUser && (
-        <ul className="absolute top-6 right-0 w-48 p-4 bg-white rounded shadow border border-gray-300">
+        <ul className="absolute top-6 right-0 w-48 p-4 bg-white rounded shadow border border-gray-300 z-50">
           <>
             <li>
               <Link

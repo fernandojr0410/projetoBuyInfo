@@ -17,6 +17,7 @@ const clientes = require('./clientes/clientes.js')
 const enderecos = require('./enderecos/enderecos.js')
 const marcas = require('./marcas/marcas.js')
 const destaques = require('./destaques/destaques.js')
+const vendas = require('./vendas/vendas.js')
 
 const app = express()
 app.use(express.json())
@@ -409,6 +410,57 @@ app.get('/product/fastSearch', (req, res) => {
       res.send(
         results.rows.map((produto) => {
           console.log('produto', produto)
+          return {
+            ...produto,
+            imagens:
+              produto.imagens &&
+              produto.imagens
+                .split(',')
+                .map((img) =>
+                  `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(' ', '')
+                )
+                .sort(),
+          }
+        })
+      )
+    })
+    .catch((error) => {
+      console.error('Erro ao buscar produtos:', error)
+      res.status(500).send({ error: 'Erro ao buscar produtos' })
+    })
+})
+
+app.get('/product/maisVendidosPorPeriodo', (req, res) => {
+  const grupos = req.query.grupos
+  const inicioPeriodo = req.query.inicioPeriodo
+  const fimPeriodo = req.query.fimPeriodo
+
+  if (!grupos) {
+    return res.status(400).send({ error: 'Grupo do produto é necessário' })
+  }
+
+  if (!inicioPeriodo) {
+    return res
+      .status(400)
+      .send({ error: 'inicioPeriodo do produto é necessário' })
+  }
+
+  if (!fimPeriodo) {
+    return res.status(400).send({ error: 'fimPeriodo do produto é necessário' })
+  }
+
+  let grupoBusca = ''
+  for (let grupo of grupos.split(',')) {
+    if (grupoBusca.length > 1) grupoBusca += ','
+    grupoBusca += `'${grupo}'`
+  }
+  
+  vendas
+    .findAllByPeriodo(grupoBusca, inicioPeriodo, fimPeriodo)
+    .then((results) => {
+      console.log('results', results)
+      res.send(
+        results.rows.map((produto) => {
           return {
             ...produto,
             imagens:
