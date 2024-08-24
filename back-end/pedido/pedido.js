@@ -18,9 +18,9 @@ function findAllOrder() {
     
 }
 
-function findByIdOrder(idpedido) {
-    console.log(idpedido)
-    return queryPromiseReturn(`SELECT * FROM pedido WHERE idpedido = ${idpedido}`)
+function findByIdOrder(id_pedido) {
+    console.log(id_pedido)
+    return queryPromiseReturn(`SELECT * FROM pedido WHERE id_pedido = ${id_pedido}`)
     
 }
 
@@ -28,13 +28,13 @@ function insertOrder(dados) {
     const {
         status
     } = dados
-    sql = `INSERT INTO pedido (status) VALUES ('${status}') RETURNING idpedido`
+    sql = `INSERT INTO pedido (status) VALUES ('${status}') RETURNING id_pedido`
     return queryPromiseReturn(sql)
 }
 
 function updateOrder(dados) {
     const {
-        idpedido,
+        id_pedido,
         status
     } = dados
     sql = "UPDATE pedido SET"
@@ -43,13 +43,13 @@ function updateOrder(dados) {
     }
 
     sql = sql.slice(0, -1)
-    sql += ` WHERE idpedido = ${idpedido}`
+    sql += ` WHERE id_pedido = ${id_pedido}`
     return queryPromiseReturn(sql)
 }
 
 function deleteOrder(ids) {
     const idsDelete = ids.toString()
-    return queryPromiseReturn(`DELETE FROM pedido WHERE idpedido IN (${idsDelete})`)
+    return queryPromiseReturn(`DELETE FROM pedido WHERE id_pedido IN (${idsDelete})`)
 }
 
 module.exports = {
