@@ -26,7 +26,7 @@ app.use(bodyParser.json({ limit: '10mb' }))
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
 app.use(cors())
 
-const PORT = 5000
+const PORT = 5001
 const HOST = 'http://localhost'
 
 app.post('/create-payment-intent', async (req, res) => {
@@ -77,6 +77,35 @@ app.get('/order/findAllOrder', (req, res) => {
       res.send({ message: 'Pedidos filtrados!', result: results.rows })
     })
     .catch((error) => console.error(error))
+})
+
+app.get('/order/findAllProductsByOrderClientId', (req, res) => {
+  console.log('req', req.query)
+  const id_pedido = req.query.id_pedido
+  const id_cliente = req.query.id_cliente
+  pedido
+    .findAllProductsByOrderClientId(id_pedido, id_cliente)
+    .then((results) => {
+      console.log('findAllProductsByOrderClientId: ', results)
+      res.send(
+        results.rows.map((produto) => {
+          return {
+            ...produto,
+            imagens:
+              produto.imagens &&
+              produto.imagens
+                .split(',')
+                .map((img) =>
+                  `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(' ', '')
+                )
+                .sort(),
+          }
+        })
+      )
+    })
+    .catch((error) => {
+      console.error(error)
+    })
 })
 
 app.get('/order/findByIdOrder', (req, res) => {

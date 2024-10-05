@@ -18,7 +18,8 @@ const stripePromise = loadStripe('pk_test_51PRzenISma1JVODe4EXNZZkqWh9eIrthZXASg
 
 function FinishOrder({ cliente }) {
   const location = useLocation();
-  const { carrinho } = location.state;
+  const { carrinho } = location.state || [];
+  console.log("{carrinho}", location)
   const [tipoEntrega, setTipoEntrega] = useState("normal");
   const [frete, setFrete] = useState(30);
   const valorProduto = carrinho.reduce(
@@ -44,7 +45,7 @@ function FinishOrder({ cliente }) {
   useEffect(() => {
     const valor = valorTotal.toFixed(2).replace('.', '')
     // Create PaymentIntent as soon as the page loads
-    fetch("http://localhost:5000/create-payment-intent", {
+    fetch("http://localhost:5001/create-payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ amount: Number(valor) }),
@@ -69,7 +70,7 @@ function FinishOrder({ cliente }) {
       status: status,
     };
 
-    fetch(`http://localhost:5000/order/insertOrder`, {
+    fetch(`http://localhost:5001/order/insertOrder`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -92,7 +93,7 @@ function FinishOrder({ cliente }) {
 
             console.log("dadosPedidos", dadosPedidos)
 
-            fetch(`http://localhost:5000/orderProductClient/insert`, {
+            fetch(`http://localhost:5001/orderProductClient/insert`, {
               method: "POST",
               headers: {
                 "Content-type": "application/json",
@@ -114,7 +115,7 @@ function FinishOrder({ cliente }) {
             })
           }
 
-          fetch(`http://localhost:5000/vendas/insert`, {
+          fetch(`http://localhost:5001/vendas/insert`, {
             method: "POST",
             headers: {
               "Content-type": "application/json",
@@ -135,7 +136,7 @@ function FinishOrder({ cliente }) {
 
   useEffect(() => {
     if (registroCliente && registroCliente.id_cliente) {
-      fetch(`http://localhost:5000/enderecos/findByIdClienteEndereco?id_cliente=${registroCliente.id_cliente}`)
+      fetch(`http://localhost:5001/enderecos/findByIdClienteEndereco?id_cliente=${registroCliente.id_cliente}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Erro ao buscar endereço");
@@ -296,7 +297,7 @@ function FinishOrder({ cliente }) {
               <ModalRegistration
                 titulo="Produto comprado com sucesso!"
                 onClose={() => setShowModal(false)}
-                link="/edicao-cadastro/meus-pedidos/:id"
+                link="/edicao-cadastro/meus-pedidos/pedidos"
               />
             )}
           </div>

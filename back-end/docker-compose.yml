@@ -9,7 +9,7 @@ services:
     volumes:
       - .:/app
     ports:
-      - '5000:5000'
+      - '5001:5001'
     command: npm start
     env_file:
       - .env

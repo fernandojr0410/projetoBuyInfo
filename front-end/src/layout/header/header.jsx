@@ -34,7 +34,7 @@ function Header({ cliente, handleUser, itemsCart }) {
   const handlefastSearch = () => {
     const encodedSearchTerm = encodeURIComponent(termoDeBusca);
     console.log(grupos)
-    fetch(`http://localhost:5000/product/findByProductGroup?grupos=${grupos}&nome=${encodedSearchTerm}`, {
+    fetch(`http://localhost:5001/product/findByProductGroup?grupos=${grupos}&nome=${encodedSearchTerm}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",

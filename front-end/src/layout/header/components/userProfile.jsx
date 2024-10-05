@@ -25,7 +25,7 @@ function UserProfile({ cliente, handleUser }) {
           <>
             <li>
               <Link
-                to={`/edicao-cadastro/meus-pedidos/${cliente.id_cliente}`}
+                to={`/edicao-cadastro/meus-pedidos/pedidos`}
                 className="flex flex-col gap-6 py-1"
               >
                 <div className="flex items-center gap-2">

@@ -116,7 +116,7 @@ function Main() {
           />
           <Route
             exact
-            path="/edicao-cadastro/meus-pedidos/:id"
+            path="/edicao-cadastro/meus-pedidos/pedidos"
             element={<CustomerOrders />}
           />
 

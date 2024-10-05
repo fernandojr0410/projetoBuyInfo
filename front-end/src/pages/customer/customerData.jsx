@@ -28,7 +28,7 @@ function CustomerData({ cliente }) {
   useEffect(() => {
     if (cliente && cliente.id_cliente) {
       fetch(
-        `http://localhost:5000/clientes/findById?id=${cliente.id_cliente}`,
+        `http://localhost:5001/clientes/findById?id=${cliente.id_cliente}`,
         {
           method: "GET",
           headers: {
@@ -51,7 +51,7 @@ function CustomerData({ cliente }) {
   useEffect(() => {
     if (cliente && cliente.id_cliente) {
       fetch(
-        `http://localhost:5000/enderecos/findByIdClienteEndereco?id_cliente=${cliente.id_cliente}`,
+        `http://localhost:5001/enderecos/findByIdClienteEndereco?id_cliente=${cliente.id_cliente}`,
         {
           method: "GET",
           headers: {
@@ -100,7 +100,7 @@ function CustomerData({ cliente }) {
     };
 
     if (enderecoCliente.id_endereco) {
-      fetch(`http://localhost:5000/enderecos/update`, {
+      fetch(`http://localhost:5001/enderecos/update`, {
         method: "PUT",
         headers: {
           "Content-type": "application/json",
@@ -116,7 +116,7 @@ function CustomerData({ cliente }) {
         })
         .catch((error) => console.error("Não foi atualizado cliente:", error));
     } else {
-      fetch(`http://localhost:5000/enderecos/insert`, {
+      fetch(`http://localhost:5001/enderecos/insert`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -132,7 +132,7 @@ function CustomerData({ cliente }) {
 
     const clienteId = cliente && cliente.id_cliente;
     const dadosClienteAtualizado = { ...dadosCliente, id_cliente: clienteId };
-    fetch(`http://localhost:5000/clientes/update/${clienteId}`, {
+    fetch(`http://localhost:5001/clientes/update/${clienteId}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",

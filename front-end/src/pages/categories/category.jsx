@@ -10,7 +10,7 @@ function Category() {
   const { id } = useParams();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/produtos/categoria?id=${id}`, {
+    fetch(`http://localhost:5001/produtos/categoria?id=${id}`, {
       method: "GET",
       headers: {
         "Contet-type": "application/json",

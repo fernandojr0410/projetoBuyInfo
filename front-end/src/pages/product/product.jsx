@@ -48,7 +48,7 @@ function Product({ handleAdicionarCarrinho }) {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:5000/produtos/findById?id=${id}`, {
+    fetch(`http://localhost:5001/produtos/findById?id=${id}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",

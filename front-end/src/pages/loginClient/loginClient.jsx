@@ -24,7 +24,7 @@ function LoginClient({ handleUser }) {
     }
 
     fetch(
-      `http://localhost:5000/clientes/findByEmailSenha?email=${email}&senha=${senha}`,
+      `http://localhost:5001/clientes/findByEmailSenha?email=${email}&senha=${senha}`,
       {
         method: "GET",
         headers: {
@@ -76,11 +76,10 @@ function LoginClient({ handleUser }) {
                   type="text"
                   name="email"
                   placeholder="E-mail"
-                  className={`border ${
-                    emailError
+                  className={`border ${emailError
                       ? "border-red-500"
                       : "border-gray-400 rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9"
-                  }`}
+                    }`}
                   onChange={(evento) => {
                     setEmail(evento.target.value);
                   }}
@@ -99,11 +98,10 @@ function LoginClient({ handleUser }) {
                   type="password"
                   name="password"
                   placeholder="senha"
-                  className={`border ${
-                    senhaError
+                  className={`border ${senhaError
                       ? "border-red-500"
                       : "border-gray-400 rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9"
-                  }`}
+                    }`}
                   onChange={(evento) => {
                     setSenha(evento.target.value);
                   }}
