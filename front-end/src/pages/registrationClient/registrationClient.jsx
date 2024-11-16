@@ -169,7 +169,7 @@ function RegistrationClient({ handleUser }) {
         }),
       };
 
-      fetch(`http://localhost:5000/clientes/insert`, dadosClientes)
+      fetch(`http://localhost:5001/clientes/insert`, dadosClientes)
         .then((res) => res.json())
         .then((response) => {
           console.log("response", response);
@@ -183,7 +183,7 @@ function RegistrationClient({ handleUser }) {
   };
 
   // useEffect(() => {
-  //   fetch(`http://localhost:5000/clientes/findByEmail/${emailDuplicado}`, {
+  //   fetch(`http://localhost:5001/clientes/findByEmail/${emailDuplicado}`, {
   //     method: "GET",
   //     headers: {
   //       "Content-type": "Application/json",
@@ -198,7 +198,7 @@ function RegistrationClient({ handleUser }) {
   // }, [emailDuplicado]);
 
   function getClientById(clientId) {
-    fetch(`http://localhost:5000/clientes/findById?id=${clientId}`)
+    fetch(`http://localhost:5001/clientes/findById?id=${clientId}`)
       .then((res) => res.json())
       .then((response) => {
         console.log("response", response);
@@ -279,9 +279,8 @@ function RegistrationClient({ handleUser }) {
                     name="nome"
                     value={nome}
                     placeholder="Nome"
-                    className={`border ${
-                      nomeError ? "border-red-500" : "border-gray-400"
-                    } rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9`}
+                    className={`border ${nomeError ? "border-red-500" : "border-gray-400"
+                      } rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9`}
                     onChange={handleNomeChange}
                   />
                   {nomeError && (
@@ -291,9 +290,8 @@ function RegistrationClient({ handleUser }) {
 
                 <div className="flex flex-col gap-1">
                   <label
-                    className={`text-lg ${
-                      sobrenomeError ? "text-red-500" : ""
-                    }`}
+                    className={`text-lg ${sobrenomeError ? "text-red-500" : ""
+                      }`}
                   >
                     Sobrenome
                   </label>
@@ -303,9 +301,8 @@ function RegistrationClient({ handleUser }) {
                     name="Sobrenome"
                     value={sobrenome}
                     placeholder="Sobrenome"
-                    className={`border ${
-                      nomeError ? "border-red-500" : "border-gray-400"
-                    } rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9`}
+                    className={`border ${nomeError ? "border-red-500" : "border-gray-400"
+                      } rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9`}
                     onChange={handleSobrenomeChange}
                   />
                   {sobrenomeError && (
@@ -328,9 +325,8 @@ function RegistrationClient({ handleUser }) {
                     maxLength="14"
                     name="cpf"
                     placeholder="CPF"
-                    className={`border ${
-                      cpfError ? "border-red-500" : "border-gray-400"
-                    }  rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9`}
+                    className={`border ${cpfError ? "border-red-500" : "border-gray-400"
+                      }  rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9`}
                     value={cpf}
                     onChange={handleCpfChange}
                   />
@@ -350,9 +346,8 @@ function RegistrationClient({ handleUser }) {
                     name="telefone"
                     value={telefone}
                     placeholder="Telefone"
-                    className={`border ${
-                      telefoneError ? "border-red-500" : "border-gray-400"
-                    }
+                    className={`border ${telefoneError ? "border-red-500" : "border-gray-400"
+                      }
                       border rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9
                   `}
                     onChange={handleTelefoneChange}
@@ -376,9 +371,8 @@ function RegistrationClient({ handleUser }) {
                   name="email"
                   value={email}
                   placeholder="E-mail"
-                  className={`border ${
-                    emailError ? "border-red-500" : "border-gray-400"
-                  }
+                  className={`border ${emailError ? "border-red-500" : "border-gray-400"
+                    }
                       border rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9
                   `}
                   onChange={(evento) => {
@@ -402,9 +396,8 @@ function RegistrationClient({ handleUser }) {
                   name="password"
                   value={senha}
                   placeholder="senha"
-                  className={`border ${
-                    senhaError ? "border-red-500" : "border-gray-400"
-                  } rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9`}
+                  className={`border ${senhaError ? "border-red-500" : "border-gray-400"
+                    } rounded-lg px-2 py-1 text-sm outline-primary cursor-pointer h-9`}
                   onChange={handleSenhaChange}
                 />
                 {senhaError && (

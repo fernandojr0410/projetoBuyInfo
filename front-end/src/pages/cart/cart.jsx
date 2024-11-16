@@ -105,7 +105,7 @@ function Cart({ handleItemsCart, cliente, handleUser }) {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:5000/produtos/destaques`, {
+    fetch(`http://localhost:5001/produtos/destaques`, {
       method: "GET",
       headers: {
         "Contet-type": "application/json",

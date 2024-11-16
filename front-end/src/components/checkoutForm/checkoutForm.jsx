@@ -81,13 +81,16 @@ export default function CheckoutForm({ onSubmit }) {
   }
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit} className="flex flex-col">
+    <form id="payment-form" onSubmit={() =>{
+      console.debug('rodou handleSubmit')
+      handleSubmit()
+    }} className="flex flex-col">
 
       <PaymentElement id="payment-element" options={paymentElementOptions} className="flex pt-40px" />
       <button disabled={isLoading || !stripe || !elements} id="submit" onClick={onSubmit}
-        className="flex items-center justify-center bg-primary w-full h-10 rounded-md">
+        className="flex items-center justify-center bg-primary w-full h-10 rounded-md mt-10 p-4">
         <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner"></div> : <div className="flex ml-auto">
+          {isLoading ? <div className="spinner" id="spinner"></div> : <div className="flex ml-auto ">
 
             <span className="text-white">
               FINALIZAR PEDIDO COM CARTÃO DE CRÉDITO
@@ -96,7 +99,6 @@ export default function CheckoutForm({ onSubmit }) {
           </div>}
         </span>
       </button>
-      {/* Show any error or success messages */}
       {message && <div id="payment-message">{message}</div>}
     </form>
   );

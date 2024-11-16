@@ -20,6 +20,7 @@ import CustomerOrders from "./pages/customer/customerOrders";
 import ModalRegistration from "./components/modal/modalRegistration";
 import Loading from "./layout/loading/loading";
 import Modal from "./components/modal/modal";
+import ProductTips from "./pages/productTips/productTipes";
 
 function Main() {
   const [cliente, setCliente] = useState(
@@ -115,7 +116,7 @@ function Main() {
           />
           <Route
             exact
-            path="/edicao-cadastro/meus-pedidos/:id"
+            path="/edicao-cadastro/meus-pedidos/pedidos"
             element={<CustomerOrders />}
           />
 
@@ -135,6 +136,7 @@ function Main() {
             path="/finalizar-pedido"
             element={<FinishOrder cliente={cliente} />}
           />
+          <Route exact path="/dicas" element={<ProductTips />} />
         </Routes>
         <Footer />
       </Router>

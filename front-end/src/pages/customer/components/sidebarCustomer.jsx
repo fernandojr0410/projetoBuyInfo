@@ -23,7 +23,7 @@ function SidebarCustomer({ handleUser }) {
     <div className="flex  px-10 py-2 h-[30%] ">
       <div className="flex flex-col gap-6 p-4 bg-white border-gray-400 border rounded-md text-gray-600 font-bold">
         <Link
-          to={`/edicao-cadastro/meus-pedidos/${id}`}
+          to={`/edicao-cadastro/meus-pedidos/pedidos`}
           state={{ menu: "pedidos" }}
           className=" pb-2 border-b border-gray-400 "
           // onClick={() => setSelectedMenu("pedidos")}

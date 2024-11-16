@@ -17,6 +17,7 @@ const clientes = require('./clientes/clientes.js')
 const enderecos = require('./enderecos/enderecos.js')
 const marcas = require('./marcas/marcas.js')
 const destaques = require('./destaques/destaques.js')
+const vendas = require('./vendas/vendas.js')
 
 const app = express()
 app.use(express.json())
@@ -25,7 +26,7 @@ app.use(bodyParser.json({ limit: '10mb' }))
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
 app.use(cors())
 
-const PORT = 5000
+const PORT = 5001
 const HOST = 'http://localhost'
 
 app.post('/create-payment-intent', async (req, res) => {
@@ -76,6 +77,35 @@ app.get('/order/findAllOrder', (req, res) => {
       res.send({ message: 'Pedidos filtrados!', result: results.rows })
     })
     .catch((error) => console.error(error))
+})
+
+app.get('/order/findAllProductsByOrderClientId', (req, res) => {
+  console.log('req', req.query)
+  const id_pedido = req.query.id_pedido
+  const id_cliente = req.query.id_cliente
+  pedido
+    .findAllProductsByOrderClientId(id_pedido, id_cliente)
+    .then((results) => {
+      console.log('findAllProductsByOrderClientId: ', results)
+      res.send(
+        results.rows.map((produto) => {
+          return {
+            ...produto,
+            imagens:
+              produto.imagens &&
+              produto.imagens
+                .split(',')
+                .map((img) =>
+                  `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(' ', '')
+                )
+                .sort(),
+          }
+        })
+      )
+    })
+    .catch((error) => {
+      console.error(error)
+    })
 })
 
 app.get('/order/findByIdOrder', (req, res) => {
@@ -353,6 +383,49 @@ app.get('/product/findByName', (req, res) => {
     })
 })
 
+app.get('/product/findByProductGroup', (req, res) => {
+  const grupos = req.query.grupos
+  const nome = req.query.nome
+  console.log('reqQuery', req.query.grupos)
+  if (!grupos) {
+    return res.status(400).send({ error: 'Grupo do produto é necessário' })
+  }
+
+  if (!nome) {
+    return res.status(400).send({ error: 'Nome do produto é necessário' })
+  }
+
+  let grupoBusca = ''
+  for (let grupo of grupos.split(',')) {
+    if (grupoBusca.length > 1) grupoBusca += ','
+    grupoBusca += `'${grupo}'`
+  }
+
+  produtos
+    .findByProductGroup(grupoBusca, nome)
+    .then((results) => {
+      res.send(
+        results.rows.map((produto) => {
+          return {
+            ...produto,
+            imagens:
+              produto.imagens &&
+              produto.imagens
+                .split(',')
+                .map((img) =>
+                  `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(' ', '')
+                )
+                .sort(),
+          }
+        })
+      )
+    })
+    .catch((error) => {
+      console.error('Erro ao buscar produtos:', error)
+      res.status(500).send({ error: 'Erro ao buscar produtos' })
+    })
+})
+
 app.get('/product/fastSearch', (req, res) => {
   const nome = req.query.nome
 
@@ -384,6 +457,67 @@ app.get('/product/fastSearch', (req, res) => {
       console.error('Erro ao buscar produtos:', error)
       res.status(500).send({ error: 'Erro ao buscar produtos' })
     })
+})
+
+app.get('/product/maisVendidosPorPeriodo', (req, res) => {
+  const grupos = req.query.grupos
+  const inicioPeriodo = req.query.inicioPeriodo
+  const fimPeriodo = req.query.fimPeriodo
+
+  if (!grupos) {
+    return res.status(400).send({ error: 'Grupo do produto é necessário' })
+  }
+
+  if (!inicioPeriodo) {
+    return res
+      .status(400)
+      .send({ error: 'inicioPeriodo do produto é necessário' })
+  }
+
+  if (!fimPeriodo) {
+    return res.status(400).send({ error: 'fimPeriodo do produto é necessário' })
+  }
+
+  let grupoBusca = ''
+  for (let grupo of grupos.split(',')) {
+    if (grupoBusca.length > 1) grupoBusca += ','
+    grupoBusca += `'${grupo}'`
+  }
+
+  vendas
+    .findAllByPeriodo(grupoBusca, inicioPeriodo, fimPeriodo)
+    .then((results) => {
+      console.log('results', results)
+      res.send(
+        results.rows.map((produto) => {
+          return {
+            ...produto,
+            imagens:
+              produto.imagens &&
+              produto.imagens
+                .split(',')
+                .map((img) =>
+                  `${HOST}:${PORT}/imagens/produtos/${img}`.replaceAll(' ', '')
+                )
+                .sort(),
+          }
+        })
+      )
+    })
+    .catch((error) => {
+      console.error('Erro ao buscar produtos:', error)
+      res.status(500).send({ error: 'Erro ao buscar produtos' })
+    })
+})
+
+app.post('/vendas/insert', (req, res) => {
+  const produtos = req.body.produtos
+  produtos.forEach((produto) => {
+    vendas.insert(produto).catch((error) => {
+      console.error(error)
+    })
+  })
+  res.send('Vendas cadastradas com sucesso!')
 })
 
 // app.post("/produtos/insert", (req, res) => {

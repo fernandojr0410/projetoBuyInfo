@@ -21,11 +21,11 @@ function findAll() {
 //  return queryPromiseReturn(`SELECT * FROM pedidoProdutoCliente WHERE id = ${id}`);
 // }
 
-function findById(clientId, idpedido, idproduto) {
+function findById(clientId, id_pedido, id_produto) {
   const sql = `
   SELECT
-    ppc.idpedido,
-    ppc.idproduto,
+    ppc.id_pedido,
+    ppc.id_produto,
     p.status AS status_pedido,
     c.nome AS nome_cliente,
     pr.nome AS nome_produto,
@@ -36,35 +36,35 @@ function findById(clientId, idpedido, idproduto) {
   JOIN
     cliente c ON ppc.id_cliente = c.id_cliente
   JOIN
-    pedido p ON ppc.idpedido = p.idpedido
+    pedido p ON ppc.id_pedido = p.id_pedido
   JOIN
-    produto pr ON ppc.idproduto = pr.id_produto
+    produto pr ON ppc.id_produto = pr.id_produto
   WHERE
     ppc.id_cliente = ${clientId}
-    AND ppc.idpedido = ${idpedido}
-    AND ppc.idproduto = ${idproduto};
+    AND ppc.id_pedido = ${id_pedido}
+    AND ppc.id_produto = ${id_produto};
   `;
 
-  const params = [clientId, idpedido, idproduto];
+  const params = [clientId, id_pedido, id_produto];
 
   return queryPromiseReturn(sql, params);
 }
 
 function insert(dados) {
-  const { idproduto, idpedido, id_cliente } = dados;
-  let sql = `INSERT INTO pedidoProdutoCliente (idproduto, idpedido, id_cliente) VALUES (${idproduto}, ${idpedido}, ${id_cliente}) RETURNING id`;
+  const { id_produto, id_pedido, id_cliente } = dados;
+  let sql = `INSERT INTO pedidoProdutoCliente (id_produto, id_pedido, id_cliente) VALUES (${id_produto}, ${id_pedido}, ${id_cliente}) RETURNING id`;
   return queryPromiseReturn(sql);
 }
 
 function update(dados) {
-  const { id, idproduto, idpedido, id_cliente } = dados;
+  const { id, id_produto, id_pedido, id_cliente } = dados;
   let sql = "UPDATE pedidoProdutoCliente SET";
 
-  if (idproduto) {
-    sql += ` idproduto = ${idproduto},`;
+  if (id_produto) {
+    sql += ` id_produto = ${id_produto},`;
   }
-  if (idpedido) {
-    sql += ` idpedido = ${idpedido},`;
+  if (id_pedido) {
+    sql += ` id_pedido = ${id_pedido},`;
   }
   if (id_cliente) {
     sql += ` id_cliente = ${id_cliente},`;

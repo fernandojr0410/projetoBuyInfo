@@ -14,7 +14,7 @@ function Home() {
   const [buscaRapida, setBuscaRapida] = useState([])
 
   useEffect(() => {
-    fetch(`http://localhost:5000/produtos/destaques`, {
+    fetch(`http://localhost:5001/produtos/destaques`, {
       method: "GET",
       headers: {
         "Contet-type": "application/json",
@@ -29,7 +29,7 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/categorias/findAll`, {
+    fetch(`http://localhost:5001/categorias/findAll`, {
       method: "GET",
       headers: {
         "Contet-type": "application/json",
@@ -44,7 +44,7 @@ function Home() {
 
   const handleSearch = () => {
     const encodedSearchTerm = encodeURIComponent(termoDeBusca);
-    fetch(`http://localhost:5000/product/findByName?nome=${encodedSearchTerm}`, {
+    fetch(`http://localhost:5001/product/findByName?nome=${encodedSearchTerm}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -64,7 +64,7 @@ function Home() {
 
   const handlefastSearch = () => {
     const encodedSearchTerm = encodeURIComponent(termoDeBusca);
-    fetch(`http://localhost:5000/product/fastSearch?nome=${encodedSearchTerm}`, {
+    fetch(`http://localhost:5001/product/fastSearch?nome=${encodedSearchTerm}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",

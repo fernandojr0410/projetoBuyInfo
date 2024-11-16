@@ -13,11 +13,13 @@ import ModalRegistration from "../../components/modal/modalRegistration";
 import CheckoutForm from "../../components/checkoutForm/checkoutForm";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+
 const stripePromise = loadStripe('pk_test_51PRzenISma1JVODe4EXNZZkqWh9eIrthZXASg7397vudybTCcEHSGmp25iOLs57ZhqTrmymnOV9uDcJlgbduzMrD00iRGgN5vX')
 
 function FinishOrder({ cliente }) {
   const location = useLocation();
-  const { carrinho } = location.state;
+  const { carrinho } = location.state || [];
+  console.log("{carrinho}", location)
   const [tipoEntrega, setTipoEntrega] = useState("normal");
   const [frete, setFrete] = useState(30);
   const valorProduto = carrinho.reduce(
@@ -34,15 +36,16 @@ function FinishOrder({ cliente }) {
   // const { valorTotal } = location.state;
   const [endereco, setEndereco] = useState([]);
   // const [pedidoCliente, setPedidoCliente] = useState({});
-  // const [idPedido, setIdPedido] = useState({});
-  const [status, setStatus] = useState("pendente de pagamento");
+  // const [id_pedido, setid_pedido] = useState({});
+  const [status, setStatus] = useState("aguardando pagamento");
   const [showModal, setShowModal] = useState(false);
   const [registroCliente, setRegistroCliente] = useState(cliente);
   const [clientSecret, setClientSecret] = useState('')
+
   useEffect(() => {
     const valor = valorTotal.toFixed(2).replace('.', '')
     // Create PaymentIntent as soon as the page loads
-    fetch("http://localhost:5000/create-payment-intent", {
+    fetch("http://localhost:5001/create-payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ amount: Number(valor) }),
@@ -59,14 +62,15 @@ function FinishOrder({ cliente }) {
     appearance,
   };
 
-
+  // old handlePayment
   const handlePayment = (event) => {
+    console.log('rodou handlePayment')
 
     const statusPedido = {
       status: status,
     };
 
-    fetch(`http://localhost:5000/order/insertOrder`, {
+    fetch(`http://localhost:5001/order/insertOrder`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -75,18 +79,21 @@ function FinishOrder({ cliente }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data && data.result && data.result.idpedido) {
-          const idPedido = data.result.idpedido;
-
+        console.log("data antes if", data)
+        if (data && data.result && data.result.id_pedido) {
+          const id_pedido = data.result.id_pedido;
+          console.log("dentro if", data)
           const carrinhoData = JSON.parse(localStorage.getItem("carrinho"));
           carrinhoData.forEach((produto) => {
             const dadosPedidos = {
-              idproduto: produto.id_produto,
+              id_produto: produto.id_produto,
               id_cliente: cliente.id_cliente,
-              idpedido: idPedido,
+              id_pedido: id_pedido,
             };
 
-            fetch(`http://localhost:5000/orderProductClient/insert`, {
+            console.log("dadosPedidos", dadosPedidos)
+
+            fetch(`http://localhost:5001/orderProductClient/insert`, {
               method: "POST",
               headers: {
                 "Content-type": "application/json",
@@ -99,6 +106,23 @@ function FinishOrder({ cliente }) {
               });
           });
 
+          const vendasBody = {
+            produtos: carrinhoData.map((produto) => {
+              return {
+                id_produto: produto.id_produto,
+                qtd_vendido: produto.quantidade
+              }
+            })
+          }
+
+          fetch(`http://localhost:5001/vendas/insert`, {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify(vendasBody)
+          })
+            .catch((error) => console.error("erro ao inserir vendas", error))
           setShowModal(true);
         } else {
           console.error("Erro ao inserir pedido:", data);
@@ -109,11 +133,10 @@ function FinishOrder({ cliente }) {
     setShowModal(true);
   };
 
+
   useEffect(() => {
     if (registroCliente && registroCliente.id_cliente) {
-      fetch(
-        `http://localhost:5000/enderecos/findByIdClienteEndereco?id_cliente=${registroCliente.id_cliente}`
-      )
+      fetch(`http://localhost:5001/enderecos/findByIdClienteEndereco?id_cliente=${registroCliente.id_cliente}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Erro ao buscar endereço");
@@ -260,8 +283,7 @@ function FinishOrder({ cliente }) {
                     {
                       clientSecret && (
                         <Elements options={options} stripe={stripePromise}>
-                          <CheckoutForm onSubmit={() => handlePayment} />
-
+                          <CheckoutForm onSubmit={handlePayment} />
                         </Elements>
                       )
                     }
@@ -275,7 +297,7 @@ function FinishOrder({ cliente }) {
               <ModalRegistration
                 titulo="Produto comprado com sucesso!"
                 onClose={() => setShowModal(false)}
-                link="/edicao-cadastro/meus-pedidos/:id"
+                link="/edicao-cadastro/meus-pedidos/pedidos"
               />
             )}
           </div>
