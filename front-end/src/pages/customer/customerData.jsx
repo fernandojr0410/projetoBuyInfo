@@ -243,18 +243,7 @@ function CustomerData({ cliente }) {
                     }
                   />
                 </div>
-                <div className="flex flex-col">
-                  <label className="text-primary font-bold px-2">Senha</label>
-                  <input
-                    type="text"
-                    name="senha"
-                    value={dadosCliente.senha}
-                    className="border-gray-400 border rounded-md p-2"
-                    onChange={({ target }) =>
-                      handleChangeCliente(target.value, "senha")
-                    }
-                  />
-                </div>
+
               </div>
             </div>
             <div className="flex flex-col gap-6 w-[50%]">
